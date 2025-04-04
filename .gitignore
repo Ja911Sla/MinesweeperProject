@@ -1,7 +1,7 @@
-*.class
-*.log
+# Ignore Scala build directory
+/target/
 
-# Ignore class files (Java compilation)
+# Ignore class files (Java/Scala compilation)
 *.class
 
 # Ignore IntelliJ project files
@@ -19,5 +19,5 @@ Thumbs.db
 *.log
 *.tmp
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+# Virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
