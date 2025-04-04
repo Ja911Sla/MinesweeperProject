@@ -1,0 +1,23 @@
+*.class
+*.log
+
+# Ignore class files (Java compilation)
+*.class
+
+# Ignore IntelliJ project files
+.idea/
+*.iml
+
+# Ignore VS Code workspace settings
+.vscode/
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore logs and temp files
+*.log
+*.tmp
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
