@@ -101,6 +101,12 @@
           <root url="jar://$USER_HOME$/.sbt/boot/scala-2.12.20/org.scala-sbt/sbt/1.10.11/zinc-persist-core-assembly-1.10.8.jar!/" />
           <root url="jar://$USER_HOME$/.sbt/boot/scala-2.12.20/org.scala-sbt/sbt/1.10.11/zinc-persist_2.12-1.10.8.jar!/" />
           <root url="jar://$USER_HOME$/.sbt/boot/scala-2.12.20/org.scala-sbt/sbt/1.10.11/zinc_2.12-1.10.8.jar!/" />
+          <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/org/scala-lang/modules/scala-xml_2.12/2.3.0/scala-xml_2.12-2.3.0.jar!/" />
+          <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/org/scoverage/sbt-scoverage_2.12_1.0/2.0.12/sbt-scoverage_2.12_1.0-2.0.12.jar!/" />
+          <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/org/scoverage/scalac-scoverage-domain_2.12/2.1.1/scalac-scoverage-domain_2.12-2.1.1.jar!/" />
+          <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/org/scoverage/scalac-scoverage-plugin_2.12.19/2.1.1/scalac-scoverage-plugin_2.12.19-2.1.1.jar!/" />
+          <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/org/scoverage/scalac-scoverage-reporter_2.12/2.1.1/scalac-scoverage-reporter_2.12-2.1.1.jar!/" />
+          <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/org/scoverage/scalac-scoverage-serializer_2.12/2.1.1/scalac-scoverage-serializer_2.12-2.1.1.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
@@ -186,14 +192,19 @@
           <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc-persist-core-assembly/1.10.8/zinc-persist-core-assembly-1.10.8-sources.jar!/" />
           <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc-persist_2.12/1.10.8/zinc-persist_2.12-1.10.8-sources.jar!/" />
           <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/org/scala-sbt/zinc_2.12/1.10.8/zinc_2.12-1.10.8-sources.jar!/" />
+          <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/org/scoverage/sbt-scoverage_2.12_1.0/2.0.12/sbt-scoverage_2.12_1.0-2.0.12-sources.jar!/" />
+          <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/org/scoverage/scalac-scoverage-domain_2.12/2.1.1/scalac-scoverage-domain_2.12-2.1.1-sources.jar!/" />
+          <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/org/scoverage/scalac-scoverage-plugin_2.12.19/2.1.1/scalac-scoverage-plugin_2.12.19-2.1.1-sources.jar!/" />
+          <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/org/scoverage/scalac-scoverage-reporter_2.12/2.1.1/scalac-scoverage-reporter_2.12-2.1.1-sources.jar!/" />
+          <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/org/scoverage/scalac-scoverage-serializer_2.12/2.1.1/scalac-scoverage-serializer_2.12-2.1.1-sources.jar!/" />
           <root url="jar://$USER_HOME$/AppData/Local/Coursier/cache/v1/https/repo1.maven.org/maven2/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36-sources.jar!/" />
         </SOURCES>
       </library>
     </orderEntry>
   </component>
   <component name="SbtModule">
-    <option name="buildForURI" value="file:/$MODULE_DIR$/../../../../../Drittes%20Semester/Software%20Engineering/MinesweeperProject/" />
-    <option name="imports" value="SUB:DOLLAR815567163c62b6c3fb0c.`root`, _root_.sbt.Keys._, _root_.sbt.ScriptedPlugin.autoImport._, _root_.sbt.plugins.JUnitXmlReportPlugin.autoImport._, _root_.sbt.plugins.MiniDependencyTreePlugin.autoImport._, _root_.sbt._, _root_.sbt.nio.Keys._, _root_.sbt.plugins.IvyPlugin, _root_.sbt.plugins.JvmPlugin, _root_.sbt.plugins.CorePlugin, _root_.sbt.ScriptedPlugin, _root_.sbt.plugins.SbtPlugin, _root_.sbt.plugins.SemanticdbPlugin, _root_.sbt.plugins.JUnitXmlReportPlugin, _root_.sbt.plugins.Giter8TemplatePlugin, _root_.sbt.plugins.MiniDependencyTreePlugin, _root_.scala.xml.{TopScope=&gt;SUB:DOLLARscope}" />
+    <option name="buildForURI" value="file:/$MODULE_DIR$/../../../../../IntelliJ%20Projects/Software%20Engineering/MinesweeperProjekt/" />
+    <option name="imports" value="SUB:DOLLARebc4d2c90b20b147284b.`root`, _root_.sbt.Keys._, _root_.sbt.ScriptedPlugin.autoImport._, _root_.sbt.plugins.JUnitXmlReportPlugin.autoImport._, _root_.sbt.plugins.MiniDependencyTreePlugin.autoImport._, _root_.scoverage.ScoverageSbtPlugin.autoImport._, _root_.sbt._, _root_.sbt.nio.Keys._, _root_.sbt.plugins.IvyPlugin, _root_.sbt.plugins.JvmPlugin, _root_.sbt.plugins.CorePlugin, _root_.sbt.ScriptedPlugin, _root_.sbt.plugins.SbtPlugin, _root_.sbt.plugins.SemanticdbPlugin, _root_.sbt.plugins.JUnitXmlReportPlugin, _root_.sbt.plugins.Giter8TemplatePlugin, _root_.sbt.plugins.MiniDependencyTreePlugin, _root_.scoverage.ScoverageSbtPlugin, _root_.scala.xml.{TopScope=&gt;SUB:DOLLARscope}" />
     <option name="resolvers" value="C:\Users\Jan\.ivy2\cache|ivy|true|Local cache, https://repo1.maven.org/maven2/|maven|public" />
   </component>
 </module>
