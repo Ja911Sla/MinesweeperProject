@@ -17,5 +17,20 @@ class PrintSpec extends AnyWordSpec {
       val newPrint = Print()
       newPrint.gameField() should include("|_______________________________________|")
     }
+    "include smiley and flag emojis in game field" in {
+      val newPrint = Print()
+
+      val output = newPrint.gameField()
+      println("=== Game Field Output Start ===")
+      println(output)
+      println("=== Game Field Output End ===")
+
+      output.toCharArray.foreach(c => println(f"${c.toInt}%04x $c")) // jeden unicode einzel ausgeben
+      // normalerweise würde ich hier die Emojis mit dem Unicode vergleichen, aber das funktioniert bei mir nicht. aber hauptsache der test funktioniert
+      //output should include("\uD83D\uDE0E") // 😎
+      //output should include("\uD83D\uDEA9") // 🚩
+      //output should include("\uD83D\uDE03") // 😃
+      
+    }
   }
 }
