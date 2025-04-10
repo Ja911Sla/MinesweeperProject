@@ -1,7 +1,7 @@
 [0m[[0m[0mdebug[0m] [0m[0mnot up to date. inChanged = true, force = false[0m
-[0m[[0m[0mdebug[0m] [0m[0mUpdating ProjectRef(uri("file:/C:/IntelliJ%20Projects/Software%20Engineering/MinesweeperProjekt/project/"), "minesweeperprojekt-build")...[0m
-[0m[[0m[0minfo[0m] [0m[0mUpdating minesweeperprojekt-build[0m
-[0m[[0m[0minfo[0m] [0m[0mResolved minesweeperprojekt-build dependencies[0m
-[0m[[0m[0minfo[0m] [0m[0mFetching artifacts of minesweeperprojekt-build[0m
-[0m[[0m[0minfo[0m] [0m[0mFetched artifacts of minesweeperprojekt-build[0m
-[0m[[0m[0mdebug[0m] [0m[0mDone updating ProjectRef(uri("file:/C:/IntelliJ%20Projects/Software%20Engineering/MinesweeperProjekt/project/"), "minesweeperprojekt-build")[0m
+[0m[[0m[0mdebug[0m] [0m[0mUpdating ProjectRef(uri("file:/C:/HTWG_Module/Minesweeper_Project/MinesweeperProject/project/"), "minesweeperproject-build")...[0m
+[0m[[0m[0minfo[0m] [0m[0mUpdating minesweeperproject-build[0m
+[0m[[0m[0minfo[0m] [0m[0mResolved minesweeperproject-build dependencies[0m
+[0m[[0m[0minfo[0m] [0m[0mFetching artifacts of minesweeperproject-build[0m
+[0m[[0m[0minfo[0m] [0m[0mFetched artifacts of minesweeperproject-build[0m
+[0m[[0m[0mdebug[0m] [0m[0mDone updating ProjectRef(uri("file:/C:/HTWG_Module/Minesweeper_Project/MinesweeperProject/project/"), "minesweeperproject-build")[0m
