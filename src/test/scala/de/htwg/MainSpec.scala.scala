@@ -8,8 +8,9 @@ class MainSpec extends AnyWordSpec {
     "print the game field and a welcome message" in {
       // Capture stdout
       val outCapture = new ByteArrayOutputStream()
+      
       Console.withOut(new PrintStream(outCapture)) {
-        main() // call your main method
+        main() 
       }
 
       val output = outCapture.toString

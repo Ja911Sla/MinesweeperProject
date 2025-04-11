@@ -5,7 +5,9 @@ ThisBuild / scalaVersion := "3.3.5"
 lazy val root = (project in file("."))
   .settings(
     name := "MinesweeperProjekt",
-    libraryDependencies += "org.scalactic" %% "scalactic" % "3.2.14",
-    libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.14" % Test
+    libraryDependencies ++= Seq(
+      "org.scalactic" %% "scalactic" % "3.2.14",
+      "org.scalatest" %% "scalatest" % "3.2.14" % Test
+    )
   )
 

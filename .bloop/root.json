@@ -8,43 +8,44 @@
             "C:\\HTWG_Module\\Minesweeper_Project\\MinesweeperProject\\src\\main\\scala",
             "C:\\HTWG_Module\\Minesweeper_Project\\MinesweeperProject\\src\\main\\scala-3",
             "C:\\HTWG_Module\\Minesweeper_Project\\MinesweeperProject\\src\\main\\java",
-            "C:\\HTWG_Module\\Minesweeper_Project\\MinesweeperProject\\target\\scala-3.6.4\\src_managed\\main"
+            "C:\\HTWG_Module\\Minesweeper_Project\\MinesweeperProject\\target\\scala-3.3.5\\src_managed\\main"
         ],
         "dependencies": [
             
         ],
         "classpath": [
-            "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-library_3\\3.6.4\\scala3-library_3-3.6.4.jar",
+            "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-library_3\\3.3.5\\scala3-library_3-3.3.5.jar",
+            "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalactic\\scalactic_3\\3.2.14\\scalactic_3-3.2.14.jar",
             "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala-library\\2.13.15\\scala-library-2.13.15.jar"
         ],
         "out": "C:\\HTWG_Module\\Minesweeper_Project\\MinesweeperProject\\.bloop\\root",
         "classesDir": "C:\\HTWG_Module\\Minesweeper_Project\\MinesweeperProject\\.bloop\\root\\scala-3\\classes",
         "resources": [
             "C:\\HTWG_Module\\Minesweeper_Project\\MinesweeperProject\\src\\main\\resources",
-            "C:\\HTWG_Module\\Minesweeper_Project\\MinesweeperProject\\target\\scala-3.6.4\\resource_managed\\main"
+            "C:\\HTWG_Module\\Minesweeper_Project\\MinesweeperProject\\target\\scala-3.3.5\\resource_managed\\main"
         ],
         "scala": {
             "organization": "org.scala-lang",
             "name": "scala-compiler",
-            "version": "3.6.4",
+            "version": "3.3.5",
             "options": [
                 
             ],
             "jars": [
-                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-library_3\\3.6.4\\scala3-library_3-3.6.4.jar",
+                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-library_3\\3.3.5\\scala3-library_3-3.3.5.jar",
                 "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala-library\\2.13.15\\scala-library-2.13.15.jar",
-                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-compiler_3\\3.6.4\\scala3-compiler_3-3.6.4.jar",
-                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-interfaces\\3.6.4\\scala3-interfaces-3.6.4.jar",
-                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\tasty-core_3\\3.6.4\\tasty-core_3-3.6.4.jar",
-                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\modules\\scala-asm\\9.7.1-scala-1\\scala-asm-9.7.1-scala-1.jar",
-                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-sbt\\compiler-interface\\1.10.4\\compiler-interface-1.10.4.jar",
+                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-compiler_3\\3.3.5\\scala3-compiler_3-3.3.5.jar",
+                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-interfaces\\3.3.5\\scala3-interfaces-3.3.5.jar",
+                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\tasty-core_3\\3.3.5\\tasty-core_3-3.3.5.jar",
+                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\modules\\scala-asm\\9.7.0-scala-2\\scala-asm-9.7.0-scala-2.jar",
+                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-sbt\\compiler-interface\\1.9.6\\compiler-interface-1.9.6.jar",
                 "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\jline\\jline-reader\\3.27.1\\jline-reader-3.27.1.jar",
                 "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\jline\\jline-terminal\\3.27.1\\jline-terminal-3.27.1.jar",
                 "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\jline\\jline-terminal-jni\\3.27.1\\jline-terminal-jni-3.27.1.jar",
-                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-sbt\\util-interface\\1.10.4\\util-interface-1.10.4.jar",
+                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-sbt\\util-interface\\1.9.8\\util-interface-1.9.8.jar",
                 "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\jline\\jline-native\\3.27.1\\jline-native-3.27.1.jar",
-                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scaladoc_3\\3.6.4\\scaladoc_3-3.6.4.jar",
-                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-tasty-inspector_3\\3.6.4\\scala3-tasty-inspector_3-3.6.4.jar",
+                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scaladoc_3\\3.3.5\\scaladoc_3-3.3.5.jar",
+                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-tasty-inspector_3\\3.3.5\\scala3-tasty-inspector_3-3.3.5.jar",
                 "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\com\\vladsch\\flexmark\\flexmark\\0.62.2\\flexmark-0.62.2.jar",
                 "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\com\\vladsch\\flexmark\\flexmark-util-ast\\0.62.2\\flexmark-util-ast-0.62.2.jar",
                 "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\com\\vladsch\\flexmark\\flexmark-util-data\\0.62.2\\flexmark-util-data-0.62.2.jar",
@@ -91,7 +92,7 @@
                 "filterLibraryFromClasspath": false
             },
             "bridgeJars": [
-                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-sbt-bridge\\3.6.4\\scala3-sbt-bridge-3.6.4.jar"
+                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-sbt-bridge\\3.3.5\\scala3-sbt-bridge-3.3.5.jar"
             ]
         },
         "java": {
@@ -177,7 +178,8 @@
             },
             "classpath": [
                 "C:\\HTWG_Module\\Minesweeper_Project\\MinesweeperProject\\.bloop\\root\\scala-3\\classes",
-                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-library_3\\3.6.4\\scala3-library_3-3.6.4.jar",
+                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-library_3\\3.3.5\\scala3-library_3-3.3.5.jar",
+                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalactic\\scalactic_3\\3.2.14\\scalactic_3-3.2.14.jar",
                 "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala-library\\2.13.15\\scala-library-2.13.15.jar"
             ]
         },
@@ -186,17 +188,34 @@
                 {
                     "organization": "org.scala-lang",
                     "name": "scala3-library_3",
-                    "version": "3.6.4",
+                    "version": "3.3.5",
                     "configurations": "default",
                     "artifacts": [
                         {
                             "name": "scala3-library_3",
-                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-library_3\\3.6.4\\scala3-library_3-3.6.4.jar"
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-library_3\\3.3.5\\scala3-library_3-3.3.5.jar"
                         },
                         {
                             "name": "scala3-library_3",
                             "classifier": "sources",
-                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-library_3\\3.6.4\\scala3-library_3-3.6.4-sources.jar"
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-library_3\\3.3.5\\scala3-library_3-3.3.5-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.scalactic",
+                    "name": "scalactic_3",
+                    "version": "3.2.14",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "scalactic_3",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalactic\\scalactic_3\\3.2.14\\scalactic_3-3.2.14.jar"
+                        },
+                        {
+                            "name": "scalactic_3",
+                            "classifier": "sources",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalactic\\scalactic_3\\3.2.14\\scalactic_3-3.2.14-sources.jar"
                         }
                     ]
                 },

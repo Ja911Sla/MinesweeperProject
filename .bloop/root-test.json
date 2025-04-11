@@ -8,44 +8,61 @@
             "C:\\HTWG_Module\\Minesweeper_Project\\MinesweeperProject\\src\\test\\scala",
             "C:\\HTWG_Module\\Minesweeper_Project\\MinesweeperProject\\src\\test\\scala-3",
             "C:\\HTWG_Module\\Minesweeper_Project\\MinesweeperProject\\src\\test\\java",
-            "C:\\HTWG_Module\\Minesweeper_Project\\MinesweeperProject\\target\\scala-3.6.4\\src_managed\\test"
+            "C:\\HTWG_Module\\Minesweeper_Project\\MinesweeperProject\\target\\scala-3.3.5\\src_managed\\test"
         ],
         "dependencies": [
             "root"
         ],
         "classpath": [
             "C:\\HTWG_Module\\Minesweeper_Project\\MinesweeperProject\\.bloop\\root\\scala-3\\classes",
-            "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-library_3\\3.6.4\\scala3-library_3-3.6.4.jar",
-            "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala-library\\2.13.15\\scala-library-2.13.15.jar"
+            "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-library_3\\3.3.5\\scala3-library_3-3.3.5.jar",
+            "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalactic\\scalactic_3\\3.2.14\\scalactic_3-3.2.14.jar",
+            "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest_3\\3.2.14\\scalatest_3-3.2.14.jar",
+            "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala-library\\2.13.15\\scala-library-2.13.15.jar",
+            "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-core_3\\3.2.14\\scalatest-core_3-3.2.14.jar",
+            "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-featurespec_3\\3.2.14\\scalatest-featurespec_3-3.2.14.jar",
+            "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-flatspec_3\\3.2.14\\scalatest-flatspec_3-3.2.14.jar",
+            "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-freespec_3\\3.2.14\\scalatest-freespec_3-3.2.14.jar",
+            "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-funsuite_3\\3.2.14\\scalatest-funsuite_3-3.2.14.jar",
+            "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-funspec_3\\3.2.14\\scalatest-funspec_3-3.2.14.jar",
+            "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-propspec_3\\3.2.14\\scalatest-propspec_3-3.2.14.jar",
+            "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-refspec_3\\3.2.14\\scalatest-refspec_3-3.2.14.jar",
+            "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-wordspec_3\\3.2.14\\scalatest-wordspec_3-3.2.14.jar",
+            "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-diagrams_3\\3.2.14\\scalatest-diagrams_3-3.2.14.jar",
+            "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-matchers-core_3\\3.2.14\\scalatest-matchers-core_3-3.2.14.jar",
+            "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-shouldmatchers_3\\3.2.14\\scalatest-shouldmatchers_3-3.2.14.jar",
+            "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-mustmatchers_3\\3.2.14\\scalatest-mustmatchers_3-3.2.14.jar",
+            "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-compatible\\3.2.14\\scalatest-compatible-3.2.14.jar",
+            "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\modules\\scala-xml_3\\2.1.0\\scala-xml_3-2.1.0.jar"
         ],
         "out": "C:\\HTWG_Module\\Minesweeper_Project\\MinesweeperProject\\.bloop\\root",
         "classesDir": "C:\\HTWG_Module\\Minesweeper_Project\\MinesweeperProject\\.bloop\\root\\scala-3\\test-classes",
         "resources": [
             "C:\\HTWG_Module\\Minesweeper_Project\\MinesweeperProject\\src\\test\\resources",
-            "C:\\HTWG_Module\\Minesweeper_Project\\MinesweeperProject\\target\\scala-3.6.4\\resource_managed\\test"
+            "C:\\HTWG_Module\\Minesweeper_Project\\MinesweeperProject\\target\\scala-3.3.5\\resource_managed\\test"
         ],
         "scala": {
             "organization": "org.scala-lang",
             "name": "scala-compiler",
-            "version": "3.6.4",
+            "version": "3.3.5",
             "options": [
                 
             ],
             "jars": [
-                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-library_3\\3.6.4\\scala3-library_3-3.6.4.jar",
+                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-library_3\\3.3.5\\scala3-library_3-3.3.5.jar",
                 "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala-library\\2.13.15\\scala-library-2.13.15.jar",
-                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-compiler_3\\3.6.4\\scala3-compiler_3-3.6.4.jar",
-                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-interfaces\\3.6.4\\scala3-interfaces-3.6.4.jar",
-                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\tasty-core_3\\3.6.4\\tasty-core_3-3.6.4.jar",
-                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\modules\\scala-asm\\9.7.1-scala-1\\scala-asm-9.7.1-scala-1.jar",
-                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-sbt\\compiler-interface\\1.10.4\\compiler-interface-1.10.4.jar",
+                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-compiler_3\\3.3.5\\scala3-compiler_3-3.3.5.jar",
+                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-interfaces\\3.3.5\\scala3-interfaces-3.3.5.jar",
+                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\tasty-core_3\\3.3.5\\tasty-core_3-3.3.5.jar",
+                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\modules\\scala-asm\\9.7.0-scala-2\\scala-asm-9.7.0-scala-2.jar",
+                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-sbt\\compiler-interface\\1.9.6\\compiler-interface-1.9.6.jar",
                 "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\jline\\jline-reader\\3.27.1\\jline-reader-3.27.1.jar",
                 "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\jline\\jline-terminal\\3.27.1\\jline-terminal-3.27.1.jar",
                 "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\jline\\jline-terminal-jni\\3.27.1\\jline-terminal-jni-3.27.1.jar",
-                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-sbt\\util-interface\\1.10.4\\util-interface-1.10.4.jar",
+                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-sbt\\util-interface\\1.9.8\\util-interface-1.9.8.jar",
                 "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\jline\\jline-native\\3.27.1\\jline-native-3.27.1.jar",
-                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scaladoc_3\\3.6.4\\scaladoc_3-3.6.4.jar",
-                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-tasty-inspector_3\\3.6.4\\scala3-tasty-inspector_3-3.6.4.jar",
+                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scaladoc_3\\3.3.5\\scaladoc_3-3.3.5.jar",
+                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-tasty-inspector_3\\3.3.5\\scala3-tasty-inspector_3-3.3.5.jar",
                 "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\com\\vladsch\\flexmark\\flexmark\\0.62.2\\flexmark-0.62.2.jar",
                 "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\com\\vladsch\\flexmark\\flexmark-util-ast\\0.62.2\\flexmark-util-ast-0.62.2.jar",
                 "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\com\\vladsch\\flexmark\\flexmark-util-data\\0.62.2\\flexmark-util-data-0.62.2.jar",
@@ -92,7 +109,7 @@
                 "filterLibraryFromClasspath": false
             },
             "bridgeJars": [
-                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-sbt-bridge\\3.6.4\\scala3-sbt-bridge-3.6.4.jar"
+                "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-sbt-bridge\\3.3.5\\scala3-sbt-bridge-3.3.5.jar"
             ]
         },
         "java": {
@@ -176,17 +193,34 @@
                 {
                     "organization": "org.scala-lang",
                     "name": "scala3-library_3",
-                    "version": "3.6.4",
+                    "version": "3.3.5",
                     "configurations": "default",
                     "artifacts": [
                         {
                             "name": "scala3-library_3",
-                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-library_3\\3.6.4\\scala3-library_3-3.6.4.jar"
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-library_3\\3.3.5\\scala3-library_3-3.3.5.jar"
                         },
                         {
                             "name": "scala3-library_3",
                             "classifier": "sources",
-                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-library_3\\3.6.4\\scala3-library_3-3.6.4-sources.jar"
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala3-library_3\\3.3.5\\scala3-library_3-3.3.5-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.scalactic",
+                    "name": "scalactic_3",
+                    "version": "3.2.14",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "scalactic_3",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalactic\\scalactic_3\\3.2.14\\scalactic_3-3.2.14.jar"
+                        },
+                        {
+                            "name": "scalactic_3",
+                            "classifier": "sources",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalactic\\scalactic_3\\3.2.14\\scalactic_3-3.2.14-sources.jar"
                         }
                     ]
                 },
@@ -204,6 +238,278 @@
                             "name": "scala-library",
                             "classifier": "sources",
                             "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\scala-library\\2.13.15\\scala-library-2.13.15-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.scalatest",
+                    "name": "scalatest_3",
+                    "version": "3.2.14",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "scalatest_3",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest_3\\3.2.14\\scalatest_3-3.2.14.jar"
+                        },
+                        {
+                            "name": "scalatest_3",
+                            "classifier": "sources",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest_3\\3.2.14\\scalatest_3-3.2.14-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.scalatest",
+                    "name": "scalatest-core_3",
+                    "version": "3.2.14",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "scalatest-core_3",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-core_3\\3.2.14\\scalatest-core_3-3.2.14.jar"
+                        },
+                        {
+                            "name": "scalatest-core_3",
+                            "classifier": "sources",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-core_3\\3.2.14\\scalatest-core_3-3.2.14-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.scalatest",
+                    "name": "scalatest-featurespec_3",
+                    "version": "3.2.14",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "scalatest-featurespec_3",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-featurespec_3\\3.2.14\\scalatest-featurespec_3-3.2.14.jar"
+                        },
+                        {
+                            "name": "scalatest-featurespec_3",
+                            "classifier": "sources",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-featurespec_3\\3.2.14\\scalatest-featurespec_3-3.2.14-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.scalatest",
+                    "name": "scalatest-flatspec_3",
+                    "version": "3.2.14",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "scalatest-flatspec_3",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-flatspec_3\\3.2.14\\scalatest-flatspec_3-3.2.14.jar"
+                        },
+                        {
+                            "name": "scalatest-flatspec_3",
+                            "classifier": "sources",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-flatspec_3\\3.2.14\\scalatest-flatspec_3-3.2.14-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.scalatest",
+                    "name": "scalatest-freespec_3",
+                    "version": "3.2.14",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "scalatest-freespec_3",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-freespec_3\\3.2.14\\scalatest-freespec_3-3.2.14.jar"
+                        },
+                        {
+                            "name": "scalatest-freespec_3",
+                            "classifier": "sources",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-freespec_3\\3.2.14\\scalatest-freespec_3-3.2.14-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.scalatest",
+                    "name": "scalatest-funsuite_3",
+                    "version": "3.2.14",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "scalatest-funsuite_3",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-funsuite_3\\3.2.14\\scalatest-funsuite_3-3.2.14.jar"
+                        },
+                        {
+                            "name": "scalatest-funsuite_3",
+                            "classifier": "sources",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-funsuite_3\\3.2.14\\scalatest-funsuite_3-3.2.14-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.scalatest",
+                    "name": "scalatest-funspec_3",
+                    "version": "3.2.14",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "scalatest-funspec_3",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-funspec_3\\3.2.14\\scalatest-funspec_3-3.2.14.jar"
+                        },
+                        {
+                            "name": "scalatest-funspec_3",
+                            "classifier": "sources",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-funspec_3\\3.2.14\\scalatest-funspec_3-3.2.14-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.scalatest",
+                    "name": "scalatest-propspec_3",
+                    "version": "3.2.14",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "scalatest-propspec_3",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-propspec_3\\3.2.14\\scalatest-propspec_3-3.2.14.jar"
+                        },
+                        {
+                            "name": "scalatest-propspec_3",
+                            "classifier": "sources",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-propspec_3\\3.2.14\\scalatest-propspec_3-3.2.14-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.scalatest",
+                    "name": "scalatest-refspec_3",
+                    "version": "3.2.14",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "scalatest-refspec_3",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-refspec_3\\3.2.14\\scalatest-refspec_3-3.2.14.jar"
+                        },
+                        {
+                            "name": "scalatest-refspec_3",
+                            "classifier": "sources",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-refspec_3\\3.2.14\\scalatest-refspec_3-3.2.14-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.scalatest",
+                    "name": "scalatest-wordspec_3",
+                    "version": "3.2.14",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "scalatest-wordspec_3",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-wordspec_3\\3.2.14\\scalatest-wordspec_3-3.2.14.jar"
+                        },
+                        {
+                            "name": "scalatest-wordspec_3",
+                            "classifier": "sources",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-wordspec_3\\3.2.14\\scalatest-wordspec_3-3.2.14-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.scalatest",
+                    "name": "scalatest-diagrams_3",
+                    "version": "3.2.14",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "scalatest-diagrams_3",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-diagrams_3\\3.2.14\\scalatest-diagrams_3-3.2.14.jar"
+                        },
+                        {
+                            "name": "scalatest-diagrams_3",
+                            "classifier": "sources",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-diagrams_3\\3.2.14\\scalatest-diagrams_3-3.2.14-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.scalatest",
+                    "name": "scalatest-matchers-core_3",
+                    "version": "3.2.14",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "scalatest-matchers-core_3",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-matchers-core_3\\3.2.14\\scalatest-matchers-core_3-3.2.14.jar"
+                        },
+                        {
+                            "name": "scalatest-matchers-core_3",
+                            "classifier": "sources",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-matchers-core_3\\3.2.14\\scalatest-matchers-core_3-3.2.14-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.scalatest",
+                    "name": "scalatest-shouldmatchers_3",
+                    "version": "3.2.14",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "scalatest-shouldmatchers_3",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-shouldmatchers_3\\3.2.14\\scalatest-shouldmatchers_3-3.2.14.jar"
+                        },
+                        {
+                            "name": "scalatest-shouldmatchers_3",
+                            "classifier": "sources",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-shouldmatchers_3\\3.2.14\\scalatest-shouldmatchers_3-3.2.14-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.scalatest",
+                    "name": "scalatest-mustmatchers_3",
+                    "version": "3.2.14",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "scalatest-mustmatchers_3",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-mustmatchers_3\\3.2.14\\scalatest-mustmatchers_3-3.2.14.jar"
+                        },
+                        {
+                            "name": "scalatest-mustmatchers_3",
+                            "classifier": "sources",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-mustmatchers_3\\3.2.14\\scalatest-mustmatchers_3-3.2.14-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.scalatest",
+                    "name": "scalatest-compatible",
+                    "version": "3.2.14",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "scalatest-compatible",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-compatible\\3.2.14\\scalatest-compatible-3.2.14.jar"
+                        },
+                        {
+                            "name": "scalatest-compatible",
+                            "classifier": "sources",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scalatest\\scalatest-compatible\\3.2.14\\scalatest-compatible-3.2.14-sources.jar"
+                        }
+                    ]
+                },
+                {
+                    "organization": "org.scala-lang.modules",
+                    "name": "scala-xml_3",
+                    "version": "2.1.0",
+                    "configurations": "default",
+                    "artifacts": [
+                        {
+                            "name": "scala-xml_3",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\modules\\scala-xml_3\\2.1.0\\scala-xml_3-2.1.0.jar"
+                        },
+                        {
+                            "name": "scala-xml_3",
+                            "classifier": "sources",
+                            "path": "C:\\Users\\tiemo\\AppData\\Local\\Coursier\\Cache\\v1\\https\\repo1.maven.org\\maven2\\org\\scala-lang\\modules\\scala-xml_3\\2.1.0\\scala-xml_3-2.1.0-sources.jar"
                         }
                     ]
                 }
