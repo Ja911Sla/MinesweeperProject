@@ -57,15 +57,21 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
         val nc = col + dc // genau das gleiche macht man hier für die Spalte
         inBounds(nr, nc) && cells(nr)(nc).isMine // Prüft die Grenzen und ob die Nachbarzelle eine Mine hat
         }
-       
     }
 
     def revealAdjacent(row: Int, col: Int): Unit = { //Jan
         // Iteriere über alle Nachbarn indem du die positionen berechneste wie oben nr = row + dr 
         // Überprüfe ob Nachbarzelle im Spielfeldgrenze liegt (inBounds) und noch nicht markiert ist (isFlagged)
         // erst nach beiden Bedingungen wird die Zelle aufgedeckt (reveal)
-        
+        directions.foreach { case (dr, dc) =>
+            val nr = row + dr
+            val nc = col + dc
+            if (inBounds(nr, nc) && !(cells(nr)(nc).isMine) && !(cells(nr)(nc).isFlagged) && !(cells(nr)(nc).isRevealed)) {
+                cells(nr)(nc).isRevealed = true
+            }
+        }
     }
+
 
      def toggleFlag(row: Int, col: Int): Unit = { // Jan
         // Wenn die Zelle nicht aufgedeckt ist, dann toggle die Flagge (isFlagged) der Zelle

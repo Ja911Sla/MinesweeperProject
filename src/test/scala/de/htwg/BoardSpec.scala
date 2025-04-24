@@ -30,6 +30,7 @@ class BoardSpec extends AnyWordSpec {
       placesMinesBefore should not equal placesMinesAfter
     }
   }
+
   "be able to place bombs" in {     //Place
     val board = Board()
     var amountMinesBefore = 0
@@ -56,8 +57,47 @@ class BoardSpec extends AnyWordSpec {
     amountMinesBefore should be(0)
     amountMinesAfter should be(board.mineCount)
     }
-  //"be able to reveal adjacents of its Cells" in {     //RevealAdjacent
-   // val board = Board()
+
+  "be able to reveal adjacents of its Cells" in {       //RevealAdjacent
+    val board = Board()
+
+    var x = 0
+    while (x < board.size) {
+      var y = 0
+      while (y < board.size) {
+        board.cells(x)(y).isMine = false
+        y += 1
+      }
+      x += 1
+    }
+
+    board.cells(2)(2).isRevealed = false
+    board.cells(3)(2).isRevealed = false
+    board.cells(2)(1).isRevealed = false
+    board.cells(3)(1).isRevealed = false
+    board.cells(4)(2).isRevealed = false
+    board.cells(4)(1).isRevealed = false
+
+    board.cells(2)(2).isMine = false
+    board.cells(3)(2).isMine = false
+    board.cells(2)(1).isMine = false
+    board.cells(3)(1).isMine = false
+    board.cells(4)(2).isMine = false
+    board.cells(4)(1).isMine = false
+    board.cells(1)(2).isMine = true
+    board.cells(3)(3).isMine = true
+    board.cells(5)(2).isMine = true
+
+    board.revealAdjacent(3, 1)
+
+    board.cells(2)(2).isRevealed should be (true)
+    board.cells(3)(2).isRevealed should be (true)
+    board.cells(2)(1).isRevealed should be (true)
+    board.cells(3)(1).isRevealed should be (true)
+    board.cells(4)(2).isRevealed should be (true)
+    board.cells(4)(1).isRevealed should be (true)
+  }
+
 
   "be able to toggle flags on not revealed fields" in {    //Toggle
     val board = Board()
