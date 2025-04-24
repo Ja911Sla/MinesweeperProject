@@ -18,8 +18,8 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
         val random = scala.util.Random
         var amountMines = mineCount
         while (amountMines > 0) {
-            val x = random.nextInt(8)
-            val y = random.nextInt(8)
+            val x = random.nextInt(size)
+            val y = random.nextInt(size)
             if (!cells(x)(y).isMine) {
                 cells(x)(y).isMine = true
                 amountMines -= 1
@@ -27,7 +27,7 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
         }
     }
 
-    
+
 
     def reveal(row: Int, col: Int): Boolean = {
         if (cells(row)(col).isFlagged || cells(row)(col).isRevealed) return true // Zelle bereits aufgedeckt oder markiert
