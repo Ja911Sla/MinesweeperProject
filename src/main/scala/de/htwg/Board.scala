@@ -37,8 +37,6 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
         }
     }
 
-
-
     def reveal(row: Int, col: Int): Boolean = {
         if (cells(row)(col).isFlagged || cells(row)(col).isRevealed) return true // Zelle bereits aufgedeckt oder markiert
         if (cells(row)(col).isMine) return false // Mine aufgedeckt, Spiel verloren
@@ -73,6 +71,9 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
         // Wenn die Zelle nicht aufgedeckt ist, dann toggle die Flagge (isFlagged) der Zelle
         // Wenn die Zelle aufgedeckt ist, dann mache nichts
         // toggle bedeutet, dass wenn die Flagge gesetzt ist, sie entfernt wird und umgekehrt
+        if (!cells(row)(col).isRevealed) {
+            cells(row)(col).isFlagged = !cells(row)(col).isFlagged      // Setzt Flag auf das Gegenteil was es gerade ist.
+        }
     }
 
     def checkWin(): Boolean = { 
@@ -80,8 +81,6 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
         val totalFlags = cells.flatten.count(_.isFlagged) // Zähle die Gesamtzahl der gesetzten Flaggen
         flaggedMines == mineCount && totalFlags == mineCount  // Gewonnen wenn Anzahl der markierten Minen und Flaggen gleich der Gesamtzahl der Minen ist
     }
-
-
 
     def display(revealAll: Boolean = false): Unit = {
         println("  1 2 3 4 5 6 7 8 9") // Spaltenüberschrift
