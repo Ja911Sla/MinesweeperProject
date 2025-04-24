@@ -4,7 +4,7 @@ import de.htwg._
 
 class BoardSpec extends AnyWordSpec {
   "A Board" should {
-    "be able to reset" in {
+    "be able to reset" in {       //Reset 
       val board = Board()
       var placesMinesBefore = 0
       var x = 0
@@ -33,7 +33,7 @@ class BoardSpec extends AnyWordSpec {
     }
   }
 
-  "be able to place bombs" in {
+  "be able to place bombs" in {     //Place
 
     val board = Board()
     var amountMinesBefore = 0
