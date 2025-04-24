@@ -3,7 +3,7 @@ import org.scalatest.matchers.should.Matchers._
 import java.io.{ByteArrayOutputStream, PrintStream}
 import de.htwg._
 
-class MainSpec extends AnyWordSpec {
+class MainSpecc extends AnyWordSpec {
   "The main method" should {
     "print the game field and a welcome message" in {
       // Capture stdout

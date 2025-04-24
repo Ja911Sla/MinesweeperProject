@@ -9,13 +9,25 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
         // Nestart des Spiels, das heißt heißt jede Zelle im 2D Array wird mit neuen GameCell Objekten gefüllt
         // danach muss man die Minen neu platzieren
 
+
     }
 
     def placeMines(): Unit = { //Jan
         // platziere die Minen zufällig (Random) im 2D Array, mineCount gibt an wie viele Minen es maximal gibt
         // wenn die Zelle noch keine Mine hat (isMine), dann platziere eine Mine. 
-        
+        val random = scala.util.Random
+        var amountMines = mineCount
+        while (amountMines > 0) {
+            val x = random.nextInt(8)
+            val y = random.nextInt(8)
+            if (!cells(x)(y).isMine) {
+                cells(x)(y).isMine = true
+                amountMines -= 1
+            }
+        }
     }
+
+    
 
     def reveal(row: Int, col: Int): Boolean = {
         if (cells(row)(col).isFlagged || cells(row)(col).isRevealed) return true // Zelle bereits aufgedeckt oder markiert
