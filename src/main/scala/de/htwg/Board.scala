@@ -94,10 +94,22 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
             print((r + 'A').toChar + " ") // Konvertiere die Zeilenindizes in Buchstaben (A-I)
             for (c <- 0 until size) {  // Iteriere über die Spalten
                 val cell = cells(r)(c)
-                if (revealAll && cell.isMine) print("\uD83D\uDCA3 ") // mine M wird gezeigt wenn alles aufgedeckt werden soll
-                else if (cell.isFlagged) print("\uD83D\uDEA9 ") // zeige flag F wenn es gesetzte wird
-                else if (cell.isRevealed) print(if (cell.mineCount == 0) "\uD83D\uDFEB" else s"${cell.mineCount} ")  // zeige leere Zelle # wenn alle Nachbarzellen keine Mine haben
+                if (revealAll && cell.isMine) print("\uD83D\uDCA3") // mine M wird gezeigt wenn alles aufgedeckt werden soll
+                else if (cell.isFlagged) print("\uD83D\uDEA9") // zeige flag F wenn es gesetzte wird
+                else if (cell.isRevealed) {
+                    val emojiNumber = cell.mineCount match {
+                        case 0 => "⬛"    // leere Zelle ohne Mine als Nachbar
+                        case 1 => "1️⃣"
+                        case 2 => "2️⃣"
+                        case 3 => "3️⃣"
+                        case 4 => "4️⃣"
+                        case 5 => "5️⃣"
+                        case n => s"$n " // zahlen ab 6 werden als Text angezeigt
+                    }
+                    print(emojiNumber)  // zeige leere Zelle "\uD83D\uDFEB " wenn alle Nachbarzellen keine Mine haben
+                }
                 else print("⬜") //Neutrales Feld
+
 
             }
             println()
