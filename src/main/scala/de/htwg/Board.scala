@@ -5,7 +5,7 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
     val cells: Array[Array[GameCell]] = Array.fill(size, size)(GameCell()) //cells füllt das 2D Array mit GameCell Objekten
     val directions = List((-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)) // liste von alle möglichen Nachbarn
 
-    def reset(): Unit = { 
+    def reset(): Unit = {
         // Nestart des Spiels, das heißt heißt jede Zelle im 2D Array wird mit neuen GameCell Objekten gefüllt
         // danach muss man die Minen neu platzieren
         var x = 0
@@ -67,7 +67,7 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
             val nr = row + dr
             val nc = col + dc
             if (inBounds(nr, nc) && !(cells(nr)(nc).isMine) && !(cells(nr)(nc).isFlagged) && !(cells(nr)(nc).isRevealed)) {
-                cells(nr)(nc).isRevealed = true
+                reveal(nr, nc)
             }
         }
     }

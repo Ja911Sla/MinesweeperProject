@@ -1,4 +1,4 @@
-[debug] [minesweeperproject-build-build] Classpath dependencies List()
-[debug] [minesweeperproject-build-build] Dependencies from configurations List()
-[debug] Bloop wrote the configuration of project 'minesweeperproject-build-build' to 'C:\Users\Jan\Desktop\HTWG\Drittes Semester\Software Engineering\MinesweeperProject\project\project\.bloop\minesweeperproject-build-build.json'
-[success] Generated .bloop\minesweeperproject-build-build.json
+[0m[[0m[0mdebug[0m] [0m[0m[minesweeperproject-build-build] Classpath dependencies List()[0m
+[0m[[0m[0mdebug[0m] [0m[0m[minesweeperproject-build-build] Dependencies from configurations List()[0m
+[0m[[0m[0mdebug[0m] [0m[0mBloop wrote the configuration of project 'minesweeperproject-build-build' to 'C:\Users\Jan\Desktop\HTWG\Drittes Semester\Software Engineering\MinesweeperProject\project\project\.bloop\minesweeperproject-build-build.json'[0m
+[0m[[0m[32msuccess[0m] [0m[0mGenerated .bloop\minesweeperproject-build-build.json[0m

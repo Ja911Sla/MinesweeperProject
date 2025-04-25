@@ -1,6 +1,9 @@
+package de.htwg
 import org.scalatest.wordspec.AnyWordSpec
-import org.scalatest.matchers.should.Matchers._
-import de.htwg._
+import org.scalatest.matchers.should.Matchers.*
+
+import java.io.{ByteArrayOutputStream, PrintStream}
+
 
 class BoardSpec extends AnyWordSpec {
   "A Board" should {
@@ -114,6 +117,55 @@ class BoardSpec extends AnyWordSpec {
     board.toggleFlag(2, 2)
     board.cells(2)(2).isFlagged should be (false)
   }
+
+  "be able to know if inbounds or not" in {     // Inbound
+    val board = Board()
+    board.inBounds(4, 3) should be (true)
+    board.inBounds(11, 14) should be (false)
+  }
+
+  "reveal a mine-free cell and mark it as revealed" in {    // Reveal
+    val board = Board()
+    board.cells(3)(3).isMine = false
+    val revealed = board.reveal(3, 3)
+    revealed should be (true)
+    board.cells(3)(3).isRevealed should be (true)
+  }
+
+  "reveal a mine and return false" in {
+    val board = Board()
+    board.cells(4)(4).isMine = true
+    val revealed = board.reveal(4, 4)
+    revealed should be (false)
+  }
+
+  "return true on checkWin only if all mines are flagged" in {      // Check Win
+    val board = Board(mineCount = 3)
+
+    board.cells(0)(0).isMine = true
+    board.cells(1)(1).isMine = true
+    board.cells(2)(2).isMine = true
+    board.toggleFlag(0, 0)
+    board.toggleFlag(1, 1)
+    board.toggleFlag(2, 2)
+    board.checkWin() should be (true)
+
+    board.toggleFlag(0, 0)
+    board.checkWin() should be (false)
+  }
+
+  "be able to count adjacent mines" in {
+    val board = Board()
+
+    board.cells(3)(2).isMine = true
+    board.cells(3)(4).isMine = true
+    board.cells(2)(3).isMine = true
+    board.cells(2)(4).isMine = true
+
+    board.countAdjacentMines(3, 3) should be (4)
+  }
 }
+
+
 
 
