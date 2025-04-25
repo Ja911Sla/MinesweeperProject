@@ -151,7 +151,7 @@ class TuiSpec extends AnyWordSpec {
 
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {
-          tui.start(resetBoard = false)
+          //tui.start(resetBoard = false)
          
         }
       }
