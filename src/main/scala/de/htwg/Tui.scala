@@ -1,8 +1,8 @@
 package de.htwg
 import scala.io.StdIn // eingabe von 
 
-case class Tui(){
-    val board = new Board()
+case class Tui(var board: Board = Board()) {
+    //val board = new Board()
 
     def start(): Unit = {
         board.reset()
@@ -24,7 +24,7 @@ case class Tui(){
             val input = StdIn.readLine().trim.toUpperCase // konvertiert alle eingaben in großbuchstaben und entfernt Leerzeichen
             input match {
                 case i if i == "Q" => // Q für quit
-                running = false 
+                running = false
                 println("Spiel beendet.")
 
                 case i if i == "R" => // R für reset
@@ -42,7 +42,7 @@ case class Tui(){
                          |  R    -> Spiel zurücksetzen
                          |  H    -> Hilfe anzeigen
                          |  A    -> Anleitung anzeigen
-                         |""".stripMargin) 
+                         |""".stripMargin)
 
 
                 case i if i == "A" =>   // A für Anleitung
@@ -62,14 +62,14 @@ case class Tui(){
 
 
                 case i if i.matches("F [A-I][1-9]") => // regex für Flagge setzen/entfernen
-                val row = i.charAt(2) - 'A' 
-                val col = i.charAt(3) - '1' 
-                board.toggleFlag(row, col)  
+                val row = i.charAt(2) - 'A'
+                val col = i.charAt(3) - '1'
+                board.toggleFlag(row, col)
 
                 case i if i.matches("[A-I][1-9]") => // regex für Zelle aufdecken
                 val row = i.charAt(0) - 'A'
                 val col = i.charAt(1) - '1'
-                val safe = board.reveal(row, col) 
+                val safe = board.reveal(row, col)
 
                 if (!safe) {
                     board.display(true)

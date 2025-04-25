@@ -10,3 +10,7 @@ val emptyField = "\u2B1C"   // field
 val smStart = "\uD83D\uDE03"     // smileyStart
 val smWon = "\uD83D\uDE0E"  // smileyVictory
 val smLose = "\uD83D\uDE35"
+// white square emoji
+val sm = "\uD83D\uDE00" // smiley
+// blue square emoji
+val blueSquare = "\uD83D\uDFE6" // blue square
