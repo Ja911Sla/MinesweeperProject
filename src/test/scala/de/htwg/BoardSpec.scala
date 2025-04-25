@@ -2,7 +2,7 @@ package de.htwg
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers.*
 
-import java.io.{ByteArrayOutputStream, PrintStream}
+import java.io.{ByteArrayInputStream, ByteArrayOutputStream, PrintStream, PrintWriter, StringWriter}
 
 
 class BoardSpec extends AnyWordSpec {
@@ -154,7 +154,7 @@ class BoardSpec extends AnyWordSpec {
     board.checkWin() should be (false)
   }
 
-  "be able to count adjacent mines" in {
+  "be able to count adjacent mines" in {      // CountAdjacentMines
     val board = Board()
 
     board.cells(3)(2).isMine = true
@@ -163,6 +163,31 @@ class BoardSpec extends AnyWordSpec {
     board.cells(2)(4).isMine = true
 
     board.countAdjacentMines(3, 3) should be (4)
+  }
+
+  "be able to display itself" in {          // Display
+
+    val board = Board(2, 2)
+    board.cells(0)(0).isMine = true
+    board.cells(0)(0).isRevealed = false
+    board.cells(0)(1).isRevealed = false
+    board.cells(1)(1).isMine = true
+    board.cells(1)(1).isRevealed = false
+    board.cells(1)(0).isRevealed = false
+
+    board.reveal(0, 0)
+
+
+    val out = new ByteArrayOutputStream()
+    Console.withOut(new PrintStream(out)) {
+      board.display(true)
+    }
+
+    val output = out.toString()
+
+    output should include("A")
+    output should include("1 2")
+    output should include("\uD83D\uDCA3") // Bombe
   }
 }
 
