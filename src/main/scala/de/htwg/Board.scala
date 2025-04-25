@@ -5,7 +5,7 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
     val cells: Array[Array[GameCell]] = Array.fill(size, size)(GameCell()) //cells füllt das 2D Array mit GameCell Objekten
     val directions = List((-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)) // liste von alle möglichen Nachbarn
 
-    def reset(): Unit = { //Jan
+    def reset(): Unit = { 
         // Nestart des Spiels, das heißt heißt jede Zelle im 2D Array wird mit neuen GameCell Objekten gefüllt
         // danach muss man die Minen neu platzieren
         var x = 0
@@ -22,7 +22,7 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
         placeMines()
     }
 
-    def placeMines(): Unit = { //Jan
+    def placeMines(): Unit = {
         // platziere die Minen zufällig (Random) im 2D Array, mineCount gibt an wie viele Minen es maximal gibt
         // wenn die Zelle noch keine Mine hat (isMine), dann platziere eine Mine. 
         val random = scala.util.Random
@@ -59,7 +59,7 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
         }
     }
 
-    def revealAdjacent(row: Int, col: Int): Unit = { //Jan
+    def revealAdjacent(row: Int, col: Int): Unit = {
         // Iteriere über alle Nachbarn indem du die positionen berechneste wie oben nr = row + dr 
         // Überprüfe ob Nachbarzelle im Spielfeldgrenze liegt (inBounds) und noch nicht markiert ist (isFlagged)
         // erst nach beiden Bedingungen wird die Zelle aufgedeckt (reveal)
@@ -73,7 +73,7 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
     }
 
 
-     def toggleFlag(row: Int, col: Int): Unit = { // Jan
+     def toggleFlag(row: Int, col: Int): Unit = {
         // Wenn die Zelle nicht aufgedeckt ist, dann toggle die Flagge (isFlagged) der Zelle
         // Wenn die Zelle aufgedeckt ist, dann mache nichts
         // toggle bedeutet, dass wenn die Flagge gesetzt ist, sie entfernt wird und umgekehrt

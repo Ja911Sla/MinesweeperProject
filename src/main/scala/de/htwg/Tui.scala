@@ -44,7 +44,6 @@ case class Tui(){
                          |  A    -> Anleitung anzeigen
                          |""".stripMargin) 
 
-                 // vielliecht könntest du hier ein A für Anleitung machen, was erklärt wie man das Spiel spielt.
 
                 case i if i == "A" =>   // A für Anleitung
                     println(
