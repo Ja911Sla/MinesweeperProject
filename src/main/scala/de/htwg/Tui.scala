@@ -46,6 +46,22 @@ case class Tui(){
 
                  // vielliecht könntest du hier ein A für Anleitung machen, was erklärt wie man das Spiel spielt.
 
+                case i if i == "A" =>   // A für Anleitung
+                    println(
+                        """
+                          |Neu bei Minesweeper? Kein Problem!
+                          |Das Ziel ist es Felder mit potentiellen Minen zu identifizieren und
+                          |mit einer Flagge zu markieren. Es gibt eine sichtbare Menge an Minen mit
+                          |dem der Spieler immer weiß wie viele Minen es noch zu erkennen gibt.
+                          |
+                          |Jedes sichere Feld was revealed wurde, gibt eine Zahl aus um zu signalisieren wieviele Bomben
+                          |sich in direkter Nähe um das Feld befinden. Nun muss man durch Logik, Kombinatorik und manchmal
+                          |auch durch etwas Glück sich auf die Suche nach den Minen begeben.
+                          |
+                          |Viel Erfolg!
+                          |""".stripMargin)
+
+
                 case i if i.matches("F [A-I][1-9]") => // regex für Flagge setzen/entfernen
                 val row = i.charAt(2) - 'A' 
                 val col = i.charAt(3) - '1' 

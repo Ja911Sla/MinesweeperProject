@@ -3,9 +3,9 @@ import de.htwg._
 
 @main
 def main(): Unit = {
-  println("It works!!!!! hopefullybbbbbbbbbaaaaaaaa")
-  val myGame = Print()
-  print(myGame.gameField())
+  // println("It works!!!!! hopefullybbbbbbbbbaaaaaaaa")
+  // val myGame = Print()
+  // print(myGame.gameField())
   // ab hier ausgabe von der TUI  
   
   val tui = new Tui()
