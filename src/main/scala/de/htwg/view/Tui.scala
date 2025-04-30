@@ -1,11 +1,16 @@
-package de.htwg
-import scala.io.StdIn // eingabe von 
+package de.htwg.view
 
-case class Tui(var board: Board = Board()) {
+import de.htwg.controller.Controller
+import de.htwg.utility.Observer
+import de.htwg.model.Board
+import scala.io.StdIn // eingabe von
+
+class Tui(controller: Controller) extends Observer {
+    controller.add(this)
     //val board = new Board()
 
     def start(): Unit = {
-        board.reset()
+        controller.resetGame()
         println("""
         |Willkommen zu Minesweeper!
         |Das Ziel ist es, alle Felder zu öffnen, ohne auf eine Mine zu treten.
@@ -20,7 +25,7 @@ case class Tui(var board: Board = Board()) {
 
         var running = true
         while (running) {
-            board.display()
+            controller.board.display()
             val input = StdIn.readLine().trim.toUpperCase // konvertiert alle eingaben in großbuchstaben und entfernt Leerzeichen
             input match {
                 case i if i == "Q" => // Q für quit
@@ -28,7 +33,7 @@ case class Tui(var board: Board = Board()) {
                 println("Spiel beendet.")
 
                 case i if i == "R" => // R für reset
-                board.reset()
+                controller.board.reset()
                 println("Spiel zurückgesetzt.")
 
                 case i if i == "H" => // H für Hilfe
@@ -64,19 +69,19 @@ case class Tui(var board: Board = Board()) {
                 case i if i.matches("F [A-I][1-9]") => // regex für Flagge setzen/entfernen
                 val row = i.charAt(2) - 'A'
                 val col = i.charAt(3) - '1'
-                board.toggleFlag(row, col)
+                controller.board.toggleFlag(row, col)
 
                 case i if i.matches("[A-I][1-9]") => // regex für Zelle aufdecken
                 val row = i.charAt(0) - 'A'
                 val col = i.charAt(1) - '1'
-                val safe = board.reveal(row, col)
+                val safe = controller.board.reveal(row, col)
 
                 if (!safe) {
-                    board.display(true)
+                    controller.board.display(true)
                     println("BOOOM! Du hast verloren.")
                     running = false
-                } else if (board.checkWin()) {
-                    board.display(true)
+                } else if (controller.board.checkWin()) {
+                    controller.board.display(true)
                     println("Du hast gewonnen!")
                     running = false
                 }
@@ -85,6 +90,10 @@ case class Tui(var board: Board = Board()) {
                 println("Ungültige Eingabe. Nutze z.B. 'C3' oder 'F C3'.")
             }
         }
+    }
+
+    override def update: Unit = {
+        println("Board wurde aktualisiert.")
     }
 }
 

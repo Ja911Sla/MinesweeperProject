@@ -1,4 +1,5 @@
-package de.htwg
+package de.htwg.model
+
 import scala.util.Random
 
 case class Board(val size: Int = 9, val mineCount: Int = 10) {

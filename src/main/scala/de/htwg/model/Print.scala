@@ -1,4 +1,4 @@
-package de.htwg
+package de.htwg.model
 
 case class Print():
   

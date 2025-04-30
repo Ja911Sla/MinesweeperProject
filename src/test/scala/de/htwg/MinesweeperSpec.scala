@@ -1,6 +1,7 @@
 import org.scalatest.wordspec.AnyWordSpec
-import org.scalatest.matchers.should.Matchers._
-import de.htwg._
+import org.scalatest.matchers.should.Matchers.*
+import de.htwg.*
+import de.htwg.model.Field
 
 class MinesweeperSpec extends AnyWordSpec {
   "A Minesweeper game" should {

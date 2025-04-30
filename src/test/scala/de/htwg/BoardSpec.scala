@@ -1,4 +1,5 @@
 package de.htwg
+import de.htwg.model.Board
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers.*
 

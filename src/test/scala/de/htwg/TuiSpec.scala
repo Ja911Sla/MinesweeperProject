@@ -1,7 +1,10 @@
 package de.htwg
 
+import de.htwg.model.Board
+import de.htwg.view.Tui
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers.*
+
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream, PrintStream}
 
 class TuiSpec extends AnyWordSpec {
@@ -144,7 +147,7 @@ class TuiSpec extends AnyWordSpec {
       }
       customBoard.cells(0)(0).isMine = true // A1 ist Mine
 
-      val tui = Tui(board = customBoard)
+      val tui = view.Tui(board = customBoard)
 
       val in = new ByteArrayInputStream("F A1\nQ\n".getBytes())
       val out = new ByteArrayOutputStream()

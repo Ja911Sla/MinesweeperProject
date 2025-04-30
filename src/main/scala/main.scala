@@ -1,5 +1,9 @@
 // filepath: c:\HTWG_Module\Minesweeper_Project\MinesweeperProject\src\main\scala\main.scala
-import de.htwg._
+import de.htwg.*
+import de.htwg.view.Tui
+import de.htwg.controller.Controller
+import de.htwg.model.Board
+import de.htwg.utility.Observer
 
 @main
 def main(): Unit = {
@@ -7,7 +11,9 @@ def main(): Unit = {
   // val myGame = Print()
   // print(myGame.gameField())
   // ab hier ausgabe von der TUI  
-  
-  val tui = new Tui()
+
+  val board = new Board()
+  val controller = new Controller(board)
+  val tui = new Tui(controller)
   tui.start()
 }

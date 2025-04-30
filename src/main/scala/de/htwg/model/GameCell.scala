@@ -1,4 +1,4 @@
-package de.htwg
+package de.htwg.model
 
 // alle infos die in einer Zelle gespeichert werden
 case class GameCell(
