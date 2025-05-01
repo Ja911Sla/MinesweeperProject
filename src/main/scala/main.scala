@@ -11,7 +11,7 @@ def main(): Unit = {
   // val myGame = Print()
   // print(myGame.gameField())
   // ab hier ausgabe von der TUI  
-
+  println("Willkommen zu Minesweeper!")
   val board = new Board()
   val controller = new Controller(board)
   val tui = new Tui(controller)

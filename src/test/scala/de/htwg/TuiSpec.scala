@@ -6,22 +6,22 @@ import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers.*
 import de.htwg.controller.Controller
 import de.htwg.utility.Observer
-
+import scala.Console
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream, PrintStream}
 
 class TuiSpec extends AnyWordSpec {
 
-  
   "The Tui" should {
     "quit the game with Q" in {
       val in = new ByteArrayInputStream("Q\n".getBytes())
       val out = new ByteArrayOutputStream()
-      val controller = new Controller(new Board())
+
+      val controller = new Controller(Board())
       val tui = new Tui(controller)
-      
+
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {
-          tui().start()
+          tui.start()
         }
       }
 
@@ -34,9 +34,12 @@ class TuiSpec extends AnyWordSpec {
       val in = new ByteArrayInputStream("H\nQ\n".getBytes()) // Hilfe, dann beenden
       val out = new ByteArrayOutputStream()
 
+      val controller = new Controller(Board()) // Board() ist dein Model
+      val tui = new Tui(controller)
+
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {
-          Tui().start()
+          tui.start()
         }
       }
 
@@ -49,9 +52,12 @@ class TuiSpec extends AnyWordSpec {
       val in = new ByteArrayInputStream("R\nQ\n".getBytes()) // Reset, dann quit
       val out = new ByteArrayOutputStream()
 
+      val controller = new Controller(Board()) // Board() ist dein Model
+      val tui = new Tui(controller)
+
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {
-          Tui().start()
+          tui.start()
         }
       }
 
@@ -63,9 +69,12 @@ class TuiSpec extends AnyWordSpec {
       val in = new ByteArrayInputStream("F C3\nQ\n".getBytes())
       val out = new ByteArrayOutputStream()
 
+      val controller = new Controller(Board())
+      val tui = new Tui(controller)
+
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {
-          Tui().start()
+          tui.start()
         }
       }
 
@@ -77,9 +86,12 @@ class TuiSpec extends AnyWordSpec {
       val in = new ByteArrayInputStream("C3\nQ\n".getBytes())
       val out = new ByteArrayOutputStream()
 
+      val controller = new Controller(Board())
+      val tui = new Tui(controller)
+
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {
-          Tui().start()
+          tui.start()
         }
       }
 
@@ -91,9 +103,12 @@ class TuiSpec extends AnyWordSpec {
       val in = new ByteArrayInputStream("XYZ\nQ\n".getBytes())
       val out = new ByteArrayOutputStream()
 
+      val controller = new Controller(Board()) // Board() ist dein Model
+      val tui = new Tui(controller)
+
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {
-          Tui().start()
+          tui.start()
         }
       }
 
@@ -105,9 +120,12 @@ class TuiSpec extends AnyWordSpec {
       val in = new ByteArrayInputStream("A\nQ\n".getBytes()) // Anleitung, dann quit
       val out = new ByteArrayOutputStream()
 
+      val controller = new Controller(Board()) // Board() ist dein Model
+      val tui = new Tui(controller)
+
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {
-          Tui().start()
+          tui.start()
         }
       }
 
@@ -118,49 +136,49 @@ class TuiSpec extends AnyWordSpec {
     // new code
     //more new code
     "lose the game when uncovering a mine" in {
-      val tui = Tui()
+      val controller = new Controller(Board())
+      val tui = new Tui(controller)
+
+      // Stelle sicher, dass Board initial korrekt gesetzt ist
+      controller.board.reset()
+      controller.board.cells(0)(0).isMine = true // Setze Mine manuell
 
       val in = new ByteArrayInputStream("A1\nQ\n".getBytes())
       val out = new ByteArrayOutputStream()
 
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {
-          val thread = new Thread(() => tui.start())
+          val thread = new Thread(() => tui.start(resetBoard = false)) // <- wichtig!
           thread.start()
-
-          // Warte kurz, bis `reset()` durchgelaufen ist
-          Thread.sleep(300)
-
-          // Jetzt Mine setzen
-          tui.board.cells(0)(0).isMine = true
-
           thread.join()
         }
       }
 
       val output = out.toString
-      println(output) // <- falls du debuggen willst
+      println(output)
       output should include("BOOOM! Du hast verloren.")
     }
+
+
     "win the game when all mines are flagged" in {
-      val customBoard = Board(mineCount = 1)
+      val board = Board(mineCount = 1)
 
-      // Alles vorbereiten BEVOR das Spiel startet
-      for (r <- 0 until customBoard.size; c <- 0 until customBoard.size) {
-        customBoard.cells(r)(c).isMine = false
-        customBoard.cells(r)(c).isFlagged = false
+      // Initialisiere Board manuell
+      for (r <- 0 until board.size; c <- 0 until board.size) {
+        board.cells(r)(c).isMine = false
+        board.cells(r)(c).isFlagged = false
       }
-      customBoard.cells(0)(0).isMine = true // A1 ist Mine
+      board.cells(0)(0).isMine = true // Setze eine einzelne Mine
 
-      val tui = view.Tui(board = customBoard)
+      val controller = new Controller(board)
+      val tui = new Tui(controller)
 
       val in = new ByteArrayInputStream("F A1\nQ\n".getBytes())
       val out = new ByteArrayOutputStream()
 
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {
-          //tui.start(resetBoard = false)
-         
+          tui.start(resetBoard = false) // <- verhindert das Zurücksetzen des Boards
         }
       }
 
