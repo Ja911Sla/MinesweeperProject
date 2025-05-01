@@ -1,4 +1,4 @@
-// filepath: c:\HTWG_Module\Minesweeper_Project\MinesweeperProject\src\main\scala\main.scala
+
 import de.htwg.*
 import de.htwg.view.Tui
 import de.htwg.controller.Controller

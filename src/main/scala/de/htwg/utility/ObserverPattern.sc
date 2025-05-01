@@ -1,5 +1,5 @@
-package de.htwg.utility
-
+//package de.htwg.utility
+import de.htwg.utility.{Observable, Observer}
 class TestObject extends Observer {
   def update:Unit = println("Ping")
 }
