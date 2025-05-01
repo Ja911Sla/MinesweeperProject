@@ -181,7 +181,7 @@ class BoardSpec extends AnyWordSpec {
 
 
     val out = new ByteArrayOutputStream()
-    Console.withOut(new PrintStream(out)) {
+    scala.Console.withOut(new PrintStream(out)) {
       board.display(true)
     }
 

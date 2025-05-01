@@ -11,14 +11,17 @@ import java.io.{ByteArrayInputStream, ByteArrayOutputStream, PrintStream}
 
 class TuiSpec extends AnyWordSpec {
 
+  
   "The Tui" should {
     "quit the game with Q" in {
       val in = new ByteArrayInputStream("Q\n".getBytes())
       val out = new ByteArrayOutputStream()
-
+      val controller = new Controller(new Board())
+      val tui = new Tui(controller)
+      
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {
-          Tui().start()
+          tui().start()
         }
       }
 
