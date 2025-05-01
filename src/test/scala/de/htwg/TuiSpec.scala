@@ -186,5 +186,11 @@ class TuiSpec extends AnyWordSpec {
       println(output)
       output should include("Du hast gewonnen!")
     }
+    "should flag cell when input is 'F A1'" in {
+      val controller = new Controller(Board())
+      val tui = new Tui(controller)
+      tui.processInputLine("F A1")
+      controller.board.cells(0)(0).isFlagged shouldBe true
+    }
   }
 }
