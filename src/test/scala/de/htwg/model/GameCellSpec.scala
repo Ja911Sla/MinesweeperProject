@@ -1,7 +1,9 @@
-import org.scalatest.wordspec.AnyWordSpec
-import org.scalatest.matchers.should.Matchers.*
+package de.htwg.model
+
 import de.htwg.*
 import de.htwg.model.GameCell
+import org.scalatest.matchers.should.Matchers.*
+import org.scalatest.wordspec.AnyWordSpec
 
 class GameCellSpec extends AnyWordSpec {
   "A Game cell" should {

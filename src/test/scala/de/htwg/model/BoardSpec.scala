@@ -1,9 +1,10 @@
-package de.htwg
-import de.htwg.model.Board
-import org.scalatest.wordspec.AnyWordSpec
-import org.scalatest.matchers.should.Matchers.*
+package de.htwg.model
 
-import java.io.{ByteArrayInputStream, ByteArrayOutputStream, PrintStream, PrintWriter, StringWriter}
+import de.htwg.model.Board
+import org.scalatest.matchers.should.Matchers.*
+import org.scalatest.wordspec.AnyWordSpec
+
+import java.io.*
 
 
 class BoardSpec extends AnyWordSpec {

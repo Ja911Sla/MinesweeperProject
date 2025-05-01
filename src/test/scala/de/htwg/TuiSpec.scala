@@ -4,6 +4,8 @@ import de.htwg.model.Board
 import de.htwg.view.Tui
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers.*
+import de.htwg.controller.Controller
+import de.htwg.utility.Observer
 
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream, PrintStream}
 

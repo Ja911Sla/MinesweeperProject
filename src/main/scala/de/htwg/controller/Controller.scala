@@ -21,6 +21,7 @@ class Controller(var board:Board) extends Observable {      // Controller soll k
 
   def checkWin(): Boolean = board.checkWin()
 
+
   def resetGame(): Unit = {
     board.reset()
     notifyObservers
