@@ -1,13 +1,14 @@
-package de.htwg
+package de.htwg.view
 
-import de.htwg.model.Board
-import de.htwg.view.Tui
-import org.scalatest.wordspec.AnyWordSpec
-import org.scalatest.matchers.should.Matchers.*
 import de.htwg.controller.Controller
+import de.htwg.model.Board
 import de.htwg.utility.Observer
-import scala.Console
+import de.htwg.view.Tui
+import org.scalatest.matchers.should.Matchers.*
+import org.scalatest.wordspec.AnyWordSpec
+
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream, PrintStream}
+import scala.Console
 
 class TuiSpec extends AnyWordSpec {
 
