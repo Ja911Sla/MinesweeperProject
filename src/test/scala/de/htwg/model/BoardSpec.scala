@@ -3,6 +3,7 @@ package de.htwg.model
 import de.htwg.model.Board
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
+import scala.Console
 
 import java.io.*
 
@@ -190,6 +191,69 @@ class BoardSpec extends AnyWordSpec {
     output should include("A")
     output should include("1 2")
     output should include("\uD83D\uDCA3") // Bombe
+  }
+  "display correctly with revealAll = false for flagged, revealed, and hidden cells" in {
+    val board = Board(2, 0) // kleines 2x2 Board, keine Minen
+
+    // Zelle A1: Flagge gesetzt
+    board.cells(0)(0).isFlagged = true
+
+    // Zelle A2: aufgedeckt mit mineCount = 1
+    board.cells(0)(1).isRevealed = true
+    board.cells(0)(1).mineCount = 1
+
+    // Zelle B1: NICHT aufgedeckt → sollte als ⬜ erscheinen
+    board.cells(1)(0).isRevealed = false
+
+    // Zelle B2: aufgedeckt mit mineCount = 0
+    board.cells(1)(1).isRevealed = true
+    board.cells(1)(1).mineCount = 0
+
+    val out = new ByteArrayOutputStream()
+    Console.withOut(new PrintStream(out)) {
+      board.display(false) // NICHT revealAll
+    }
+
+    val output = out.toString
+
+    output should include("🚩") // Flagge
+    output should include("1️⃣") // mineCount = 1
+    output should include("⬛") // mineCount = 0
+    output should include("⬜") // nicht revealed
+  }
+  "reveal returns true on flagged or revealed cells" in {
+    val board = Board()
+    board.cells(0)(0).isFlagged = true
+    board.reveal(0, 0) shouldBe true
+
+    board.cells(1)(1).isRevealed = true
+    board.reveal(1, 1) shouldBe true
+  }
+  "return false if more flags than mines are set, even if all mines are flagged" in {
+    val board = Board(mineCount = 2)
+
+    board.cells(0)(0).isMine = true
+    board.cells(1)(1).isMine = true
+    board.cells(2)(2).isMine = false
+
+    board.toggleFlag(0, 0)
+    board.toggleFlag(1, 1)
+    board.toggleFlag(2, 2)
+
+    board.checkWin() should be(false)
+  }
+
+  "return false if not all mines are flagged, but totalFlags == mineCount" in {
+    val board = Board(mineCount = 2)
+
+    board.cells(0)(0).isMine = true
+    board.cells(1)(1).isMine = true
+    board.cells(2)(2).isMine = false
+
+    board.toggleFlag(0, 0)
+    board.toggleFlag(2, 2)
+
+    board.checkWin() should be(false)
   }
 }
 

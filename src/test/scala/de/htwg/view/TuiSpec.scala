@@ -75,7 +75,7 @@ class TuiSpec extends AnyWordSpec {
 
       tui.processInputLine("F A1")
 
-      controller.board.cells(0)(0).isFlagged should be (true)
+      controller.board.cells(0)(0).isFlagged should be(true)
     }
 
     "reveal a cell with C3" in {
@@ -86,7 +86,7 @@ class TuiSpec extends AnyWordSpec {
 
       tui.processInputLine("A1")
 
-      controller.board.cells(0)(0).isRevealed should be (true)
+      controller.board.cells(0)(0).isRevealed should be(true)
     }
 
     "handle invalid input" in {
@@ -149,7 +149,7 @@ class TuiSpec extends AnyWordSpec {
       output should include("BOOOM! Du hast verloren.")
     }
 
-
+    /*
     "win the game when all mines are flagged" in {
       val board = Board(mineCount = 1)
 
@@ -175,6 +175,39 @@ class TuiSpec extends AnyWordSpec {
       val output = out.toString
       println(output)
       output should include("Du hast gewonnen!")
+    }
+  }*/
+    "show winning message if all mines are flagged after flag input" in {
+      val board = Board(mineCount = 1)
+
+      // Manuelles Setup: nur eine Mine
+      for (r <- 0 until board.size; c <- 0 until board.size) {
+        board.cells(r)(c).isMine = false
+        board.cells(r)(c).isFlagged = false
+      }
+      board.cells(0)(0).isMine = true
+
+      val controller = new Controller(board)
+      val tui = new Tui(controller)
+
+      val out = new ByteArrayOutputStream()
+      Console.withOut(new PrintStream(out)) {
+        tui.processInputLine("F A1") // Flagge korrekt setzen = win
+      }
+
+      val output = out.toString
+      output should include("Du hast gewonnen!")
+    }
+    "handle completely invalid command with processInputLine" in {
+      val controller = new Controller(Board())
+      val tui = new Tui(controller)
+
+      val out = new ByteArrayOutputStream()
+      Console.withOut(new PrintStream(out)) {
+        tui.processInputLine("invalid command")
+      }
+
+      out.toString should include("Ungültige Eingabe")
     }
   }
 }
