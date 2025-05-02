@@ -9,9 +9,10 @@ class Controller(var board:Board) extends Observable {      // Controller soll k
     notifyObservers
   }
 
-  def revealCell(x: Int, y: Int): Unit = {
-    board.reveal(x, y)
+  def revealCell(row: Int, col: Int): Boolean = {
+    val safe = board.reveal(row, col)
     notifyObservers
+    safe
   }
 
   def flagCell(x: Int, y: Int): Unit = {
@@ -19,12 +20,19 @@ class Controller(var board:Board) extends Observable {      // Controller soll k
     notifyObservers
   }
 
-  def checkWin(): Boolean = board.checkWin()
-
+  def checkWin(): Boolean = {
+    val result = board.checkWin()
+    notifyObservers
+    result
+  }
 
   def resetGame(): Unit = {
     board.reset()
     notifyObservers
+  }
+
+  def displayBoard(revealAll: Boolean = false): Unit = {
+    board.display(revealAll)
   }
 }
 

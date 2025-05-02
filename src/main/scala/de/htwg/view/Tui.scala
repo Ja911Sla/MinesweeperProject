@@ -25,7 +25,7 @@ class Tui(val controller: Controller) extends Observer {
 
         var running = true
         while (running) {
-            controller.board.display()
+            controller.displayBoard()
             val input = StdIn.readLine()
             if (input.trim.toUpperCase == "Q") {
                 running = false
@@ -40,7 +40,7 @@ class Tui(val controller: Controller) extends Observer {
 
         i match {
             case "R" =>
-                controller.board.reset()
+                controller.resetGame()
                 println("Spiel zurückgesetzt.")
 
             case "H" =>
@@ -77,21 +77,21 @@ class Tui(val controller: Controller) extends Observer {
             case move if move.matches("F [A-I][1-9]") =>
                 val row = move.charAt(2) - 'A'
                 val col = move.charAt(3) - '1'
-                controller.board.toggleFlag(row, col)
-                if (controller.board.checkWin()) {
-                    controller.board.display(true)
+                controller.flagCell(row, col)
+                if (controller.checkWin()) {
+                    controller.displayBoard(true)
                     println("Du hast gewonnen!")
                 }
 
             case move if move.matches("[A-I][1-9]") =>
                 val row = move.charAt(0) - 'A'
                 val col = move.charAt(1) - '1'
-                val safe = controller.board.reveal(row, col)
+                val safe = controller.revealCell(row, col)
                 if (!safe) {
-                    controller.board.display(true)
+                    controller.displayBoard(true)
                     println("BOOOM! Du hast verloren.")
-                } else if (controller.board.checkWin()) {
-                    controller.board.display(true)
+                } else if (controller.checkWin()) {
+                    controller.displayBoard(true)
                     println("Du hast gewonnen!")
                 }
 

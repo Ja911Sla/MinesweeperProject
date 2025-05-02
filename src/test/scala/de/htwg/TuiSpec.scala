@@ -65,38 +65,27 @@ class TuiSpec extends AnyWordSpec {
       output should include("Spiel zurückgesetzt.")
     }
 
-    "toggle flag with F C3" in {
-      val in = new ByteArrayInputStream("F C3\nQ\n".getBytes())
-      val out = new ByteArrayOutputStream()
+    "toggle flag with F A1" in {
+      //val in = new ByteArrayInputStream("F C3\nQ\n".getBytes())
+      //val out = new ByteArrayOutputStream()
 
       val controller = new Controller(Board())
       val tui = new Tui(controller)
 
-      Console.withIn(in) {
-        Console.withOut(new PrintStream(out)) {
-          tui.start()
-        }
-      }
+      tui.processInputLine("F A1")
 
-      val output = out.toString
-      output should include("Willkommen zu Minesweeper!")
+      controller.board.cells(0)(0).isFlagged should be (true)
     }
 
     "reveal a cell with C3" in {
-      val in = new ByteArrayInputStream("C3\nQ\n".getBytes())
-      val out = new ByteArrayOutputStream()
+
 
       val controller = new Controller(Board())
       val tui = new Tui(controller)
 
-      Console.withIn(in) {
-        Console.withOut(new PrintStream(out)) {
-          tui.start()
-        }
-      }
+      tui.processInputLine("A1")
 
-      val output = out.toString
-      output should include("Willkommen zu Minesweeper!")
+      controller.board.cells(0)(0).isRevealed should be (true)
     }
 
     "handle invalid input" in {
@@ -185,12 +174,6 @@ class TuiSpec extends AnyWordSpec {
       val output = out.toString
       println(output)
       output should include("Du hast gewonnen!")
-    }
-    "should flag cell when input is 'F A1'" in {
-      val controller = new Controller(Board())
-      val tui = new Tui(controller)
-      tui.processInputLine("F A1")
-      controller.board.cells(0)(0).isFlagged shouldBe true
     }
   }
 }
