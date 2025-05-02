@@ -31,17 +31,18 @@ class Tui(val controller: Controller) extends Observer {
                 running = false
                 println("Spiel beendet.")
             } else {
-                processInputLine(input)
+                running = processInputLine(input)
             }
         }
     }
-    def processInputLine(input: String): Unit = {
+    def processInputLine(input: String): Boolean = {
         val i = input.trim.toUpperCase
 
         i match {
             case "R" =>
                 controller.resetGame()
                 println("Spiel zurückgesetzt.")
+                true
 
             case "H" =>
                 println(
@@ -57,6 +58,7 @@ class Tui(val controller: Controller) extends Observer {
                       |  A    -> Anleitung anzeigen
         """.stripMargin
                 )
+                true
 
             case "A" =>
                 println(
@@ -73,6 +75,7 @@ class Tui(val controller: Controller) extends Observer {
                       |Viel Erfolg!
         """.stripMargin
                 )
+                true
 
             case move if move.matches("F [A-I][1-9]") =>
                 val row = move.charAt(2) - 'A'
@@ -82,6 +85,7 @@ class Tui(val controller: Controller) extends Observer {
                     controller.displayBoard(true)
                     println("Du hast gewonnen!")
                 }
+                true
 
             case move if move.matches("[A-I][1-9]") =>
                 val row = move.charAt(0) - 'A'
@@ -90,13 +94,16 @@ class Tui(val controller: Controller) extends Observer {
                 if (!safe) {
                     controller.displayBoard(true)
                     println("BOOOM! Du hast verloren.")
+                    return  false
                 } else if (controller.checkWin()) {
                     controller.displayBoard(true)
                     println("Du hast gewonnen!")
+                    return false
                 }
-
+                true
             case _ =>
                 println("Ungültige Eingabe. Nutze z.B. 'C3' oder 'F C3'.")
+                true
         }
     }
 
