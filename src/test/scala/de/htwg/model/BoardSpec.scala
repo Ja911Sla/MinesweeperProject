@@ -193,19 +193,16 @@ class BoardSpec extends AnyWordSpec {
     output should include("\uD83D\uDCA3") // Bombe
   }
   "display correctly with revealAll = false for flagged, revealed, and hidden cells" in {
-    val board = Board(2, 0) // kleines 2x2 Board, keine Minen
+    val board = Board(2, 0)
 
-    // Zelle A1: Flagge gesetzt
     board.cells(0)(0).isFlagged = true
 
-    // Zelle A2: aufgedeckt mit mineCount = 1
     board.cells(0)(1).isRevealed = true
     board.cells(0)(1).mineCount = 1
 
-    // Zelle B1: NICHT aufgedeckt → sollte als ⬜ erscheinen
     board.cells(1)(0).isRevealed = false
 
-    // Zelle B2: aufgedeckt mit mineCount = 0
+    // Zelle B2:
     board.cells(1)(1).isRevealed = true
     board.cells(1)(1).mineCount = 0
 
@@ -216,10 +213,10 @@ class BoardSpec extends AnyWordSpec {
 
     val output = out.toString
 
-    output should include("🚩") // Flagge
-    output should include("1️⃣") // mineCount = 1
-    output should include("⬛") // mineCount = 0
-    output should include("⬜") // nicht revealed
+    output should include("🚩")
+    output should include("1️⃣")
+    output should include("⬛")
+    output should include("⬜")
   }
   "reveal returns true on flagged or revealed cells" in {
     val board = Board()
