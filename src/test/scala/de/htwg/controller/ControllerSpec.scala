@@ -7,10 +7,6 @@ import org.scalatest.matchers.should.Matchers
 
 
 class ControllerSpec extends AnyWordSpec with Matchers {
-  class TestObserver extends Observer {
-    var updated = false
-    override def update: Unit = updated = true
-  }
 
   class TestObserver extends Observer {
     var updated = false
