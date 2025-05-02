@@ -4,8 +4,8 @@ import de.htwg.utility.Observable
 import de.htwg.model._
 
 class Controller(var board:Board) extends Observable {      // Controller soll koordinieren und keine Duplikation sein
-  def createNewBoard(): Unit = {
-    board = new Board()
+  def createNewBoard(size: Int, amountMines: Int): Unit = {
+    board = new Board(size, amountMines)
     notifyObservers
   }
 

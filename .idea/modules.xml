@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/MinesweeperProjekt.iml" filepath="$PROJECT_DIR$/.idea/modules/MinesweeperProjekt.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/MinesweeperProjekt-build.iml" filepath="$PROJECT_DIR$/.idea/modules/MinesweeperProjekt-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/MinesweeperProjekt.MinesweeperProjekt-build.iml" filepath="$PROJECT_DIR$/.idea/modules/MinesweeperProjekt.MinesweeperProjekt-build.iml" />
     </modules>
   </component>
 </project>
