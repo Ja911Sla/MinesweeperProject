@@ -19,7 +19,11 @@ class Controller(var board:Board) extends Observable {      // Controller soll k
     notifyObservers
   }
 
-  def checkWin(): Boolean = board.checkWin()
+  def checkWin(): Boolean = {
+    val result = board.checkWin()
+    notifyObservers
+    result
+  }
 
 
   def resetGame(): Unit = {
