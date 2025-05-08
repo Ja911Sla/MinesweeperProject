@@ -11,3 +11,10 @@ lazy val root = (project in file("."))
     )
   )
 
+enablePlugins(CoverallsPlugin)
+
+coverageEnabled := true
+coverageFailOnMinimum := false
+coverageMinimum := 60
+
+
