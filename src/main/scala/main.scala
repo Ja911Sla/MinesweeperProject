@@ -7,9 +7,7 @@ import de.htwg.utility.Observer
 
 @main
 def main(): Unit = {
-  // println("It works!!!!! hopefullybbbbbbbbbaaaaaaaa")
-  // val myGame = Print()
-  // print(myGame.gameField())
+
   // ab hier ausgabe von der TUI  
   println("Willkommen zu Minesweeper!")
   val board = new Board()

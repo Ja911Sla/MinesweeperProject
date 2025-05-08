@@ -1,20 +1,17 @@
-ThisBuild / version := "0.1.0-SNAPSHOT"
+import scoverage.ScoverageKeys._
 
+ThisBuild / version := "0.1.0-SNAPSHOT"
 ThisBuild / scalaVersion := "3.3.5"
 
 lazy val root = (project in file("."))
+  .enablePlugins(CoverallsPlugin)
   .settings(
     name := "MinesweeperProjekt",
     libraryDependencies ++= Seq(
       "org.scalactic" %% "scalactic" % "3.2.14",
       "org.scalatest" %% "scalatest" % "3.2.14" % Test
-    )
+    ),
+    coverageEnabled := true,
+    coverageFailOnMinimum := false,
+    Test / fork := true
   )
-
-enablePlugins(CoverallsPlugin)
-
-coverageEnabled := true
-coverageFailOnMinimum := false
-coverageMinimum := 60
-
-
