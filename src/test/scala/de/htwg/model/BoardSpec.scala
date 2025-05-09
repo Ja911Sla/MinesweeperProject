@@ -254,25 +254,6 @@ class BoardSpec extends AnyWordSpec {
     output should include("2️⃣")
   }
 
-  "display 2️⃣ when a revealed cell has 2 adjacent mines" in {
-    val board = Board(3, 0)
-
-    // Drei benachbarte Minen
-    board.cells(0)(1).isMine = true
-    board.cells(1)(0).isMine = true
-
-
-    board.cells(1)(1).isRevealed = true
-    board.cells(1)(1).mineCount = 2
-
-    val out = new ByteArrayOutputStream()
-    Console.withOut(new PrintStream(out)) {
-      board.display(false)
-    }
-
-    val output = out.toString
-    output should include("2️⃣")
-  }
 
   "display 3️⃣ when a revealed cell has 3 adjacent mines" in {
     val board = Board(3, 0)
