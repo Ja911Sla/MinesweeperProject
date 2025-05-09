@@ -192,6 +192,151 @@ class BoardSpec extends AnyWordSpec {
     output should include("1 2")
     output should include("\uD83D\uDCA3") // Bombe
   }
+
+  "be able to display the board without revealing all" in {
+    val board = Board(2, 2)
+    board.cells(0)(0).isMine = true
+    board.cells(0)(0).isRevealed = false
+    board.cells(0)(1).isRevealed = false
+    board.cells(1)(1).isMine = true
+    board.cells(1)(1).isRevealed = false
+    board.cells(1)(0).isRevealed = false
+
+    val out = new ByteArrayOutputStream()
+    scala.Console.withOut(new PrintStream(out)) {
+      board.display(false) // revealAll = false
+    }
+
+    val output = out.toString()
+
+    output should include("⬜") // Nicht aufgedeckte Zellen müssen als ⬜ erscheinen
+    output should not include "\uD83D\uDCA3" // Keine Bomben sollten sichtbar sein
+  }
+
+  "be able to display the board with revealed cells" in {
+    val board = Board(2, 2)
+    board.cells(0)(0).isMine = true
+    board.cells(0)(0).isRevealed = true
+    board.cells(0)(1).isRevealed = true
+    board.cells(1)(1).isMine = true
+    board.cells(1)(1).isRevealed = true
+    board.cells(1)(0).isRevealed = true
+
+    val out = new ByteArrayOutputStream()
+    scala.Console.withOut(new PrintStream(out)) {
+      board.display(true)
+    }
+
+    val output = out.toString()
+
+    output should include("\uD83D\uDCA3")
+    output should include("⬛")
+    output should not include "⬜"
+  }
+
+  "display 2️⃣ when a revealed cell has 2 adjacent mines" in {
+    val board = Board(3, 0)
+
+
+    board.cells(0)(1).isMine = true
+    board.cells(1)(0).isMine = true
+
+
+    board.cells(1)(1).isRevealed = true
+    board.cells(1)(1).mineCount = 2
+
+    val out = new ByteArrayOutputStream()
+    Console.withOut(new PrintStream(out)) {
+      board.display(false)
+    }
+
+    val output = out.toString
+    output should include("2️⃣")
+  }
+
+  "display 2️⃣ when a revealed cell has 2 adjacent mines" in {
+    val board = Board(3, 0)
+
+    // Drei benachbarte Minen
+    board.cells(0)(1).isMine = true
+    board.cells(1)(0).isMine = true
+
+
+    board.cells(1)(1).isRevealed = true
+    board.cells(1)(1).mineCount = 2
+
+    val out = new ByteArrayOutputStream()
+    Console.withOut(new PrintStream(out)) {
+      board.display(false)
+    }
+
+    val output = out.toString
+    output should include("2️⃣")
+  }
+
+  "display 3️⃣ when a revealed cell has 3 adjacent mines" in {
+    val board = Board(3, 0)
+
+    // 3 Minen um Zelle (1,1)
+    board.cells(0)(1).isMine = true
+    board.cells(1)(0).isMine = true
+    board.cells(2)(1).isMine = true
+
+
+    board.cells(1)(1).isRevealed = true
+    board.cells(1)(1).mineCount = 3
+
+    val out = new ByteArrayOutputStream()
+    Console.withOut(new PrintStream(out)) {
+      board.display(false)
+    }
+
+    val output = out.toString
+    output should include("3️⃣")
+  }
+
+  "display 4️⃣ when a revealed cell has 4 adjacent mines" in {
+    val board = Board(3, 0)
+
+    board.cells(0)(1).isMine = true
+    board.cells(1)(0).isMine = true
+    board.cells(1)(2).isMine = true
+    board.cells(2)(1).isMine = true
+
+    board.cells(1)(1).isRevealed = true
+    board.cells(1)(1).mineCount = 4
+
+    val out = new ByteArrayOutputStream()
+    Console.withOut(new PrintStream(out)) {
+      board.display(false)
+    }
+
+    val output = out.toString
+    output should include("4️⃣")
+  }
+
+  "display 5️⃣ when a revealed cell has 5 adjacent mines" in {
+    val board = Board(3, 0)
+
+    board.cells(0)(0).isMine = true
+    board.cells(0)(1).isMine = true
+    board.cells(1)(0).isMine = true
+    board.cells(2)(0).isMine = true
+    board.cells(2)(1).isMine = true
+
+    board.cells(1)(1).isRevealed = true
+    board.cells(1)(1).mineCount = 5
+
+    val out = new ByteArrayOutputStream()
+    Console.withOut(new PrintStream(out)) {
+      board.display(false)
+    }
+
+    val output = out.toString
+    output should include("5️⃣")
+  }
+
+
   "display correctly with revealAll = false for flagged, revealed, and hidden cells" in {
     val board = Board(2, 0)
 
@@ -267,7 +412,7 @@ class BoardSpec extends AnyWordSpec {
     val output = out.toString
 
     output should include("Bomb amount: 1")
-    
+
   }
 }
 
