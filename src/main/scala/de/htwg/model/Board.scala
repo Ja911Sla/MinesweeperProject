@@ -41,7 +41,7 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
     def reveal(row: Int, col: Int): Boolean = {
         if (cells(row)(col).isFlagged || cells(row)(col).isRevealed) return true // Zelle bereits aufgedeckt oder markiert
         if (cells(row)(col).isMine) return false // Mine aufgedeckt, Spiel verloren
-        val count = countAdjacentMines(row, col)  // Zähle die Minen in den Nachbarzellen
+        val count = countAdjacentMines(row, col) // Zähle die Minen in den Nachbarzellen
         cells(row)(col).mineCount = count // Setze die Anzahl der benachbarten Minen in der Zelle
         cells(row)(col).isRevealed = true // Zelle aufdecken
         if (count == 0) revealAdjacent(row, col) // Wenn keine Minen in den Nachbarzellen, decke angrenzende Zellen auf
@@ -54,9 +54,9 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
 
     def countAdjacentMines(row: Int, col: Int): Int = { // zählt die Anzahl der Minen in den Nachbarzellen
         directions.count { case (dr, dc) => // .count Iteriert über alle Nachbarn die die isMine Bedingung erfüllt. dr= direchtion row, dc= direction column 
-        val nr = row + dr // addiert man die Zeilenverschiebung zu der aktuellen Zeile hat man die Koordinate der Nachbarzelle
-        val nc = col + dc // genau das gleiche macht man hier für die Spalte
-        inBounds(nr, nc) && cells(nr)(nc).isMine // Prüft die Grenzen und ob die Nachbarzelle eine Mine hat
+            val nr = row + dr // addiert man die Zeilenverschiebung zu der aktuellen Zeile hat man die Koordinate der Nachbarzelle
+            val nc = col + dc // genau das gleiche macht man hier für die Spalte
+            inBounds(nr, nc) && cells(nr)(nc).isMine // Prüft die Grenzen und ob die Nachbarzelle eine Mine hat
         }
     }
 
@@ -74,32 +74,33 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
     }
 
 
-     def toggleFlag(row: Int, col: Int): Unit = {
+    def toggleFlag(row: Int, col: Int): Unit = {
         // Wenn die Zelle nicht aufgedeckt ist, dann toggle die Flagge (isFlagged) der Zelle
         // Wenn die Zelle aufgedeckt ist, dann mache nichts
         // toggle bedeutet, dass wenn die Flagge gesetzt ist, sie entfernt wird und umgekehrt
         if (!cells(row)(col).isRevealed) {
-            cells(row)(col).isFlagged = !cells(row)(col).isFlagged      // Setzt Flag auf das Gegenteil was es gerade ist.
+            cells(row)(col).isFlagged = !cells(row)(col).isFlagged // Setzt Flag auf das Gegenteil was es gerade ist.
         }
     }
 
-    def checkWin(): Boolean = { 
+    def checkWin(): Boolean = {
         val flaggedMines = cells.flatten.count(c => c.isFlagged && c.isMine) // Zähle die Minen die markiert sind
         val totalFlags = cells.flatten.count(_.isFlagged) // Zähle die Gesamtzahl der gesetzten Flaggen
-        flaggedMines == mineCount && totalFlags == mineCount  // Gewonnen wenn Anzahl der markierten Minen und Flaggen gleich der Gesamtzahl der Minen ist
+        flaggedMines == mineCount && totalFlags == mineCount // Gewonnen wenn Anzahl der markierten Minen und Flaggen gleich der Gesamtzahl der Minen ist
     }
 
     def display(revealAll: Boolean = false): Unit = {
+        bombCountDisplay()
         println("   1 2 3 4 5  6 7 8 9") // Spaltenüberschrift
         for (r <- 0 until size) { // Iteriere über die Zeilen
             print((r + 'A').toChar + " ") // Konvertiere die Zeilenindizes in Buchstaben (A-I)
-            for (c <- 0 until size) {  // Iteriere über die Spalten
+            for (c <- 0 until size) { // Iteriere über die Spalten
                 val cell = cells(r)(c)
                 if (revealAll && cell.isMine) print("\uD83D\uDCA3") // mine M wird gezeigt wenn alles aufgedeckt werden soll
                 else if (cell.isFlagged) print("\uD83D\uDEA9") // zeige flag F wenn es gesetzte wird
                 else if (cell.isRevealed) {
                     val emojiNumber = cell.mineCount match {
-                        case 0 => "⬛"    // leere Zelle ohne Mine als Nachbar
+                        case 0 => "⬛" // leere Zelle ohne Mine als Nachbar
                         case 1 => "1️⃣"
                         case 2 => "2️⃣"
                         case 3 => "3️⃣"
@@ -107,13 +108,25 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
                         case 5 => "5️⃣"
                         case n => s"$n " // zahlen ab 6 werden als Text angezeigt
                     }
-                    print(emojiNumber)  // zeige leere Zelle "\uD83D\uDFEB " wenn alle Nachbarzellen keine Mine haben
+                    print(emojiNumber) // zeige leere Zelle "\uD83D\uDFEB " wenn alle Nachbarzellen keine Mine haben
                 }
                 else print("⬜") //Neutrales Feld
-
 
             }
             println()
         }
+    }
+
+    def bombCountDisplay(): Unit = {
+        var amountFlaggedFields = 0
+        for (r <- 0 until size) { // Iteriere über die Zeilen
+            for (c <- 0 until size) { // Iteriere über die Spalten
+                val cell = cells(r)(c)
+                if (cell.isFlagged) {
+                    amountFlaggedFields += 1
+                }
+            }
+        }
+        print(s"Bomb amount: ${mineCount - amountFlaggedFields}\n")
     }
 }

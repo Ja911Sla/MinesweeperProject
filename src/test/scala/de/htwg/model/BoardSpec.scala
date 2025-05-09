@@ -252,6 +252,23 @@ class BoardSpec extends AnyWordSpec {
 
     board.checkWin() should be(false)
   }
+
+  "display the amount of left bombs" in {
+    val board = Board(mineCount = 2)
+    board.cells(0)(0).isMine = true
+
+    board.toggleFlag(0, 0)
+
+    val out = new ByteArrayOutputStream()
+    Console.withOut(new PrintStream(out)) {
+      board.bombCountDisplay()
+    }
+
+    val output = out.toString
+
+    output should include("Bomb amount: 1")
+    
+  }
 }
 
 
