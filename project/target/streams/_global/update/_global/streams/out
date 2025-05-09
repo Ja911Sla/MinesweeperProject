@@ -1,3 +1,7 @@
-[debug] not up to date. inChanged = true, force = false
-[debug] Updating ProjectRef(uri("file:/C:/HTWG_Module/Minesweeper_Project/MinesweeperProject/project/"), "minesweeperproject-build")...
-[debug] Done updating ProjectRef(uri("file:/C:/HTWG_Module/Minesweeper_Project/MinesweeperProject/project/"), "minesweeperproject-build")
+[0m[[0m[0mdebug[0m] [0m[0mnot up to date. inChanged = true, force = false[0m
+[0m[[0m[0mdebug[0m] [0m[0mUpdating ProjectRef(uri("file:/C:/Users/Jan/Desktop/HTWG/Drittes%20Semester/Software%20Engineering/MinesweeperProject/project/"), "minesweeperproject-build")...[0m
+[0m[[0m[0minfo[0m] [0m[0mUpdating minesweeperproject-build[0m
+[0m[[0m[0minfo[0m] [0m[0mResolved minesweeperproject-build dependencies[0m
+[0m[[0m[0minfo[0m] [0m[0mFetching artifacts of minesweeperproject-build[0m
+[0m[[0m[0minfo[0m] [0m[0mFetched artifacts of minesweeperproject-build[0m
+[0m[[0m[0mdebug[0m] [0m[0mDone updating ProjectRef(uri("file:/C:/Users/Jan/Desktop/HTWG/Drittes%20Semester/Software%20Engineering/MinesweeperProject/project/"), "minesweeperproject-build")[0m
