@@ -7,11 +7,10 @@ import scala.io.StdIn
 class Tui(val controller: Controller) extends Observer {
     controller.add(this)
 
-    def start(resetBoard: Boolean = true): Unit = {
+    def start(resetBoard: Boolean = true): String = {
         if (resetBoard) controller.resetGame()
         println(
-            """
-              |Willkommen zu Minesweeper!
+            """Willkommen zu Minesweeper!
               |Das Ziel ist es, alle Felder zu öffnen, ohne auf eine Mine zu treten.
               |Befehle:
               |  C3   -> Zelle aufdecken
@@ -20,20 +19,21 @@ class Tui(val controller: Controller) extends Observer {
               |  R    -> Spiel zurücksetzen
               |  H    -> Hilfe anzeigen
               |  A    -> Anleitung anzeigen
-      """.stripMargin
-        )
+              |""".stripMargin)
 
         var running = true
         while (running) {
-            controller.displayBoard()
+            println(controller.displayBoardToString())
             val input = StdIn.readLine()
             if (input.trim.toUpperCase == "Q") {
-                running = false
                 println("Spiel beendet.")
+                running = false
             } else {
-                running = processInputLine(input)
+                val continue = processInputLine(input) // <- nutze das Rückgabeergebnis
+                running = continue                     // <- setzt running entsprechend
             }
         }
+        "Game over."
     }
     def processInputLine(input: String): Boolean = {
         val i = input.trim.toUpperCase
@@ -82,7 +82,7 @@ class Tui(val controller: Controller) extends Observer {
                 val col = move.charAt(3) - '1'
                 controller.flagCell(row, col)
                 if (controller.checkWin()) {
-                    controller.displayBoard(true)
+                    controller.displayBoardToString(true)
                     println("Du hast gewonnen!")
                 }
                 true
@@ -92,11 +92,11 @@ class Tui(val controller: Controller) extends Observer {
                 val col = move.charAt(1) - '1'
                 val safe = controller.revealCell(row, col)
                 if (!safe) {
-                    controller.displayBoard(true)
+                    println(controller.displayBoardToString(true))
                     println("BOOOM! Du hast verloren.")
-                    return  false
+                    return false  // Beendet die Schleife oben korrekt
                 } else if (controller.checkWin()) {
-                    controller.displayBoard(true)
+                    println(controller.displayBoardToString(true))
                     println("Du hast gewonnen!")
                     return false
                 }
@@ -107,7 +107,7 @@ class Tui(val controller: Controller) extends Observer {
         }
     }
 
-    override def update: Unit = {
-        println("Board wurde aktualisiert.")
+    override def update:String = {
+       "Board wurde aktualisiert."
     }
 }

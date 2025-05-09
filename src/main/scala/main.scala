@@ -13,6 +13,6 @@ def main(): Unit = {
   val board = new Board()
   val controller = new Controller(board)
   val tui = new Tui(controller)
-  tui.start()
+  println(tui.start())  // <--- You need to actually do something with the result.
   println("Coveralls TTTTTest")
 }

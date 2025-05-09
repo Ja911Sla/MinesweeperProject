@@ -7,7 +7,11 @@ class ObservableSpec extends AnyWordSpec with Matchers {
 
   class TestObserver extends Observer {
     var updated = false
-    override def update: Unit = updated = true
+
+    override def update: String = {
+      updated = true
+      "updated"
+    }
   }
 
   "An Observable" should {
@@ -16,7 +20,7 @@ class ObservableSpec extends AnyWordSpec with Matchers {
       val observer = new TestObserver
 
       observable.add(observer)
-      observable.notifyObservers
+      observable.notifyObservers()
 
       observer.updated shouldBe true
     }
@@ -27,7 +31,7 @@ class ObservableSpec extends AnyWordSpec with Matchers {
 
       observable.add(observer)
       observable.remove(observer)
-      observable.notifyObservers
+      observable.notifyObservers()
 
       observer.updated shouldBe false
     }
