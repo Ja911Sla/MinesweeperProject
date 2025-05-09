@@ -129,4 +129,14 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
         }
         print(s"Bomb amount: ${mineCount - amountFlaggedFields}\n")
     }
+
+//    def timePrint(): Unit = {
+//        var time = 0
+//        while (true) {
+//            
+//            print(s"Game time: $time\n")
+//            Thread.sleep(1000) // warte 1000 Millisekunden = 1 Sekunde
+//            time += 1
+//        }
+//    }
 }
