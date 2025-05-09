@@ -14,5 +14,5 @@ def main(): Unit = {
   val controller = new Controller(board)
   val tui = new Tui(controller)
   tui.start()
-  println("Coveralls TTTTest")
+  println("Coveralls TTTTTest")
 }
