@@ -4,7 +4,8 @@ import de.htwg.utility.Observable
 import de.htwg.model._
 
 class Controller(var board:Board) extends Observable {      // Controller soll koordinieren und keine Duplikation sein
-
+  private val timer = new Timer()
+  def getElapsedTime: Int = timer.getTime
   def createNewBoard(size: Int, amountMines: Int): Unit = {
     board = new Board(size, amountMines)
     notifyObservers()
@@ -23,13 +24,17 @@ class Controller(var board:Board) extends Observable {      // Controller soll k
 
   def checkWin(): Boolean = {
     val result = board.checkWin()
+    if (result) timer.stop()  // Only stop if won
     notifyObservers()
     result
   }
 
   def resetGame(): String = {
-    board.reset()
+    timer.reset()  // Restart the timer cleanlyA
+    val resetMessage = board.reset()
+    timer.start()  // Ensure it starts again if stopped
     notifyObservers()
+    resetMessage
   }
   /*
   def displayBoard(revealAll: Boolean = false): Unit = {

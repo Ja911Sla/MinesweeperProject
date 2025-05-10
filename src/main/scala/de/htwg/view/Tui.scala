@@ -19,6 +19,7 @@ class Tui(val controller: Controller) extends Observer {
               |  R    -> Spiel zurücksetzen
               |  H    -> Hilfe anzeigen
               |  A    -> Anleitung anzeigen
+              |  T    -> Zeit anzeigen
               |""".stripMargin)
 
         var running = true
@@ -56,6 +57,7 @@ class Tui(val controller: Controller) extends Observer {
                       |  R    -> Spiel zurücksetzen
                       |  H    -> Hilfe anzeigen
                       |  A    -> Anleitung anzeigen
+                      |  T    -> Zeit anzeigen
         """.stripMargin
                 )
                 true
@@ -77,6 +79,10 @@ class Tui(val controller: Controller) extends Observer {
                 )
                 true
 
+            case "T" =>
+                println("Deine Spielzeit: " + controller.getElapsedTime + " Sekunden.")
+                true
+
             case move if move.matches("F [A-I][1-9]") =>
                 val row = move.charAt(2) - 'A'
                 val col = move.charAt(3) - '1'
@@ -84,6 +90,8 @@ class Tui(val controller: Controller) extends Observer {
                 if (controller.checkWin()) {
                     controller.displayBoardToString(true)
                     println("Du hast gewonnen!")
+                    println("Spielzeit: "+ controller.getElapsedTime + " Sekunden.")
+                    return false
                 }
                 true
 
@@ -94,10 +102,12 @@ class Tui(val controller: Controller) extends Observer {
                 if (!safe) {
                     println(controller.displayBoardToString(true))
                     println("BOOOM! Du hast verloren.")
+                    println("Spielzeit: "+ controller.getElapsedTime + " Sekunden.")
                     return false  // Beendet die Schleife oben korrekt
                 } else if (controller.checkWin()) {
                     println(controller.displayBoardToString(true))
                     println("Du hast gewonnen!")
+                    println("Spielzeit: "+ controller.getElapsedTime + " Sekunden.")
                     return false
                 }
                 true

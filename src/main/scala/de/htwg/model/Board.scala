@@ -4,7 +4,7 @@ import scala.util.Random
 
 case class Board(val size: Int = 9, val mineCount: Int = 10) {
     val cells: Array[Array[GameCell]] = Array.fill(size, size)(GameCell()) //cells füllt das 2D Array mit GameCell Objekten
-    val directions = List((-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)) // liste von alle möglichen Nachbarn
+    private val directions = List((-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)) // liste von alle möglichen Nachbarn
 
     def reset(): String = {
         var x = 0
@@ -91,6 +91,7 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
 
     def display(revealAll: Boolean = false): String = {
         val sb = new StringBuilder
+        println(bombCountDisplayString())
         sb.append("   1 2 3 4 5  6 7 8 9\n") // Spaltenüberschrift
         for (r <- 0 until size) { // Iteriere über die Zeilen
             sb.append(((r + 'A').toChar + " ")) // Konvertiere die Zeilenindizes in Buchstaben (A-I)
@@ -117,4 +118,10 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
         }
         sb.toString()
     }
+
+    private def bombCountDisplayString(): String = {
+        val flagged = cells.flatten.count(_.isFlagged)
+        s"Bomb amount: ${mineCount - flagged}"
+    }
+
 }
