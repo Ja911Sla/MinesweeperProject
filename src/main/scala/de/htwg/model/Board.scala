@@ -6,6 +6,12 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
     val cells: Array[Array[GameCell]] = Array.fill(size, size)(GameCell()) //cells füllt das 2D Array mit GameCell Objekten
     private val directions = List((-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)) // liste von alle möglichen Nachbarn
 
+    private def dynamicHeader: String = {
+        (1 to size).map(_.toString).zipWithIndex.map { case (n, i) =>
+            if ((i + 1) % 5 == 0 && i + 1 != size) n + "  "
+            else n + " "
+        }.mkString.trim
+    }
     def reset(): String = {
         var x = 0
         while (x < size) {
@@ -91,32 +97,33 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
 
     def display(revealAll: Boolean = false): String = {
         val sb = new StringBuilder
-        println(bombCountDisplayString())
-        sb.append("   1 2 3 4 5  6 7 8 9\n") // Spaltenüberschrift
-        for (r <- 0 until size) { // Iteriere über die Zeilen
-            sb.append(((r + 'A').toChar + " ")) // Konvertiere die Zeilenindizes in Buchstaben (A-I)
-            for (c <- 0 until size) { // Iteriere über die Spalten
+        sb.append(bombCountDisplayString() + "\n")
+        sb.append("   " + dynamicHeader + "\n") // dynamic header depending on size of the Board
+
+        for (r <- 0 until size) {
+            sb.append((r + 'A').toChar + " ") // Row label (A, B, ...)
+            for (c <- 0 until size) {
                 val cell = cells(r)(c)
                 val mark =
-                    if (revealAll && cell.isMine) ("\uD83D\uDCA3") // mine M wird gezeigt wenn alles aufgedeckt werden soll
-                    else if (cell.isFlagged) ("\uD83D\uDEA9") // zeige flag F wenn es gesetzte wird
+                    if (revealAll && cell.isMine) "\uD83D\uDCA3"
+                    else if (cell.isFlagged) "\uD83D\uDEA9"
                     else if (cell.isRevealed) {
                         cell.mineCount match {
-                            case 0 => "⬛" // leere Zelle ohne Mine als Nachbar
+                            case 0 => "⬛"
                             case 1 => "1\uFE0F⃣"
                             case 2 => "2\uFE0F⃣"
                             case 3 => "3\uFE0F⃣"
                             case 4 => "4\uFE0F⃣"
                             case 5 => "5\uFE0F⃣"
-                            case n => s"$n " // zahlen ab 6 werden als Text angezeigt
+                            case n => s"$n "
                         }
-                    }
-                    else "⬜" //Neutrales Feld
+                    } else "⬜"
                 sb.append(mark)
             }
             sb.append("\n")
         }
-        sb.toString()
+
+        sb.toString() // <- THIS is what's returned to tests
     }
 
     private def bombCountDisplayString(): String = {
