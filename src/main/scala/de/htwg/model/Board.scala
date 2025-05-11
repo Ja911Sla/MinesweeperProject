@@ -126,7 +126,7 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
         sb.toString() // <- THIS is what's returned to tests
     }
 
-    private def bombCountDisplayString(): String = {
+    def bombCountDisplayString(): String = {
         val flagged = cells.flatten.count(_.isFlagged)
         s"Bomb amount: ${mineCount - flagged}"
     }

@@ -241,6 +241,32 @@ class BoardSpec extends AnyWordSpec {
 
     board.checkWin() should be(false)
   }
+  "should display the amount of left bombs" in {
+    val board = Board(mineCount = 2)
+    board.cells(0)(0).isMine = true
+    board.toggleFlag(0, 0)
+
+    val output = board.bombCountDisplayString() // <- capture the returned String directly
+
+    output should include("Bomb amount: 1") // <- assert on the returned String
+  }
+  "should display 6 when a revealed cell has 6 adjacent mines" in {
+    val board = Board(3, 0)
+
+    board.cells(0)(0).isMine = true
+    board.cells(0)(1).isMine = true
+    board.cells(0)(2).isMine = true
+    board.cells(1)(0).isMine = true
+    board.cells(1)(2).isMine = true
+    board.cells(2)(1).isMine = true
+
+    board.cells(1)(1).isRevealed = true
+    board.cells(1)(1).mineCount = 6
+
+    val output = board.display(false)  // <- capture the returned String
+
+    output should include("6 ")         // <- assert on the content
+  }
 }
 
 
