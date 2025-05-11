@@ -266,6 +266,51 @@ class BoardSpec extends AnyWordSpec {
 
     output should include("6 ")         // <- assert on the content
   }
+  "correctly display 2️⃣ for 2 adjacent mines" in {
+    val board = Board(3, 0)
+    board.cells(1)(1).isRevealed = true
+    board.cells(1)(1).mineCount = 2
+
+    val output = board.display(false)
+    output should include("2️⃣")
+  }
+
+  "correctly display 3️⃣ for 3 adjacent mines" in {
+    val board = Board(3, 0)
+    board.cells(1)(1).isRevealed = true
+    board.cells(1)(1).mineCount = 3
+
+    val output = board.display(false)
+    output should include("3️⃣")
+  }
+
+  "correctly display 4️⃣ for 4 adjacent mines" in {
+    val board = Board(3, 0)
+    board.cells(1)(1).isRevealed = true
+    board.cells(1)(1).mineCount = 4
+
+    val output = board.display(false)
+    output should include("4️⃣")
+  }
+
+  "correctly display 5️⃣ for 5 adjacent mines" in {
+    val board = Board(3, 0)
+    board.cells(1)(1).isRevealed = true
+    board.cells(1)(1).mineCount = 5
+
+    val output = board.display(false)
+    output should include("5️⃣")
+  }
+
+  "correctly display raw number for mineCount >= 6" in {
+    val board = Board(3, 0)
+    board.cells(1)(1).isRevealed = true
+    board.cells(1)(1).mineCount = 6
+
+    val output = board.display(false)
+    output should include("6 ")
+  }
+
 }
 
 

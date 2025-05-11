@@ -269,6 +269,35 @@ class TuiSpec extends AnyWordSpec {
     output should include("BOOOM! Du hast verloren.")
     output should include("Spielzeit: 0 Sekunden.")
   }
+  "win the game by revealing all safe cells" in {
+    val board = Board(size = 2, mineCount = 1)
+
+    // Leeres Setup
+    for (r <- 0 until board.size; c <- 0 until board.size) {
+      board.cells(r)(c).isMine = false
+      board.cells(r)(c).isRevealed = false
+      board.cells(r)(c).isFlagged = false
+    }
+
+    // Eine Mine auf A1 setzen
+    board.cells(0)(0).isMine = true
+
+    val controller = new Controller(board)
+    val tui = new Tui(controller)
+
+    val out = new ByteArrayOutputStream()
+    Console.withOut(new PrintStream(out)) {
+      tui.processInputLine("A2") // (0,1)
+      tui.processInputLine("B1") // (1,0)
+      tui.processInputLine("B2") // (1,1) -> alle sicheren Felder aufgedeckt
+    }
+
+    val output = out.toString
+    println(output) // Debug-Print
+    output should include("Du hast gewonnen!")
+    output should include("Spielzeit:")
+  }
+
 
 
 }

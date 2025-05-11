@@ -90,9 +90,10 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
     }
 
     def checkWin(): Boolean = {
-        val flaggedMines = cells.flatten.count(c => c.isFlagged && c.isMine) // Zähle die Minen die markiert sind
-        val totalFlags = cells.flatten.count(_.isFlagged) // Zähle die Gesamtzahl der gesetzten Flaggen
-        flaggedMines == mineCount && totalFlags == mineCount // Gewonnen wenn Anzahl der markierten Minen und Flaggen gleich der Gesamtzahl der Minen ist
+        val allSafeRevealed = cells.flatten.forall(c => c.isRevealed || c.isMine) // prüfe alle minen und sichere Zellen
+        val flaggedMines = cells.flatten.count(c => c.isFlagged && c.isMine) // prüfe ob alle minen markiert sind
+        val totalFlags = cells.flatten.count(_.isFlagged) // prüfe ob alle Zellen markiert sind
+        allSafeRevealed || (flaggedMines == mineCount && totalFlags == mineCount) // prüfe ob Anzahl markierten Zellen = Anzahl der Minen ist
     }
     def display(revealAll: Boolean = false): String = {
         val sb = new StringBuilder
