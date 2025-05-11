@@ -138,7 +138,9 @@ class TuiSpec extends AnyWordSpec {
 
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {
-          val thread = new Thread(() => tui.start(resetBoard = false)) // <- wichtig!
+          val thread = new Thread(() => {
+            tui.start(resetBoard = false); ()
+          }) // <- das hier ersetzt deine fehlerhafte Zeile
           thread.start()
           thread.join()
         }

@@ -10,7 +10,11 @@ class ControllerSpec extends AnyWordSpec with Matchers {
 
   class TestObserver extends Observer {
     var updated = false
-    override def update: Unit = updated = true
+
+    override def update: String = {
+      updated = true
+      "updated"
+    }
   }
   "A Controller" should {
 

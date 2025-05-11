@@ -4,11 +4,15 @@ import scala.util.Random
 
 case class Board(val size: Int = 9, val mineCount: Int = 10) {
     val cells: Array[Array[GameCell]] = Array.fill(size, size)(GameCell()) //cells füllt das 2D Array mit GameCell Objekten
-    val directions = List((-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)) // liste von alle möglichen Nachbarn
+    private val directions = List((-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)) // liste von alle möglichen Nachbarn
 
-    def reset(): Unit = {
-        // Nestart des Spiels, das heißt heißt jede Zelle im 2D Array wird mit neuen GameCell Objekten gefüllt
-        // danach muss man die Minen neu platzieren
+    private def dynamicHeader: String = {
+        (1 to size).map(_.toString).zipWithIndex.map { case (n, i) =>
+            if ((i + 1) % 5 == 0 && i + 1 != size) n + "  "
+            else n + " "
+        }.mkString.trim
+    }
+    def reset(): String = {
         var x = 0
         while (x < size) {
             var y = 0
@@ -20,22 +24,24 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
             }
             x += 1
         }
-        placeMines()
+        val minesPlaced = placeMines()
+        s"Board reset. Mines placed: $minesPlaced"
     }
 
-    def placeMines(): Unit = {
-        // platziere die Minen zufällig (Random) im 2D Array, mineCount gibt an wie viele Minen es maximal gibt
-        // wenn die Zelle noch keine Mine hat (isMine), dann platziere eine Mine. 
+    def placeMines(): Int = {
         val random = scala.util.Random
         var amountMines = mineCount
+        var placed = 0
         while (amountMines > 0) {
             val x = random.nextInt(size)
             val y = random.nextInt(size)
             if (!cells(x)(y).isMine) {
                 cells(x)(y).isMine = true
                 amountMines -= 1
+                placed += 1
             }
         }
+        placed
     }
 
     def reveal(row: Int, col: Int): Boolean = {
@@ -88,47 +94,43 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
         val totalFlags = cells.flatten.count(_.isFlagged) // Zähle die Gesamtzahl der gesetzten Flaggen
         flaggedMines == mineCount && totalFlags == mineCount // Gewonnen wenn Anzahl der markierten Minen und Flaggen gleich der Gesamtzahl der Minen ist
     }
+    def display(revealAll: Boolean = false): String = {
+        val sb = new StringBuilder
+        sb.append(bombCountDisplayString() + "\n")
+        sb.append("   " + dynamicHeader + "\n") // dynamic header depending on size of the Board
 
-    def display(revealAll: Boolean = false): Unit = {
-        bombCountDisplay()
-        println("   1 2 3 4 5  6 7 8 9") // Spaltenüberschrift
-        for (r <- 0 until size) { // Iteriere über die Zeilen
-            print((r + 'A').toChar + " ") // Konvertiere die Zeilenindizes in Buchstaben (A-I)
-            for (c <- 0 until size) { // Iteriere über die Spalten
+        for (r <- 0 until size) {
+            sb.append((r + 'A').toChar + " ") // Row label (A, B, ...)
+            for (c <- 0 until size) {
                 val cell = cells(r)(c)
-                if (revealAll && cell.isMine) print("\uD83D\uDCA3") // mine M wird gezeigt wenn alles aufgedeckt werden soll
-                else if (cell.isFlagged) print("\uD83D\uDEA9") // zeige flag F wenn es gesetzte wird
-                else if (cell.isRevealed) {
-                    val emojiNumber = cell.mineCount match {
-                        case 0 => "⬛" // leere Zelle ohne Mine als Nachbar
-                        case 1 => "1️⃣"
-                        case 2 => "2️⃣"
-                        case 3 => "3️⃣"
-                        case 4 => "4️⃣"
-                        case 5 => "5️⃣"
-                        case n => s"$n " // zahlen ab 6 werden als Text angezeigt
-                    }
-                    print(emojiNumber) // zeige leere Zelle "\uD83D\uDFEB " wenn alle Nachbarzellen keine Mine haben
-                }
-                else print("⬜") //Neutrales Feld
-
+                val mark =
+                    if (revealAll && cell.isMine) "\uD83D\uDCA3"
+                    else if (cell.isFlagged) "\uD83D\uDEA9"
+                    else if (cell.isRevealed) {
+                        cell.mineCount match {
+                            case 0 => "⬛"
+                            case 1 => "1\uFE0F⃣"
+                            case 2 => "2\uFE0F⃣"
+                            case 3 => "3\uFE0F⃣"
+                            case 4 => "4\uFE0F⃣"
+                            case 5 => "5\uFE0F⃣"
+                            case n => s"$n "
+                        }
+                    } else "⬜"
+                sb.append(mark)
             }
-            println()
+            sb.append("\n")
         }
+
+        sb.toString() // <- THIS is what's returned to tests
     }
 
-    def bombCountDisplay(): Unit = {
-        var amountFlaggedFields = 0
-        for (r <- 0 until size) { // Iteriere über die Zeilen
-            for (c <- 0 until size) { // Iteriere über die Spalten
-                val cell = cells(r)(c)
-                if (cell.isFlagged) {
-                    amountFlaggedFields += 1
-                }
-            }
-        }
-        print(s"Bomb amount: ${mineCount - amountFlaggedFields}\n")
+    def bombCountDisplayString(): String = {
+        val flagged = cells.flatten.count(_.isFlagged)
+        s"Bomb amount: ${mineCount - flagged}"
     }
+
+
 
 //    def timePrint(): Unit = {
 //        var time = 0

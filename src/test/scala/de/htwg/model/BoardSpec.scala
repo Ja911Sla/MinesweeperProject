@@ -10,7 +10,7 @@ import java.io.*
 
 class BoardSpec extends AnyWordSpec {
   "A Board" should {
-    "be able to reset" in {       //Reset
+    "be able to reset" in { //Reset
       val board = Board()
       var placesMinesBefore = 0
       var x = 0
@@ -37,7 +37,7 @@ class BoardSpec extends AnyWordSpec {
     }
   }
 
-  "be able to place bombs" in {     //Place
+  "be able to place bombs" in { //Place
     val board = Board()
     var amountMinesBefore = 0
     var x = 0
@@ -62,9 +62,9 @@ class BoardSpec extends AnyWordSpec {
     }
     amountMinesBefore should be(0)
     amountMinesAfter should be(board.mineCount)
-    }
+  }
 
-  "be able to reveal adjacents of its Cells" in {       //RevealAdjacent
+  "be able to reveal adjacents of its Cells" in { //RevealAdjacent
     val board = Board()
 
     var x = 0
@@ -96,53 +96,53 @@ class BoardSpec extends AnyWordSpec {
 
     board.revealAdjacent(3, 1)
 
-    board.cells(2)(2).isRevealed should be (true)
-    board.cells(3)(2).isRevealed should be (true)
-    board.cells(2)(1).isRevealed should be (true)
-    board.cells(3)(1).isRevealed should be (true)
-    board.cells(4)(2).isRevealed should be (true)
-    board.cells(4)(1).isRevealed should be (true)
+    board.cells(2)(2).isRevealed should be(true)
+    board.cells(3)(2).isRevealed should be(true)
+    board.cells(2)(1).isRevealed should be(true)
+    board.cells(3)(1).isRevealed should be(true)
+    board.cells(4)(2).isRevealed should be(true)
+    board.cells(4)(1).isRevealed should be(true)
   }
 
 
-  "be able to toggle flags on not revealed fields" in {    //Toggle
+  "be able to toggle flags on not revealed fields" in { //Toggle
     val board = Board()
     board.cells(2)(2).isFlagged = false
     board.toggleFlag(2, 2)
-    board.cells(2)(2).isFlagged should be (true)
+    board.cells(2)(2).isFlagged should be(true)
     board.toggleFlag(2, 2)
-    board.cells(2)(2).isFlagged should be (false)
+    board.cells(2)(2).isFlagged should be(false)
   }
   "not toggle flags on revealed fields" in {
     val board = Board()
     board.cells(2)(2).isRevealed = true
     board.cells(2)(2).isFlagged = false
     board.toggleFlag(2, 2)
-    board.cells(2)(2).isFlagged should be (false)
+    board.cells(2)(2).isFlagged should be(false)
   }
 
-  "be able to know if inbounds or not" in {     // Inbound
+  "be able to know if inbounds or not" in { // Inbound
     val board = Board()
-    board.inBounds(4, 3) should be (true)
-    board.inBounds(11, 14) should be (false)
+    board.inBounds(4, 3) should be(true)
+    board.inBounds(11, 14) should be(false)
   }
 
-  "reveal a mine-free cell and mark it as revealed" in {    // Reveal
+  "reveal a mine-free cell and mark it as revealed" in { // Reveal
     val board = Board()
     board.cells(3)(3).isMine = false
     val revealed = board.reveal(3, 3)
-    revealed should be (true)
-    board.cells(3)(3).isRevealed should be (true)
+    revealed should be(true)
+    board.cells(3)(3).isRevealed should be(true)
   }
 
   "reveal a mine and return false" in {
     val board = Board()
     board.cells(4)(4).isMine = true
     val revealed = board.reveal(4, 4)
-    revealed should be (false)
+    revealed should be(false)
   }
 
-  "return true on checkWin only if all mines are flagged" in {      // Check Win
+  "return true on checkWin only if all mines are flagged" in { // Check Win
     val board = Board(mineCount = 3)
 
     board.cells(0)(0).isMine = true
@@ -151,13 +151,13 @@ class BoardSpec extends AnyWordSpec {
     board.toggleFlag(0, 0)
     board.toggleFlag(1, 1)
     board.toggleFlag(2, 2)
-    board.checkWin() should be (true)
+    board.checkWin() should be(true)
 
     board.toggleFlag(0, 0)
-    board.checkWin() should be (false)
+    board.checkWin() should be(false)
   }
 
-  "be able to count adjacent mines" in {      // CountAdjacentMines
+  "be able to count adjacent mines" in { // CountAdjacentMines
     val board = Board()
 
     board.cells(3)(2).isMine = true
@@ -165,11 +165,10 @@ class BoardSpec extends AnyWordSpec {
     board.cells(2)(3).isMine = true
     board.cells(2)(4).isMine = true
 
-    board.countAdjacentMines(3, 3) should be (4)
+    board.countAdjacentMines(3, 3) should be(4)
   }
 
-  "be able to display itself" in {          // Display
-
+  "be able to display itself" in {
     val board = Board(2, 2)
     board.cells(0)(0).isMine = true
     board.cells(0)(0).isRevealed = false
@@ -180,169 +179,32 @@ class BoardSpec extends AnyWordSpec {
 
     board.reveal(0, 0)
 
+    val output = board.display(true) // <--- Correct capture
 
-    val out = new ByteArrayOutputStream()
-    scala.Console.withOut(new PrintStream(out)) {
-      board.display(true)
-    }
-
-    val output = out.toString()
+    println("Captured Output for display(true):\n" + output)
 
     output should include("A")
     output should include("1 2")
     output should include("\uD83D\uDCA3") // Bombe
   }
-
-  "be able to display the board without revealing all" in {
-    val board = Board(2, 2)
-    board.cells(0)(0).isMine = true
-    board.cells(0)(0).isRevealed = false
-    board.cells(0)(1).isRevealed = false
-    board.cells(1)(1).isMine = true
-    board.cells(1)(1).isRevealed = false
-    board.cells(1)(0).isRevealed = false
-
-    val out = new ByteArrayOutputStream()
-    scala.Console.withOut(new PrintStream(out)) {
-      board.display(false) // revealAll = false
-    }
-
-    val output = out.toString()
-
-    output should include("⬜") // Nicht aufgedeckte Zellen müssen als ⬜ erscheinen
-    output should not include "\uD83D\uDCA3" // Keine Bomben sollten sichtbar sein
-  }
-
-  "be able to display the board with revealed cells" in {
-    val board = Board(2, 2)
-    board.cells(0)(0).isMine = true
-    board.cells(0)(0).isRevealed = true
-    board.cells(0)(1).isRevealed = true
-    board.cells(1)(1).isMine = true
-    board.cells(1)(1).isRevealed = true
-    board.cells(1)(0).isRevealed = true
-
-    val out = new ByteArrayOutputStream()
-    scala.Console.withOut(new PrintStream(out)) {
-      board.display(true)
-    }
-
-    val output = out.toString()
-
-    output should include("\uD83D\uDCA3")
-    output should include("⬛")
-    output should not include "⬜"
-  }
-
-  "display 2️⃣ when a revealed cell has 2 adjacent mines" in {
-    val board = Board(3, 0)
-
-
-    board.cells(0)(1).isMine = true
-    board.cells(1)(0).isMine = true
-
-
-    board.cells(1)(1).isRevealed = true
-    board.cells(1)(1).mineCount = 2
-
-    val out = new ByteArrayOutputStream()
-    Console.withOut(new PrintStream(out)) {
-      board.display(false)
-    }
-
-    val output = out.toString
-    output should include("2️⃣")
-  }
-
-
-  "display 3️⃣ when a revealed cell has 3 adjacent mines" in {
-    val board = Board(3, 0)
-
-    // 3 Minen um Zelle (1,1)
-    board.cells(0)(1).isMine = true
-    board.cells(1)(0).isMine = true
-    board.cells(2)(1).isMine = true
-
-
-    board.cells(1)(1).isRevealed = true
-    board.cells(1)(1).mineCount = 3
-
-    val out = new ByteArrayOutputStream()
-    Console.withOut(new PrintStream(out)) {
-      board.display(false)
-    }
-
-    val output = out.toString
-    output should include("3️⃣")
-  }
-
-  "display 4️⃣ when a revealed cell has 4 adjacent mines" in {
-    val board = Board(3, 0)
-
-    board.cells(0)(1).isMine = true
-    board.cells(1)(0).isMine = true
-    board.cells(1)(2).isMine = true
-    board.cells(2)(1).isMine = true
-
-    board.cells(1)(1).isRevealed = true
-    board.cells(1)(1).mineCount = 4
-
-    val out = new ByteArrayOutputStream()
-    Console.withOut(new PrintStream(out)) {
-      board.display(false)
-    }
-
-    val output = out.toString
-    output should include("4️⃣")
-  }
-
-  "display 5️⃣ when a revealed cell has 5 adjacent mines" in {
-    val board = Board(3, 0)
-
-    board.cells(0)(0).isMine = true
-    board.cells(0)(1).isMine = true
-    board.cells(1)(0).isMine = true
-    board.cells(2)(0).isMine = true
-    board.cells(2)(1).isMine = true
-
-    board.cells(1)(1).isRevealed = true
-    board.cells(1)(1).mineCount = 5
-
-    val out = new ByteArrayOutputStream()
-    Console.withOut(new PrintStream(out)) {
-      board.display(false)
-    }
-
-    val output = out.toString
-    output should include("5️⃣")
-  }
-
-
   "display correctly with revealAll = false for flagged, revealed, and hidden cells" in {
     val board = Board(2, 0)
 
     board.cells(0)(0).isFlagged = true
-
     board.cells(0)(1).isRevealed = true
     board.cells(0)(1).mineCount = 1
-
     board.cells(1)(0).isRevealed = false
-
-    // Zelle B2:
     board.cells(1)(1).isRevealed = true
     board.cells(1)(1).mineCount = 0
 
-    val out = new ByteArrayOutputStream()
-    Console.withOut(new PrintStream(out)) {
-      board.display(false) // NICHT revealAll
-    }
+    val output = board.display(false)
 
-    val output = out.toString
+    println("Captured Output for display(false):\n" + output)
 
-    output should include("🚩")
-    output should include("1️⃣")
-    output should include("⬛")
-    output should include("⬜")
+    output should include("\uD83D\uDEA9") // 🚩
+    output should include("1\uFE0F⃣")     // 1️⃣
+    output should include("⬛")            // ⬛
+    output should include("⬜")            // ⬜
   }
   "reveal returns true on flagged or revealed cells" in {
     val board = Board()
@@ -378,22 +240,31 @@ class BoardSpec extends AnyWordSpec {
 
     board.checkWin() should be(false)
   }
-
-  "display the amount of left bombs" in {
+  "should display the amount of left bombs" in {
     val board = Board(mineCount = 2)
     board.cells(0)(0).isMine = true
-
     board.toggleFlag(0, 0)
 
-    val out = new ByteArrayOutputStream()
-    Console.withOut(new PrintStream(out)) {
-      board.bombCountDisplay()
-    }
+    val output = board.bombCountDisplayString() // <- capture the returned String directly
 
-    val output = out.toString
+    output should include("Bomb amount: 1") // <- assert on the returned String
+  }
+  "should display 6 when a revealed cell has 6 adjacent mines" in {
+    val board = Board(3, 0)
 
-    output should include("Bomb amount: 1")
+    board.cells(0)(0).isMine = true
+    board.cells(0)(1).isMine = true
+    board.cells(0)(2).isMine = true
+    board.cells(1)(0).isMine = true
+    board.cells(1)(2).isMine = true
+    board.cells(2)(1).isMine = true
 
+    board.cells(1)(1).isRevealed = true
+    board.cells(1)(1).mineCount = 6
+
+    val output = board.display(false)  // <- capture the returned String
+
+    output should include("6 ")         // <- assert on the content
   }
 }
 

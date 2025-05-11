@@ -1,12 +1,16 @@
 package de.htwg.utility
 
 trait Observer {
-  def update: Unit
+  def update: String
 }
 
 class Observable {
   private var subscribers: Vector[Observer] = Vector() // privat da es sonst gegen die Enkapselung verstößt
   def add(s: Observer): Unit = subscribers = subscribers :+ s
   def remove(s: Observer): Unit = subscribers = subscribers.filterNot(o => o == s)
-  def notifyObservers: Unit = subscribers.foreach(o => o.update)
+
+  def notifyObservers(): String = {
+    subscribers.foreach(_.update)
+    s"${subscribers.size} observers notified."
+  }
 }
