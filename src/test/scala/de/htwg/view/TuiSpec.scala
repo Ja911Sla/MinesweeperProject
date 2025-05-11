@@ -212,4 +212,63 @@ class TuiSpec extends AnyWordSpec {
       out.toString should include("Ungültige Eingabe")
     }
   }
+  "show the elapsed time when T is entered" in {
+    val in = new ByteArrayInputStream("T\nQ\n".getBytes())
+    val out = new ByteArrayOutputStream()
+
+    val controller = new Controller(Board())
+    val tui = new Tui(controller)
+
+    Console.withIn(in) {
+      Console.withOut(new PrintStream(out)) {
+        tui.start()
+      }
+    }
+
+    val output = out.toString
+    output should include("Deine Spielzeit: 0 Sekunden.")
+  }
+  "show winning message after flagging all mines" in {
+    val board = Board(mineCount = 1)
+
+    // Safe setup with 1 mine at A1
+    board.cells(0)(0).isMine = true
+
+    val controller = new Controller(board)
+    val tui = new Tui(controller)
+
+    val out = new ByteArrayOutputStream()
+    Console.withOut(new PrintStream(out)) {
+      tui.processInputLine("F A1")
+    }
+
+    val output = out.toString
+    output should include("Du hast gewonnen!")
+    output should include("Spielzeit: 0 Sekunden.")
+  }
+  "show losing message when stepping on a mine" in {
+    val board = Board()
+    board.reset()
+    board.cells(0)(0).isMine = true
+
+    val controller = new Controller(board)
+    val tui = new Tui(controller)
+
+    val in = new ByteArrayInputStream("A1\nQ\n".getBytes())
+    val out = new ByteArrayOutputStream()
+
+    Console.withIn(in) {
+      Console.withOut(new PrintStream(out)) {
+        val thread = new Thread(() => { tui.start(resetBoard = false); () })
+        thread.start()
+        thread.join()
+      }
+    }
+
+    val output = out.toString
+    output should include("BOOOM! Du hast verloren.")
+    output should include("Spielzeit: 0 Sekunden.")
+  }
+
+
 }
