@@ -2,12 +2,19 @@ package de.htwg.controller
 
 import de.htwg.utility.Observable
 import de.htwg.model._
+import de.htwg.factory.BoardFactory
 
-class Controller(var board:Board) extends Observable {      // Controller soll koordinieren und keine Duplikation sein
+class Controller(private var boardFactory: BoardFactory) extends Observable {
+  private var board: Board = boardFactory.createBoard()
   private val timer = new Timer()
+
+  def getBoard: Board = board
+
   def getElapsedTime: Int = timer.getTime
-  def createNewBoard(size: Int, amountMines: Int): Unit = {
-    board = new Board(size, amountMines)
+
+  def createNewBoard(factory: BoardFactory): Unit = {
+    boardFactory = factory
+    board = boardFactory.createBoard()
     notifyObservers()
   }
 
@@ -24,26 +31,20 @@ class Controller(var board:Board) extends Observable {      // Controller soll k
 
   def checkWin(): Boolean = {
     val result = board.checkWin()
-    if (result) timer.stop()  // Only stop if won
+    if (result) timer.stop()
     notifyObservers()
     result
   }
 
   def resetGame(): String = {
-    timer.reset()  // Restart the timer cleanlyA
+    timer.reset()
     val resetMessage = board.reset()
-    timer.start()  // Ensure it starts again if stopped
+    timer.start()
     notifyObservers()
     resetMessage
   }
-  /*
-  def displayBoard(revealAll: Boolean = false): Unit = {
-    board.display(revealAll)
-  }*/
 
   def displayBoardToString(revealAll: Boolean = false): String = {
     board.display(revealAll)
   }
 }
-
-

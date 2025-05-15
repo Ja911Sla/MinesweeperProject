@@ -1,6 +1,7 @@
 package de.htwg.model
 
 import scala.util.Random
+import java.util.Scanner
 
 case class Board(val size: Int = 9, val mineCount: Int = 10) {
     val cells: Array[Array[GameCell]] = Array.fill(size, size)(GameCell()) //cells füllt das 2D Array mit GameCell Objekten
@@ -122,7 +123,6 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
             }
             sb.append("\n")
         }
-
         sb.toString() // <- THIS is what's returned to tests
     }
 
@@ -131,15 +131,12 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
         s"Bomb amount: ${mineCount - flagged}"
     }
 
-
-
-//    def timePrint(): Unit = {
-//        var time = 0
-//        while (true) {
-//            
-//            print(s"Game time: $time\n")
-//            Thread.sleep(1000) // warte 1000 Millisekunden = 1 Sekunde
-//            time += 1
-//        }
+//    def chooseDifficulty(): String = {
+//        val scanner = new Scanner(System.in)
+//        println("Wähle eine Schwierigkeitsstufe! 'A' für Anfänger, 'M' für Medium oder 'P' für Profi!")
+//        val difficulty = scanner.nextLine()
+//        return difficulty
 //    }
+//
+//    def chooseSizeOfBoard():
 }

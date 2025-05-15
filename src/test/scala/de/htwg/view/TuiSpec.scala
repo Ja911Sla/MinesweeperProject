@@ -1,6 +1,7 @@
 package de.htwg.view
 
 import de.htwg.controller.Controller
+import de.htwg.factory.BoardFactory
 import de.htwg.model.Board
 import de.htwg.utility.Observer
 import de.htwg.view.Tui
@@ -12,12 +13,17 @@ import scala.Console
 
 class TuiSpec extends AnyWordSpec {
 
+  // Factory für Testzwecke 
+  object TestBoardFactory extends BoardFactory {
+    override def createBoard(): Board = new Board(9, 1)
+  }
+  
   "The Tui" should {
     "quit the game with Q" in {
       val in = new ByteArrayInputStream("Q\n".getBytes())
       val out = new ByteArrayOutputStream()
 
-      val controller = new Controller(Board())
+      val controller = new Controller(TestBoardFactory)
       val tui = new Tui(controller)
 
       Console.withIn(in) {
@@ -35,7 +41,7 @@ class TuiSpec extends AnyWordSpec {
       val in = new ByteArrayInputStream("H\nQ\n".getBytes()) // Hilfe, dann beenden
       val out = new ByteArrayOutputStream()
 
-      val controller = new Controller(Board()) // Board() ist dein Model
+      val controller = new Controller(TestBoardFactory) // Board() ist dein Model
       val tui = new Tui(controller)
 
       Console.withIn(in) {
@@ -53,7 +59,7 @@ class TuiSpec extends AnyWordSpec {
       val in = new ByteArrayInputStream("R\nQ\n".getBytes()) // Reset, dann quit
       val out = new ByteArrayOutputStream()
 
-      val controller = new Controller(Board()) // Board() ist dein Model
+      val controller = new Controller(TestBoardFactory) // Board() ist dein Model
       val tui = new Tui(controller)
 
       Console.withIn(in) {
@@ -70,30 +76,30 @@ class TuiSpec extends AnyWordSpec {
       //val in = new ByteArrayInputStream("F C3\nQ\n".getBytes())
       //val out = new ByteArrayOutputStream()
 
-      val controller = new Controller(Board())
+      val controller = new Controller(TestBoardFactory)
       val tui = new Tui(controller)
 
       tui.processInputLine("F A1")
 
-      controller.board.cells(0)(0).isFlagged should be(true)
+      controller.getBoard.cells(0)(0).isFlagged should be(true)
     }
 
     "reveal a cell with C3" in {
 
 
-      val controller = new Controller(Board())
+      val controller = new Controller(TestBoardFactory)
       val tui = new Tui(controller)
 
       tui.processInputLine("A1")
 
-      controller.board.cells(0)(0).isRevealed should be(true)
+      controller.getBoard.cells(0)(0).isRevealed should be(true)
     }
 
     "handle invalid input" in {
       val in = new ByteArrayInputStream("XYZ\nQ\n".getBytes())
       val out = new ByteArrayOutputStream()
 
-      val controller = new Controller(Board()) // Board() ist dein Model
+      val controller = new Controller(TestBoardFactory) // Board() ist dein Model
       val tui = new Tui(controller)
 
       Console.withIn(in) {
@@ -110,7 +116,7 @@ class TuiSpec extends AnyWordSpec {
       val in = new ByteArrayInputStream("A\nQ\n".getBytes()) // Anleitung, dann quit
       val out = new ByteArrayOutputStream()
 
-      val controller = new Controller(Board()) // Board() ist dein Model
+      val controller = new Controller(TestBoardFactory) // Board() ist dein Model
       val tui = new Tui(controller)
 
       Console.withIn(in) {
@@ -126,12 +132,12 @@ class TuiSpec extends AnyWordSpec {
     // new code
     //more new code
     "lose the game when uncovering a mine" in {
-      val controller = new Controller(Board())
+      val controller = new Controller(TestBoardFactory)
       val tui = new Tui(controller)
 
       // Stelle sicher, dass Board initial korrekt gesetzt ist
-      controller.board.reset()
-      controller.board.cells(0)(0).isMine = true // Setze Mine manuell
+      controller.getBoard.reset()
+      controller.getBoard.cells(0)(0).isMine = true // Setze Mine manuell
 
       val in = new ByteArrayInputStream("A1\nQ\n".getBytes())
       val out = new ByteArrayOutputStream()
@@ -180,17 +186,17 @@ class TuiSpec extends AnyWordSpec {
     }
   }*/
     "show winning message if all mines are flagged after flag input" in {
-      val board = Board(mineCount = 1)
+
+
+      val controller = new Controller(TestBoardFactory)
+      val tui = new Tui(controller)
 
       // Manuelles Setup: nur eine Mine
-      for (r <- 0 until board.size; c <- 0 until board.size) {
-        board.cells(r)(c).isMine = false
-        board.cells(r)(c).isFlagged = false
+      for (r <- 0 until controller.getBoard.size; c <- 0 until controller.getBoard.size) {
+        controller.getBoard.cells(r)(c).isMine = false
+        controller.getBoard.cells(r)(c).isFlagged = false
       }
-      board.cells(0)(0).isMine = true
-
-      val controller = new Controller(board)
-      val tui = new Tui(controller)
+      controller.getBoard.cells(0)(0).isMine = true
 
       val out = new ByteArrayOutputStream()
       Console.withOut(new PrintStream(out)) {
@@ -201,7 +207,7 @@ class TuiSpec extends AnyWordSpec {
       output should include("Du hast gewonnen!")
     }
     "handle completely invalid command with processInputLine" in {
-      val controller = new Controller(Board())
+      val controller = new Controller(TestBoardFactory)
       val tui = new Tui(controller)
 
       val out = new ByteArrayOutputStream()
@@ -216,7 +222,7 @@ class TuiSpec extends AnyWordSpec {
     val in = new ByteArrayInputStream("T\nQ\n".getBytes())
     val out = new ByteArrayOutputStream()
 
-    val controller = new Controller(Board())
+    val controller = new Controller(TestBoardFactory)
     val tui = new Tui(controller)
 
     Console.withIn(in) {
@@ -229,13 +235,16 @@ class TuiSpec extends AnyWordSpec {
     output should include("Deine Spielzeit: 0 Sekunden.")
   }
   "show winning message after flagging all mines" in {
-    val board = Board(mineCount = 1)
+    //val board = Board(mineCount = 1)
+
+    val controller = new Controller(TestBoardFactory)
+    val tui = new Tui(controller)
 
     // Safe setup with 1 mine at A1
-    board.cells(0)(0).isMine = true
+    controller.getBoard.cells(0)(0).isMine = true
 
-    val controller = new Controller(board)
-    val tui = new Tui(controller)
+    //val controller = new Controller(TestBoardFactory)
+    //val tui = new Tui(controller)
 
     val out = new ByteArrayOutputStream()
     Console.withOut(new PrintStream(out)) {
@@ -247,12 +256,13 @@ class TuiSpec extends AnyWordSpec {
     output should include("Spielzeit: 0 Sekunden.")
   }
   "show losing message when stepping on a mine" in {
-    val board = Board()
-    board.reset()
-    board.cells(0)(0).isMine = true
 
-    val controller = new Controller(board)
+
+    val controller = new Controller(TestBoardFactory)
     val tui = new Tui(controller)
+
+    controller.resetGame()
+    controller.getBoard.cells(0)(0).isMine = true
 
     val in = new ByteArrayInputStream("A1\nQ\n".getBytes())
     val out = new ByteArrayOutputStream()
@@ -282,7 +292,7 @@ class TuiSpec extends AnyWordSpec {
     // Eine Mine auf A1 setzen
     board.cells(0)(0).isMine = true
 
-    val controller = new Controller(board)
+    val controller = new Controller(TestBoardFactory)
     val tui = new Tui(controller)
 
     val out = new ByteArrayOutputStream()
