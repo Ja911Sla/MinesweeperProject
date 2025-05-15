@@ -5,14 +5,15 @@ import de.htwg.controller.Controller
 import de.htwg.model.Board
 import de.htwg.utility.Observer
 import de.htwg.factory._
+import de.htwg.singleton.GameConfig
 
 @main
 def main(): Unit = {
 
-  // ab hier ausgabe von der TUI  
+  // ab hier ausgabe von der TUI
   println("Willkommen zu Minesweeper!")
-  val board = new Board()
-  val controller = new Controller(HardBoardFactory)
+  GameConfig.setMedium()
+  val controller = new Controller(ConfigBoardFactory)
   val tui = new Tui(controller)
 
   println(tui.start())  // <--- You need to actually do something with the result.

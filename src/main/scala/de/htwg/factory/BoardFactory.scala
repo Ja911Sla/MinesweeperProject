@@ -1,6 +1,7 @@
 package de.htwg.factory
 
 import de.htwg.model.Board
+import de.htwg.singleton.GameConfig
 
 trait BoardFactory {
   def createBoard(): Board
@@ -17,4 +18,13 @@ object MediumBoardFactory extends BoardFactory {
 object HardBoardFactory extends BoardFactory {
   override def createBoard(): Board = new Board(size = 12, mineCount = 35)
 }
+
+object ConfigBoardFactory extends BoardFactory {
+  override def createBoard(): Board =
+    new Board(GameConfig.boardSize, GameConfig.mineCount)
+}
+
+
+
+
 

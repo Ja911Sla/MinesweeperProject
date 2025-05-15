@@ -1,5 +1,7 @@
 package de.htwg.model
 
+import de.htwg.factory.{ConfigBoardFactory, EasyBoardFactory, HardBoardFactory, MediumBoardFactory}
+
 import scala.util.Random
 import java.util.Scanner
 
@@ -131,12 +133,26 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
         s"Bomb amount: ${mineCount - flagged}"
     }
 
-//    def chooseDifficulty(): String = {
+//    def chooseDifficulty(): Int = {
 //        val scanner = new Scanner(System.in)
-//        println("Wähle eine Schwierigkeitsstufe! 'A' für Anfänger, 'M' für Medium oder 'P' für Profi!")
-//        val difficulty = scanner.nextLine()
-//        return difficulty
+//        println(
+//            """Wähle eine Schwierigkeitsstufe!
+//              |'1' für Anfänger (6x6 Feld mit 5 Minen)
+//              |'2' für Medium (9x9 Feld mit 15 Minen)
+//              |'3' für Profi (12x12 Feld mit 35 Minen)
+//              |""".stripMargin)
+//        val difficulty = scanner.nextInt()
+//        difficulty
 //    }
 //
-//    def chooseSizeOfBoard():
+//    def createBoard(x: Int): Board = {
+//        val choice = x
+//        val board = choice match {
+//            case 1 => EasyBoardFactory
+//            case 2 => MediumBoardFactory
+//            case 3 => HardBoardFactory
+//            case 4 => ConfigBoardFactory()
+//        }
+//        board
+//    }
 }
