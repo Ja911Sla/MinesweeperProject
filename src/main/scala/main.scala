@@ -15,6 +15,7 @@ def main(): Unit = {
   GameConfig.setMedium
   val controller = new Controller(ConfigBoardFactory)
   val tui = new Tui(controller)
+  println("hoffnung")
 
   println(tui.start())  // <--- You need to actually do something with the result
 
