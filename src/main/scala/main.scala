@@ -16,7 +16,7 @@ def main(): Unit = {
   val controller = new Controller(ConfigBoardFactory)
   val tui = new Tui(controller)
 
-  println(tui.start())  // <--- You need to actually do something with the result.
+  println(tui.start())  // <--- You need to actually do something with the result
 
 
 }
