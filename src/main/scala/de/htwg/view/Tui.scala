@@ -1,12 +1,17 @@
 package de.htwg.view
 
 import de.htwg.controller.Controller
+import de.htwg.strategy._
 import de.htwg.utility.Observer
+import de.htwg.factory._
+import de.htwg.singleton._
+
 import scala.io.StdIn
 
-class Tui(val controller: Controller) extends Observer {
-    controller.add(this)
-
+class Tui(var controller: Controller) extends Observer {
+    
+    chooseDifficulty()
+    
     def start(resetBoard: Boolean = true): String = {
         if (resetBoard) controller.resetGame()
         println(
@@ -36,6 +41,33 @@ class Tui(val controller: Controller) extends Observer {
         }
         "Game over."
     }
+
+  private def chooseDifficulty(): Unit = {
+    println("Wähle Schwierigkeitsgrad:")
+    println("1 - Leicht (6x6, 5 Minen)")
+    println("2 - Mittel (9x9, 15 Minen)")
+    println("3 - Schwer (12x12, 35 Minen)")
+    println("4 - Benutzerdefiniert")
+
+    val strategy: GameModeStrategy = StdIn.readLine("Eingabe: ") match {
+      case "1" => EasyStrategy
+      case "2" => MediumStrategy
+      case "3" => HardStrategy
+      case "4" =>
+        val size = StdIn.readLine("Boardgröße: ").toInt
+        val mines = StdIn.readLine("Anzahl Minen: ").toInt
+        GameConfig.setCustom(size, mines)
+        CustomStrategy
+      case _ =>
+        println("Ungültige Eingabe. Standardmäßig 'Mittel' gewählt.")
+        MediumStrategy
+    }
+
+    val factory = strategy.getBoardFactory()
+    controller = new Controller(factory)
+    controller.add(this)
+  }
+  
     def processInputLine(input: String): Boolean = {
         val i = input.trim.toUpperCase
 
