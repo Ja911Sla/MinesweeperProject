@@ -16,6 +16,10 @@ class TuiSpec extends AnyWordSpec {
   // Factory für Testzwecke 
   object TestBoardFactory extends BoardFactory {
     override def createBoard(): Board = new Board(9, 1)
+
+    override def size: Int = 9
+
+    override def mineCount: Int = 1
   }
   
   "The Tui" should {

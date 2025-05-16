@@ -12,7 +12,7 @@ def main(): Unit = {
 
   // ab hier ausgabe von der TUI
   println("Willkommen zu Minesweeper!")
-  GameConfig.setMedium()
+  GameConfig.setMedium
   val controller = new Controller(ConfigBoardFactory)
   val tui = new Tui(controller)
 

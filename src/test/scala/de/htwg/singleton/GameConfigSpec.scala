@@ -12,24 +12,24 @@ import de.htwg.singleton.GameConfig
 class GameConfigSpec extends AnyWordSpec {
     "A board's configuration" should {
       "have default values set" in {
-        GameConfig.reset()
+        GameConfig.reset
         GameConfig.boardSize should be (9)
         GameConfig.mineCount should be (10)
       }
       "have an easy size" in {
-        GameConfig.setEasy()
+        GameConfig.setEasy
         val controller = new Controller(ConfigBoardFactory)
         controller.getBoard.size should be (6)
         controller.getBoard.mineCount should be (5)
       }
       "have a medium size" in {
-        GameConfig.setMedium()
+        GameConfig.setMedium
         val controller = new Controller(ConfigBoardFactory)
         controller.getBoard.size should be (9)
         controller.getBoard.mineCount should be (15)
       }
       "have a big size" in {
-        GameConfig.setHard()
+        GameConfig.setHard
         val controller = new Controller(ConfigBoardFactory)
         controller.getBoard.size should be(12)
         controller.getBoard.mineCount should be(35)
@@ -41,8 +41,8 @@ class GameConfigSpec extends AnyWordSpec {
         controller.getBoard.mineCount should be(25)
       }
       "have a reset function" in {
-        GameConfig.setHard()
-        GameConfig.reset()
+        GameConfig.setHard
+        GameConfig.reset
         GameConfig.boardSize should be (9)
         GameConfig.mineCount should be (10)
       }

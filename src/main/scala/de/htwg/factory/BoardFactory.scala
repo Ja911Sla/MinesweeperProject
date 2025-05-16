@@ -4,27 +4,35 @@ import de.htwg.model.Board
 import de.htwg.singleton.GameConfig
 
 trait BoardFactory {
-  def createBoard(): Board
+  def size: Int
+
+  def mineCount: Int
+
+  def createBoard(): Board = {
+    val board = new Board(size, mineCount)
+    board.placeMines()
+    board
+  }
 }
 
 object EasyBoardFactory extends BoardFactory {
-  override def createBoard(): Board = new Board(size = 6, mineCount = 5)
+  override val size: Int = 6
+  override val mineCount: Int = 5
 }
 
 object MediumBoardFactory extends BoardFactory {
-  override def createBoard(): Board = new Board(size = 9, mineCount = 15)
+  override val size: Int = 9
+  override val mineCount: Int = 15
 }
 
 object HardBoardFactory extends BoardFactory {
-  override def createBoard(): Board = new Board(size = 12, mineCount = 35)
+
+  override val size: Int = 12
+  override val mineCount: Int = 35
 }
 
 object ConfigBoardFactory extends BoardFactory {
-  override def createBoard(): Board =
-    new Board(GameConfig.boardSize, GameConfig.mineCount)
+  override def size: Int = GameConfig.boardSize
+
+  override def mineCount: Int = GameConfig.mineCount
 }
-
-
-
-
-

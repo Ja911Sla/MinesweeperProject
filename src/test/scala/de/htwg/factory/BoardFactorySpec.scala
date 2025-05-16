@@ -35,7 +35,7 @@ class BoardFactorySpec extends AnyWordSpec {
       board.mineCount should be(35)
     }
     "have a user friendly creation mode" in {
-      GameConfig.setMedium()
+      GameConfig.setMedium
       val controller = new Controller(ConfigBoardFactory)
       val board = controller.getBoard
       
