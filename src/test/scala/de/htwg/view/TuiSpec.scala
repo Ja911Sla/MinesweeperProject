@@ -8,6 +8,7 @@ import org.scalatest.wordspec.AnyWordSpec
 import de.htwg.strategy.MediumStrategy
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream, PrintStream}
 import scala.Console
+import de.htwg.state.{PlayingState, QuitState,MenuState, RestartState, WonState, LostState, IdleState}
 
 class TuiSpec extends AnyWordSpec {
 
@@ -18,21 +19,12 @@ class TuiSpec extends AnyWordSpec {
   }
 
   "The Tui" should {
-    "quit the game with Q" in {
-      val in = new ByteArrayInputStream("1\nQ\n".getBytes())
-      val out = new ByteArrayOutputStream()
-      val controller = new Controller(TestBoardFactory)
-      val tui = new Tui(controller)
-
-      Console.withIn(in) {
-        Console.withOut(new PrintStream(out)) {
-          tui.start()
-        }
-      }
-
-      val output = out.toString
-      output should include("Willkommen zu Minesweeper!")
-      output should include("Spiel beendet.")
+    "handle Q quit command" in {
+      val tui = new Tui(new Controller(TestBoardFactory))
+      tui.state = PlayingState
+      val running = tui.state.handleInput("Q", tui)
+      running should be(false)
+      tui.state should be(QuitState)
     }
 
     "show help when H is entered" in {
@@ -265,22 +257,16 @@ class TuiSpec extends AnyWordSpec {
       output should include("Spielzeit: ")
     }
 
-    "allow returning to game via M menu without restarting" in {
-      val in = new ByteArrayInputStream("1\nM\n2\nQ\n".getBytes())
-      val out = new ByteArrayOutputStream()
-      val controller = new Controller(TestBoardFactory)
-      val tui = new Tui(controller)
+    "handle M mode change correctly and go back to game" in {
+      val tui = new Tui(new Controller(TestBoardFactory))
 
+      val in = new ByteArrayInputStream("2\n".getBytes())
       Console.withIn(in) {
-        Console.withOut(new PrintStream(out)) {
-          tui.start()
-        }
+        tui.state = MenuState
+        tui.state.handleInput("dummy", tui) // The input here is ignored in MenuState
       }
 
-      val output = out.toString
-      output should include("Modus-Menü:")
-      output should include("Zurück zum Spiel.")
-      output should include("Spiel beendet.")
+      tui.state should be(PlayingState)
     }
     "handle invalid input in M menu and return to game" in {
       val in = new ByteArrayInputStream("1\nM\ninvalid\nQ\n".getBytes())
@@ -296,7 +282,6 @@ class TuiSpec extends AnyWordSpec {
 
       val output = out.toString
       output should include("Ungültige Eingabe. Zurück zum Spiel.")
-      output should include("Spiel beendet.")
     }
 
 

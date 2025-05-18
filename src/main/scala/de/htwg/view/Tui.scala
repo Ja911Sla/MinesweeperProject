@@ -5,45 +5,42 @@ import de.htwg.strategy._
 import de.htwg.utility.Observer
 import de.htwg.factory._
 import de.htwg.singleton._
+import de.htwg.state._
 
 import scala.io.StdIn
 
 class Tui(var controller: Controller) extends Observer {
-  val flagPattern = "F ([A-Z])([1-9][0-9]*)".r
-  val revealPattern = "([A-Z])([1-9][0-9]*)".r
-    
-    def start(resetBoard: Boolean = true): String = {
-        chooseDifficulty()
-        if (resetBoard) controller.resetGame()
-        println(
-            """Willkommen zu Minesweeper!
-              |Das Ziel ist es, alle Felder zu öffnen, ohne auf eine Mine zu treten.
-              |Befehle:
-              |  C3   -> Zelle aufdecken
-              |  F C3 -> Flagge setzen/entfernen
-              |  Q    -> Spiel beenden
-              |  R    -> Spiel zurücksetzen
-              |  H    -> Hilfe anzeigen
-              |  A    -> Anleitung anzeigen
-              |  T    -> Zeit anzeigen
-              |""".stripMargin)
+  var state: GameState = PlayingState
+  private val flagPattern = "F ([A-Z])([1-9][0-9]*)".r
+  private val revealPattern = "([A-Z])([1-9][0-9]*)".r
 
-        var running = true
-        while (running) {
-            println(controller.displayBoardToString())
-            val input = StdIn.readLine()
-            if (input.trim.toUpperCase == "Q") {
-                println("Spiel beendet.")
-                running = false
-            } else {
-                val continue = processInputLine(input) // <- nutze das Rückgabeergebnis
-                running = continue                     // <- setzt running entsprechend
-            }
-        }
-        "Game over."
+  def start(resetBoard: Boolean = true): String = {
+    chooseDifficulty()
+    if (resetBoard) controller.resetGame()
+    println(
+      """Willkommen zu Minesweeper!
+        |Das Ziel ist es, alle Felder zu öffnen, ohne auf eine Mine zu treten.
+        |Befehle:
+        |  C3   -> Zelle aufdecken
+        |  F C3 -> Flagge setzen/entfernen
+        |  Q    -> Spiel beenden
+        |  R    -> Spiel zurücksetzen
+        |  H    -> Hilfe anzeigen
+        |  A    -> Anleitung anzeigen
+        |  T    -> Zeit anzeigen
+        |  M    -> Game Mode wechseln
+        |""".stripMargin)
+
+    var running = true
+    while (running) {
+      println(controller.displayBoardToString())
+      val input = StdIn.readLine()
+      running = state.handleInput(input, this) // Always let state decide, even for Q
     }
+    "Game over."
+  }
 
-  private def chooseDifficulty(): Unit = {
+   def chooseDifficulty(): Unit = {
     println("Wähle Schwierigkeitsgrad:")
     println("1 - Leicht (6x6, 5 Minen)")
     println("2 - Mittel (9x9, 15 Minen)")
@@ -75,9 +72,8 @@ class Tui(var controller: Controller) extends Observer {
 
         i match {
             case "R" =>
-                controller.resetGame()
-                println("Spiel zurückgesetzt.")
-                true
+                state = RestartState
+                state.handleInput(input, this)
 
             case "H" =>
                 println(
@@ -92,6 +88,7 @@ class Tui(var controller: Controller) extends Observer {
                       |  H    -> Hilfe anzeigen
                       |  A    -> Anleitung anzeigen
                       |  T    -> Zeit anzeigen
+                      |  M    -> Game Mode wechseln
         """.stripMargin
                 )
                 true
@@ -112,42 +109,25 @@ class Tui(var controller: Controller) extends Observer {
                         """.stripMargin
                 )
                 true
+            case "Q" =>
+                state = QuitState
+                state.handleInput(input, this) // Call QuitState to stop the loop
 
             case "T" =>
                 println("Deine Spielzeit: " + controller.getElapsedTime + " Sekunden.")
                 true
 
             case "M" =>
-              println(
-                """
-                  |Modus-Menü:
-                  |1 - Schwierigkeit ändern (Spiel wird neugestartet)
-                  |2 - Zurück zum Spiel
-                  |""".stripMargin
-              )
-              val choice = scala.io.StdIn.readLine().trim
-              choice match {
-                case "1" =>
-                  chooseDifficulty() // reuse your existing difficulty selector
-                  controller.resetGame() // reset with new difficulty
-                  println("Spiel mit neuer Schwierigkeit gestartet.")
-                  true
-                case "2" =>
-                  println("Zurück zum Spiel.")
-                  true
-                case _ =>
-                  println("Ungültige Eingabe. Zurück zum Spiel.")
-                  true
-              }
+              state = MenuState
+              state.handleInput(input, this)
 
             case flagPattern(rowChar, colStr) =>
               val row = rowChar.charAt(0) - 'A'
               val col = colStr.toInt - 1
               controller.flagCell(row, col)
               if (controller.checkWin()) {
-                println(controller.displayBoardToString(true))
-                println("Du hast gewonnen!")
-                println("Spielzeit: " + controller.getElapsedTime + " Sekunden.")
+                state = WonState
+                state.handleInput(input, this)
                 return false
               }
               true
@@ -157,14 +137,12 @@ class Tui(var controller: Controller) extends Observer {
               val col = colStr.toInt - 1
               val safe = controller.revealCell(row, col)
               if (!safe) {
-                println(controller.displayBoardToString(true))
-                println("BOOOM! Du hast verloren.")
-                println("Spielzeit: " + controller.getElapsedTime + " Sekunden.")
+                state = LostState
+                state.handleInput(input, this)
                 return false
               } else if (controller.checkWin()) {
-                println(controller.displayBoardToString(true))
-                println("Du hast gewonnen!")
-                println("Spielzeit: " + controller.getElapsedTime + " Sekunden.")
+                state = WonState
+                state.handleInput(input, this)
                 return false
               }
                 true

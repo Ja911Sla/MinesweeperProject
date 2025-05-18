@@ -47,4 +47,5 @@ class Controller(private var boardFactory: BoardFactory) extends Observable {
   def displayBoardToString(revealAll: Boolean = false): String = {
     board.display(revealAll)
   }
+
 }

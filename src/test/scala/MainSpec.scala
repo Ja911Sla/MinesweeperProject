@@ -19,7 +19,7 @@ class MainSpec extends AnyWordSpec {
 
       val output = out.toString
       output should include("Willkommen zu Minesweeper!")
-      output should include("Spiel beendet.")
+      output should include("Danke für's Spielen!")
     }
   }
 }
