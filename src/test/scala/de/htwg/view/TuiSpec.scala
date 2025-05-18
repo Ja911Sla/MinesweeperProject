@@ -165,5 +165,73 @@ class TuiSpec extends AnyWordSpec {
         }
       }
     }
+    "skip board reset when resetBoard is false" in {
+      val in = new ByteArrayInputStream("1\nQ\n".getBytes())
+      val out = new ByteArrayOutputStream()
+      val controller = new Controller(TestBoardFactory)
+      val tui = new Tui(controller)
+
+      // Manually flag a cell BEFORE starting
+      controller.flagCell(0, 0)
+      controller.getBoard.cells(0)(0).isFlagged should be(true)
+
+      Console.withIn(in) {
+        Console.withOut(new PrintStream(out)) {
+          tui.start(resetBoard = false)
+        }
+      }
+
+      // After start, the cell should still be flagged if reset did NOT run
+      controller.getBoard.cells(0)(0).isFlagged should be(true)
+    }
+    "select Hard mode on input 3" in {
+      val in = new ByteArrayInputStream("3\n".getBytes())
+      val out = new ByteArrayOutputStream()
+
+      Console.withIn(in) {
+        Console.withOut(new PrintStream(out)) {
+          val tui = new Tui(new Controller(MediumStrategy.getBoardFactory()))
+          val method = tui.getClass.getDeclaredMethod("chooseDifficulty")
+          method.setAccessible(true)
+          method.invoke(tui)
+          tui.controller.getBoard.size should be(12)
+          tui.controller.getBoard.mineCount should be(35)
+        }
+      }
+    }
+    "select Custom mode on input 4 with size and mines" in {
+      val in = new ByteArrayInputStream("4\n5\n3\n".getBytes()) // Size 5, Mines 3
+      val out = new ByteArrayOutputStream()
+
+      Console.withIn(in) {
+        Console.withOut(new PrintStream(out)) {
+          val tui = new Tui(new Controller(MediumStrategy.getBoardFactory()))
+          val method = tui.getClass.getDeclaredMethod("chooseDifficulty")
+          method.setAccessible(true)
+          method.invoke(tui)
+          tui.controller.getBoard.size should be(5)
+          tui.controller.getBoard.mineCount should be(3)
+        }
+      }
+    }
+    "handle invalid difficulty selection with fallback to Medium" in {
+      val in = new ByteArrayInputStream("invalid\n".getBytes())
+      val out = new ByteArrayOutputStream()
+
+      Console.withIn(in) {
+        Console.withOut(new PrintStream(out)) {
+          val tui = new Tui(new Controller(MediumStrategy.getBoardFactory()))
+          val method = tui.getClass.getDeclaredMethod("chooseDifficulty")
+          method.setAccessible(true)
+          method.invoke(tui)
+
+          val output = out.toString
+          output should include("Ungültige Eingabe. Standardmäßig 'Mittel' gewählt.")
+          tui.controller.getBoard.size should be(9)
+          tui.controller.getBoard.mineCount should be(15)
+        }
+      }
+    }
+
   }
 }
