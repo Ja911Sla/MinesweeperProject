@@ -232,6 +232,39 @@ class TuiSpec extends AnyWordSpec {
         }
       }
     }
+    "show winning message when all mines are flagged after flag input" in {
+      val controller = new Controller(TestBoardFactory)
+      val tui = new Tui(controller)
+
+      // Set up a single mine at A1
+      controller.getBoard.cells(0)(0).isMine = true
+
+      val out = new ByteArrayOutputStream()
+      Console.withOut(new PrintStream(out)) {
+        tui.processInputLine("F A1") // Flagging A1 should trigger win
+      }
+
+      val output = out.toString
+      output should include("Du hast gewonnen!")
+      output should include("Spielzeit: ")
+    }
+    "show losing message when revealing a mine" in {
+      val controller = new Controller(TestBoardFactory)
+      val tui = new Tui(controller)
+
+      // Set up a single mine at A1
+      controller.getBoard.cells(0)(0).isMine = true
+
+      val out = new ByteArrayOutputStream()
+      Console.withOut(new PrintStream(out)) {
+        tui.processInputLine("A1") // Revealing A1 should trigger loss
+      }
+
+      val output = out.toString
+      output should include("BOOOM! Du hast verloren.")
+      output should include("Spielzeit: ")
+    }
+
 
   }
 }
