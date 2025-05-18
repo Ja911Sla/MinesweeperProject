@@ -9,14 +9,10 @@ import de.htwg.singleton.GameConfig
 import de.htwg.strategy.GameModeStrategy
 
 @main
-def main(): Unit = {
+def main(): Unit = runMain()
 
-  // ab hier ausgabe von der TUI
-  // GameConfig.setMedium
+def runMain(): Unit = {
   val controller = new Controller(ConfigBoardFactory)
   val tui = new Tui(controller)
-
-  println(tui.start())  // <--- You need to actually do something with the result
-
-
+  println(tui.start())
 }

@@ -9,6 +9,8 @@ import de.htwg.singleton._
 import scala.io.StdIn
 
 class Tui(var controller: Controller) extends Observer {
+  val flagPattern = "F ([A-Z])([1-9][0-9]*)".r
+  val revealPattern = "([A-Z])([1-9][0-9]*)".r
     
     def start(resetBoard: Boolean = true): String = {
         chooseDifficulty()
@@ -53,8 +55,9 @@ class Tui(var controller: Controller) extends Observer {
       case "2" => MediumStrategy
       case "3" => HardStrategy
       case "4" =>
-        val size = StdIn.readLine("Boardgröße: ").toInt
-        val mines = StdIn.readLine("Anzahl Minen: ").toInt
+        val size = StdIn.readLine("Boardgröße: (2 bis 26) erlaubt) ").toInt
+        val maxMines = size * size - 1
+        val mines = StdIn.readLine(s"Anzahl Minen: (>= 1 und <= $maxMines erlaubt) ").toInt
         GameConfig.setCustom(size, mines)
         CustomStrategy
       case _ =>
@@ -106,7 +109,7 @@ class Tui(var controller: Controller) extends Observer {
                       |auch durch etwas Glück sich auf die Suche nach den Minen begeben.
                       |
                       |Viel Erfolg!
-        """.stripMargin
+                        """.stripMargin
                 )
                 true
 
@@ -114,33 +117,56 @@ class Tui(var controller: Controller) extends Observer {
                 println("Deine Spielzeit: " + controller.getElapsedTime + " Sekunden.")
                 true
 
-            case move if move.matches("F [A-I][1-9]") =>
-                val row = move.charAt(2) - 'A'
-                val col = move.charAt(3) - '1'
-                controller.flagCell(row, col)
-                if (controller.checkWin()) {
-                    controller.displayBoardToString(true)
-                    println("Du hast gewonnen!")
-                    println("Spielzeit: "+ controller.getElapsedTime + " Sekunden.")
-                    return false
-                }
-                true
+            case "M" =>
+              println(
+                """
+                  |Modus-Menü:
+                  |1 - Schwierigkeit ändern (Spiel wird neugestartet)
+                  |2 - Zurück zum Spiel
+                  |""".stripMargin
+              )
+              val choice = scala.io.StdIn.readLine().trim
+              choice match {
+                case "1" =>
+                  chooseDifficulty() // reuse your existing difficulty selector
+                  controller.resetGame() // reset with new difficulty
+                  println("Spiel mit neuer Schwierigkeit gestartet.")
+                  true
+                case "2" =>
+                  println("Zurück zum Spiel.")
+                  true
+                case _ =>
+                  println("Ungültige Eingabe. Zurück zum Spiel.")
+                  true
+              }
 
-            case move if move.matches("[A-I][1-9]") =>
-                val row = move.charAt(0) - 'A'
-                val col = move.charAt(1) - '1'
-                val safe = controller.revealCell(row, col)
-                if (!safe) {
-                    println(controller.displayBoardToString(true))
-                    println("BOOOM! Du hast verloren.")
-                    println("Spielzeit: "+ controller.getElapsedTime + " Sekunden.")
-                    return false  // Beendet die Schleife oben korrekt
-                } else if (controller.checkWin()) {
-                    println(controller.displayBoardToString(true))
-                    println("Du hast gewonnen!")
-                    println("Spielzeit: "+ controller.getElapsedTime + " Sekunden.")
-                    return false
-                }
+            case flagPattern(rowChar, colStr) =>
+              val row = rowChar.charAt(0) - 'A'
+              val col = colStr.toInt - 1
+              controller.flagCell(row, col)
+              if (controller.checkWin()) {
+                println(controller.displayBoardToString(true))
+                println("Du hast gewonnen!")
+                println("Spielzeit: " + controller.getElapsedTime + " Sekunden.")
+                return false
+              }
+              true
+
+            case revealPattern(rowChar, colStr) =>
+              val row = rowChar.charAt(0) - 'A'
+              val col = colStr.toInt - 1
+              val safe = controller.revealCell(row, col)
+              if (!safe) {
+                println(controller.displayBoardToString(true))
+                println("BOOOM! Du hast verloren.")
+                println("Spielzeit: " + controller.getElapsedTime + " Sekunden.")
+                return false
+              } else if (controller.checkWin()) {
+                println(controller.displayBoardToString(true))
+                println("Du hast gewonnen!")
+                println("Spielzeit: " + controller.getElapsedTime + " Sekunden.")
+                return false
+              }
                 true
             case _ =>
                 println("Ungültige Eingabe. Nutze z.B. 'C3' oder 'F C3'.")

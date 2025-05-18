@@ -26,8 +26,18 @@ object GameConfig {
   }
 
   def setCustom(size: Int, mines: Int): GameConfig.type = {
-    _boardSize = size
-    _mineCount = mines
+    if (size < 2 || size > 26) {
+      println("Ungültige Boardgröße. Erlaubt sind nur Größen von 2 bis 30. Setze auf Standard (9x9, 15 Minen).")
+      _boardSize = 9
+      _mineCount = 15
+    } else if (mines < 1 || mines >= size * size) {
+      println(s"Ungültige Minenzahl. Erlaubt sind mindestens 1 und maximal ${size * size - 1} Minen. Setze auf Standard (9x9, 15 Minen).")
+      _boardSize = 9
+      _mineCount = 15
+    } else {
+      _boardSize = size
+      _mineCount = mines
+    }
     this
   }
 

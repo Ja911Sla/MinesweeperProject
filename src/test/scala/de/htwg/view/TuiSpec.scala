@@ -265,6 +265,40 @@ class TuiSpec extends AnyWordSpec {
       output should include("Spielzeit: ")
     }
 
+    "allow returning to game via M menu without restarting" in {
+      val in = new ByteArrayInputStream("1\nM\n2\nQ\n".getBytes())
+      val out = new ByteArrayOutputStream()
+      val controller = new Controller(TestBoardFactory)
+      val tui = new Tui(controller)
+
+      Console.withIn(in) {
+        Console.withOut(new PrintStream(out)) {
+          tui.start()
+        }
+      }
+
+      val output = out.toString
+      output should include("Modus-Menü:")
+      output should include("Zurück zum Spiel.")
+      output should include("Spiel beendet.")
+    }
+    "handle invalid input in M menu and return to game" in {
+      val in = new ByteArrayInputStream("1\nM\ninvalid\nQ\n".getBytes())
+      val out = new ByteArrayOutputStream()
+      val controller = new Controller(TestBoardFactory)
+      val tui = new Tui(controller)
+
+      Console.withIn(in) {
+        Console.withOut(new PrintStream(out)) {
+          tui.start()
+        }
+      }
+
+      val output = out.toString
+      output should include("Ungültige Eingabe. Zurück zum Spiel.")
+      output should include("Spiel beendet.")
+    }
+
 
   }
 }

@@ -46,5 +46,36 @@ class GameConfigSpec extends AnyWordSpec {
         GameConfig.boardSize should be (9)
         GameConfig.mineCount should be (10)
       }
+      "GameConfig.setCustom" should {
+        "accept valid size and mine values" in {
+          GameConfig.setCustom(10, 20)
+          GameConfig.boardSize should be(10)
+          GameConfig.mineCount should be(20)
+        }
+
+        "reset to default when size is too small" in {
+          GameConfig.setCustom(1, 5)
+          GameConfig.boardSize should be(9)
+          GameConfig.mineCount should be(15)
+        }
+
+        "reset to default when size is too big" in {
+          GameConfig.setCustom(27, 5)
+          GameConfig.boardSize should be(9)
+          GameConfig.mineCount should be(15)
+        }
+
+        "reset to default when mines are too few" in {
+          GameConfig.setCustom(10, 0)
+          GameConfig.boardSize should be(9)
+          GameConfig.mineCount should be(15)
+        }
+
+        "reset to default when mines exceed board capacity" in {
+          GameConfig.setCustom(3, 9)
+          GameConfig.boardSize should be(9)
+          GameConfig.mineCount should be(15)
+        }
+      }
     }
 }
