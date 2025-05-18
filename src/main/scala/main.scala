@@ -8,9 +8,10 @@ import de.htwg.factory._
 import de.htwg.singleton.GameConfig
 import de.htwg.strategy.GameModeStrategy
 
+// $COVERAGE-OFF$
 @main
 def main(): Unit = runMain()
-
+// $COVERAGE-ON$
 def runMain(): Unit = {
   val controller = new Controller(ConfigBoardFactory)
   val tui = new Tui(controller)
