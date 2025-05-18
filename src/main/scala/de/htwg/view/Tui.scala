@@ -10,9 +10,8 @@ import scala.io.StdIn
 
 class Tui(var controller: Controller) extends Observer {
     
-    chooseDifficulty()
-    
     def start(resetBoard: Boolean = true): String = {
+        chooseDifficulty()
         if (resetBoard) controller.resetGame()
         println(
             """Willkommen zu Minesweeper!

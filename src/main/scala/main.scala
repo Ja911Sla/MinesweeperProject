@@ -13,6 +13,7 @@ def main(): Unit = {
 
   // ab hier ausgabe von der TUI
   // GameConfig.setMedium
+  println("Welcome to the game!")
   val controller = new Controller(ConfigBoardFactory)
   val tui = new Tui(controller)
 

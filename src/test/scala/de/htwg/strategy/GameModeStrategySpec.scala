@@ -24,7 +24,7 @@ class GameModeStrategySpec extends AnyWordSpec {
       val board = controller.getBoard
 
       board.size should be(9)
-      board.mineCount should be(13)
+      board.mineCount should be(15)
   }
     "be able to create a hard board" in {
       val controller = new Controller(HardBoardFactory)

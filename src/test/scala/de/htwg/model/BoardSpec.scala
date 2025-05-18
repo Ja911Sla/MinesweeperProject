@@ -310,6 +310,12 @@ class BoardSpec extends AnyWordSpec {
     val output = board.display(false)
     output should include("6 ")
   }
+  "support default display with no parameters" in {
+    val board = Board(2, 0)
+    val output = board.display() // <- default parameter used, no argument
+    output should include("1 2")
+    output should include("A")
+  }
 
 }
 
