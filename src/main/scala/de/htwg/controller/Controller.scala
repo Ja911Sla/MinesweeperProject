@@ -10,6 +10,11 @@ class Controller(private var boardFactory: BoardFactory) extends Observable {
 
   def getBoard: Board = board
 
+  def setBoard(storedBoard: Board): Unit = {
+    board = storedBoard
+    notifyObservers()
+  }
+
   def getElapsedTime: Int = timer.getTime
 
   def createNewBoard(factory: BoardFactory): Unit = {
@@ -46,6 +51,11 @@ class Controller(private var boardFactory: BoardFactory) extends Observable {
 
   def displayBoardToString(revealAll: Boolean = false): String = {
     board.display(revealAll)
+  }
+
+  def copyBoard(): Board = {
+    val storedBoard = board.copyBoard()
+    storedBoard
   }
 
 }

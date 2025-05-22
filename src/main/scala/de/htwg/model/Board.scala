@@ -133,26 +133,11 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
         s"Bomb amount: ${mineCount - flagged}"
     }
 
-//    def chooseDifficulty(): Int = {
-//        val scanner = new Scanner(System.in)
-//        println(
-//            """Wähle eine Schwierigkeitsstufe!
-//              |'1' für Anfänger (6x6 Feld mit 5 Minen)
-//              |'2' für Medium (9x9 Feld mit 15 Minen)
-//              |'3' für Profi (12x12 Feld mit 35 Minen)
-//              |""".stripMargin)
-//        val difficulty = scanner.nextInt()
-//        difficulty
-//    }
-//
-//    def createBoard(x: Int): Board = {
-//        val choice = x
-//        val board = choice match {
-//            case 1 => EasyBoardFactory
-//            case 2 => MediumBoardFactory
-//            case 3 => HardBoardFactory
-//            case 4 => ConfigBoardFactory()
-//        }
-//        board
-//    }
+    def copyBoard(): Board = {
+        val newBoard = new Board(size, mineCount)
+        for (r <- 0 until size; c <- 0 until size) {
+            newBoard.cells(r)(c) = this.cells(r)(c).copy()
+        }
+        newBoard
+    }
 }
