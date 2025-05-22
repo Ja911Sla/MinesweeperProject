@@ -7,8 +7,11 @@ import de.htwg.view.Tui
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
 
+
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream, PrintStream}
 import scala.Console
+
+
 
 class GameStateSpec extends AnyWordSpec {
 

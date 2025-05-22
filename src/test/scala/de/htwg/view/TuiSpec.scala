@@ -285,6 +285,5 @@ class TuiSpec extends AnyWordSpec {
       output should include("Ungültige Eingabe. Zurück zum Spiel.")
     }
 
-
   }
 }

@@ -7,6 +7,8 @@ import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
 import de.htwg.command.SetCommand
 
+import java.io.{ByteArrayOutputStream, PrintStream}
+
 class ControllerSpec extends AnyWordSpec with Matchers {
 
   // Factory für Testzwecke 
@@ -200,6 +202,17 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.undo()
 
       controller.getBoard.cells(row)(col).isRevealed shouldBe false
+    }
+
+    "print message when undo is called with empty command stack" in {
+      val controller = new Controller(TestBoardFactory)
+
+      val outContent = new ByteArrayOutputStream()
+      Console.withOut(new PrintStream(outContent)) {
+        controller.undo()
+      }
+
+      outContent.toString.trim shouldBe "Nichts zum Rückgängig machen."
     }
 
   }
