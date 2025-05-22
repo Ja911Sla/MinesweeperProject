@@ -317,6 +317,29 @@ class BoardSpec extends AnyWordSpec {
     output should include("A")
   }
 
+  "create a copy of itself" in {
+    val board = Board(2, 0)
+    board.cells(0)(0).isRevealed = false
+    board.cells(0)(0).isMine = true
+    board.cells(1)(0).isRevealed = true
+    board.cells(1)(0).isMine = false
+    board.cells(1)(1).isRevealed = false
+    board.cells(1)(1).isFlagged = true
+    board.cells(0)(1).isRevealed = false
+    board.cells(0)(1).isMine = false
+
+    val output = board.copyBoard()
+
+    output.cells(0)(0).isRevealed should be (false)
+    output.cells(0)(0).isMine should be (true)
+    output.cells(1)(0).isRevealed should be (true)
+    output.cells(1)(0).isMine should be (false)
+    output.cells(1)(1).isRevealed should be (false)
+    output.cells(1)(1).isFlagged should be(true)
+    output.cells(0)(0).isRevealed should be (false)
+    output.cells(0)(1).isMine should be (false)
+  }
+
 }
 
 

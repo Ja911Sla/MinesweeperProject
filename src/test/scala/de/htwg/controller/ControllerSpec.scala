@@ -99,5 +99,71 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.getBoard.cells(0)(0).isRevealed should be(false)
       controller.getBoard.cells(0)(1).isFlagged should be(false)
     }
+
+    "create a copy" in {
+      val controller = new Controller(TestBoardFactory)
+      val observer = new TestObserver
+      controller.add(observer)
+
+      controller.getBoard.cells(0)(0).isRevealed = false
+      controller.getBoard.cells(0)(0).isMine = true
+      controller.getBoard.cells(1)(0).isRevealed = true
+      controller.getBoard.cells(1)(0).isMine = false
+      controller.getBoard.cells(1)(1).isRevealed = false
+      controller.getBoard.cells(1)(1).isFlagged = true
+      controller.getBoard.cells(0)(1).isRevealed = false
+      controller.getBoard.cells(0)(1).isMine = false
+
+      val output = controller.copyBoard()
+
+      controller.getBoard.cells(0)(0).isRevealed should be(false)
+      controller.getBoard.cells(0)(0).isMine should be(true)
+      controller.getBoard.cells(1)(0).isRevealed should be(true)
+      controller.getBoard.cells(1)(0).isMine should be(false)
+      controller.getBoard.cells(1)(1).isRevealed should be(false)
+      controller.getBoard.cells(1)(1).isFlagged should be(true)
+      controller.getBoard.cells(0)(0).isRevealed should be(false)
+      controller.getBoard.cells(0)(1).isMine should be(false)
+    }
+
+    "to put a board in place and notify its observer" in {
+      val controller = new Controller(TestBoardFactory)
+      val observer = new TestObserver
+      controller.add(observer)
+
+      controller.getBoard.cells(0)(0).isRevealed = false
+      controller.getBoard.cells(0)(0).isMine = true
+      controller.getBoard.cells(1)(0).isRevealed = true
+      controller.getBoard.cells(1)(0).isMine = false
+      controller.getBoard.cells(1)(1).isRevealed = false
+      controller.getBoard.cells(1)(1).isFlagged = true
+      controller.getBoard.cells(0)(1).isRevealed = false
+      controller.getBoard.cells(0)(1).isMine = false
+
+      val controllerSafe = controller.copyBoard()
+
+      controller.resetGame()
+
+      controller.setBoard(controllerSafe)
+
+      observer.updated should be(true)
+
+      controller.getBoard.cells(0)(0).isRevealed should be(false)
+      controller.getBoard.cells(0)(0).isMine should be(true)
+      controller.getBoard.cells(1)(0).isRevealed should be(true)
+      controller.getBoard.cells(1)(0).isMine should be(false)
+      controller.getBoard.cells(1)(1).isRevealed should be(false)
+      controller.getBoard.cells(1)(1).isFlagged should be(true)
+      controller.getBoard.cells(0)(0).isRevealed should be(false)
+      controller.getBoard.cells(0)(1).isMine should be(false)
+      
+    }
+    
+    "push something on stack" in {
+      val controller = new Controller(TestBoardFactory)
+      val observer = new TestObserver
+      controller.add(observer)
+      
+    }
   }
 }

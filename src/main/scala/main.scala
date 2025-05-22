@@ -17,3 +17,4 @@ def runMain(): Unit = {
   val tui = new Tui(controller)
   println(tui.start())
 }
+
