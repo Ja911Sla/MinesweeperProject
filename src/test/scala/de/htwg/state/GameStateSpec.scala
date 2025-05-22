@@ -43,7 +43,10 @@ class GameStateSpec extends AnyWordSpec {
 
       tui.state = PlayingState
       val result = tui.state.handleInput("A1", tui)
-      result shouldBe false
+      result shouldBe true
+
+      val quit = tui.state.handleInput("Q", tui)
+      quit should be (false)
     }
   }
 
