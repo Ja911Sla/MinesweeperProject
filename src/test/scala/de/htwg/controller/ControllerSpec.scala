@@ -11,10 +11,6 @@ class ControllerSpec extends AnyWordSpec with Matchers {
   // Factory für Testzwecke 
   object TestBoardFactory extends BoardFactory {
     override def createBoard(): Board = new Board(2, 1)
-
-    override def size: Int = 9
-
-    override def mineCount: Int = 1
   }
 
   class TestObserver extends Observer {

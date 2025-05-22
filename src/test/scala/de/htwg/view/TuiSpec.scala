@@ -3,19 +3,20 @@ package de.htwg.view
 import de.htwg.controller.Controller
 import de.htwg.factory.BoardFactory
 import de.htwg.model.Board
+import de.htwg.singleton.GameConfig
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
-import de.htwg.strategy.MediumStrategy
+import de.htwg.strategy.*
+
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream, PrintStream}
 import scala.Console
-import de.htwg.state.{PlayingState, QuitState,MenuState, RestartState, WonState, LostState, IdleState}
+import de.htwg.state.{IdleState, LostState, MenuState, PlayingState, QuitState, RestartState, WonState}
 
 class TuiSpec extends AnyWordSpec {
 
   object TestBoardFactory extends BoardFactory {
     override def createBoard(): Board = new Board(9, 1)
-    override def size: Int = 9
-    override def mineCount: Int = 1
+    
   }
 
   "The Tui" should {
@@ -148,7 +149,7 @@ class TuiSpec extends AnyWordSpec {
 
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {
-          val tui = new Tui(new Controller(MediumStrategy.getBoardFactory()))
+          val tui = new Tui(new Controller(BoardFactory.getInstance))
           val method = tui.getClass.getDeclaredMethod("chooseDifficulty")
           method.setAccessible(true)
           method.invoke(tui)
@@ -182,7 +183,7 @@ class TuiSpec extends AnyWordSpec {
 
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {
-          val tui = new Tui(new Controller(MediumStrategy.getBoardFactory()))
+          val tui = new Tui(new Controller(BoardFactory.getInstance))
           val method = tui.getClass.getDeclaredMethod("chooseDifficulty")
           method.setAccessible(true)
           method.invoke(tui)
@@ -197,7 +198,7 @@ class TuiSpec extends AnyWordSpec {
 
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {
-          val tui = new Tui(new Controller(MediumStrategy.getBoardFactory()))
+          val tui = new Tui(new Controller(BoardFactory.getInstance))
           val method = tui.getClass.getDeclaredMethod("chooseDifficulty")
           method.setAccessible(true)
           method.invoke(tui)
@@ -212,7 +213,7 @@ class TuiSpec extends AnyWordSpec {
 
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {
-          val tui = new Tui(new Controller(MediumStrategy.getBoardFactory()))
+          val tui = new Tui(new Controller(BoardFactory.getInstance))
           val method = tui.getClass.getDeclaredMethod("chooseDifficulty")
           method.setAccessible(true)
           method.invoke(tui)

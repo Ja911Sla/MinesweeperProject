@@ -14,8 +14,6 @@ class GameStateSpec extends AnyWordSpec {
 
   object TestBoardFactory extends BoardFactory {
     override def createBoard(): Board = new Board(9, 1)
-    override def size: Int = 9
-    override def mineCount: Int = 1
   }
 
   "IdleState" should {

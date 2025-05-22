@@ -14,29 +14,32 @@ import java.io.*
 class BoardFactorySpec extends AnyWordSpec {
   "A Board" should {
     "have an easy mode" in {
-      val controller = new Controller(EasyBoardFactory)
+      GameConfig.getInstance.setCustom(6, 5)
+      val controller = new Controller(BoardFactory.getInstance)
       val board = controller.getBoard
       
       board.size should be (6)
       board.mineCount should be (5)
     }
     "have a medium mode" in {
-      val controller = new Controller(MediumBoardFactory)
+      GameConfig.getInstance.setCustom(9, 15)
+      val controller = new Controller(BoardFactory.getInstance)
       val board = controller.getBoard
 
       board.size should be(9)
       board.mineCount should be(15)
     }
     "have a hard mode" in {
-      val controller = new Controller(HardBoardFactory)
+      GameConfig.getInstance.setCustom(12, 35)
+      val controller = new Controller(BoardFactory.getInstance)
       val board = controller.getBoard
 
       board.size should be(12)
       board.mineCount should be(35)
     }
     "have a user friendly creation mode" in {
-      GameConfig.setMedium
-      val controller = new Controller(ConfigBoardFactory)
+      GameConfig.getInstance.setCustom(9, 15)
+      val controller = new Controller(BoardFactory.getInstance)
       val board = controller.getBoard
       
       board.size should be (9)

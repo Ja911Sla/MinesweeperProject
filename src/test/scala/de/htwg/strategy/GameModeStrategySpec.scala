@@ -13,29 +13,32 @@ import de.htwg.singleton.GameConfig
 class GameModeStrategySpec extends AnyWordSpec {
   "A board's strategy" should {
     "be able to create an easy board" in {
-      val controller = new Controller(EasyBoardFactory)
+      GameConfig.getInstance.setCustom(6, 5)
+      val controller = new Controller(BoardFactory.getInstance)
       val board = controller.getBoard
 
       board.size should be (6)
       board.mineCount should be (5)
     }
     "be able to create a medium board" in {
-      val controller = new Controller(MediumBoardFactory)
+      GameConfig.getInstance.setCustom(9, 15)
+      val controller = new Controller(BoardFactory.getInstance)
       val board = controller.getBoard
 
       board.size should be(9)
       board.mineCount should be(15)
   }
     "be able to create a hard board" in {
-      val controller = new Controller(HardBoardFactory)
+      GameConfig.getInstance.setCustom(12, 35)
+      val controller = new Controller(BoardFactory.getInstance)
       val board = controller.getBoard
 
       board.size should be(12)
       board.mineCount should be(35)
     }
     "be able to create a custom sized board" in {
-      GameConfig.setCustom(13, 55)
-      val controller = new Controller(ConfigBoardFactory)
+      GameConfig.getInstance.setCustom(13, 55)
+      val controller = new Controller(BoardFactory.getInstance)
       val board = controller.getBoard
 
       board.size should be(13)
