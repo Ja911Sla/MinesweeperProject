@@ -13,7 +13,7 @@ import de.htwg.strategy.GameModeStrategy
 def main(): Unit = runMain()
 // $COVERAGE-ON$
 def runMain(): Unit = {
-  val controller = new Controller(ConfigBoardFactory)
+  val controller = new Controller(BoardFactory.getInstance)
   val tui = new Tui(controller)
   println(tui.start())
 }

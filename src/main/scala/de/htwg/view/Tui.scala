@@ -48,18 +48,22 @@ class Tui(var controller: Controller) extends Observer {
     println("4 - Benutzerdefiniert")
 
     val strategy: GameModeStrategy = StdIn.readLine("Eingabe: ") match {
-      case "1" => EasyStrategy
-      case "2" => MediumStrategy
-      case "3" => HardStrategy
+      case "1" => GameConfig.getInstance.setCustom(6, 5)
+                  CustomStrategy
+      case "2" => GameConfig.getInstance.setCustom(9, 15)
+                  CustomStrategy
+      case "3" => GameConfig.getInstance.setCustom(12, 35)
+                  CustomStrategy
       case "4" =>
         val size = StdIn.readLine("Boardgröße: (2 bis 26) erlaubt) ").toInt
         val maxMines = size * size - 1
         val mines = StdIn.readLine(s"Anzahl Minen: (>= 1 und <= $maxMines erlaubt) ").toInt
-        GameConfig.setCustom(size, mines)
+        GameConfig.getInstance.setCustom(size, mines)
         CustomStrategy
       case _ =>
         println("Ungültige Eingabe. Standardmäßig 'Mittel' gewählt.")
-        MediumStrategy
+        GameConfig.getInstance.setCustom(9, 15)
+        CustomStrategy
     }
 
     val factory = strategy.getBoardFactory()

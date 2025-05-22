@@ -1,6 +1,6 @@
 package de.htwg.model
 
-import de.htwg.factory.{ConfigBoardFactory, EasyBoardFactory, HardBoardFactory, MediumBoardFactory}
+import de.htwg.factory._
 
 import scala.util.Random
 import java.util.Scanner
