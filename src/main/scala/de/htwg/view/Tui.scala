@@ -31,7 +31,9 @@ class Tui(var controller: Controller) extends Observer {
 
     var running = true
     while (running) {
-      println(controller.displayBoardToString())
+      if (state == PlayingState) {
+        println(controller.displayBoardToString())
+      }
       val input = StdIn.readLine()
       running = state.handleInput(input, this)
     }
@@ -132,7 +134,9 @@ class Tui(var controller: Controller) extends Observer {
               val safe = controller.revealCell(row, col)
               if (!safe) {
                 state = LostState
-                state.handleInput(input, this)
+                state.handleInput("", this) // ich musste das einbauen
+                // weil muss wegen tui.start() noch einmal enter drückem damit ich im lost state bin
+                // und dieses extra enter wird hier für den spieler gemacht.
                 return true // muss true sein damit sich das spiel jetzt nicht mehr sofort beendet
               } else if (controller.checkWin()) {
                 state = WonState
