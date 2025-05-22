@@ -3,10 +3,14 @@ package de.htwg.controller
 import de.htwg.utility.Observable
 import de.htwg.model._
 import de.htwg.factory.BoardFactory
+import de.htwg.command.Command
+import scala.collection.mutable // veränderbare Datenstrukturen
+
 
 class Controller(private var boardFactory: BoardFactory) extends Observable {
   private var board: Board = boardFactory.createBoard()
   private val timer = new Timer()
+  private val commandStack: mutable.Stack[Command] = mutable.Stack() // Schtäck für Undo
 
   def getBoard: Board = board
 
@@ -56,6 +60,22 @@ class Controller(private var boardFactory: BoardFactory) extends Observable {
   def copyBoard(): Board = {
     val storedBoard = board.copyBoard()
     storedBoard
+  }
+
+  def doAndStore(cmd: Command): Unit = {
+    cmd.doStep() // irgendein Befehl ausführen
+    commandStack.push(cmd) // Befehl auf den Stack legen
+  }
+  // Macht den letzten Spielzug rückgängig
+  def undo(): Unit = {
+    if (commandStack.nonEmpty) {
+      val lastCommand = commandStack.pop()
+      lastCommand.undoStep()
+      timer.start() // Timer fortsetzen nach Undo
+      notifyObservers()
+    } else {
+      println("Nichts zum Rückgängig machen.")
+    }
   }
 
 }

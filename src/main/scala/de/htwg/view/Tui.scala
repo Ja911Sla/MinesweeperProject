@@ -23,8 +23,6 @@ class Tui(var controller: Controller) extends Observer {
         |Befehle:
         |  C3   -> Zelle aufdecken
         |  F C3 -> Flagge setzen/entfernen
-        |  Q    -> Spiel beenden
-        |  R    -> Spiel zurücksetzen
         |  H    -> Hilfe anzeigen
         |  A    -> Anleitung anzeigen
         |  T    -> Zeit anzeigen
@@ -35,7 +33,7 @@ class Tui(var controller: Controller) extends Observer {
     while (running) {
       println(controller.displayBoardToString())
       val input = StdIn.readLine()
-      running = state.handleInput(input, this) // Always let state decide, even for Q
+      running = state.handleInput(input, this)
     }
     "Game over."
   }
@@ -70,14 +68,11 @@ class Tui(var controller: Controller) extends Observer {
     controller = new Controller(factory)
     controller.add(this)
   }
-  
+
     def processInputLine(input: String): Boolean = {
         val i = input.trim.toUpperCase
 
         i match {
-            case "R" =>
-                state = RestartState
-                state.handleInput(input, this)
 
             case "H" =>
                 println(
@@ -87,8 +82,6 @@ class Tui(var controller: Controller) extends Observer {
                       |Befehle:
                       |  C3   -> Zelle aufdecken
                       |  F C3 -> Flagge setzen/entfernen
-                      |  Q    -> Spiel beenden
-                      |  R    -> Spiel zurücksetzen
                       |  H    -> Hilfe anzeigen
                       |  A    -> Anleitung anzeigen
                       |  T    -> Zeit anzeigen
@@ -113,9 +106,6 @@ class Tui(var controller: Controller) extends Observer {
                         """.stripMargin
                 )
                 true
-            case "Q" =>
-                state = QuitState
-                state.handleInput(input, this) // Call QuitState to stop the loop
 
             case "T" =>
                 println("Deine Spielzeit: " + controller.getElapsedTime + " Sekunden.")
@@ -143,7 +133,7 @@ class Tui(var controller: Controller) extends Observer {
               if (!safe) {
                 state = LostState
                 state.handleInput(input, this)
-                return false
+                return true // muss true sein damit sich das spiel jetzt nicht mehr sofort beendet
               } else if (controller.checkWin()) {
                 state = WonState
                 state.handleInput(input, this)

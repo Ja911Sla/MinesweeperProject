@@ -34,15 +34,37 @@ case object WonState extends GameState {
   }
 }
 
+
+
 case object LostState extends GameState {
   override def handleInput(input: String, tui: Tui): Boolean = {
     println(tui.controller.displayBoardToString(true))
     println("BOOOM! Du hast verloren.")
     println("Spielzeit: " + tui.controller.getElapsedTime + " Sekunden.")
-    true
+    println("""
+        |Was möchtest du tun?
+        |U - Undo
+        |R - Restart
+        |Q - Quit
+        |""".stripMargin)
+    val cmd = input.trim.toUpperCase
+    cmd match {
+      case "U" =>
+        tui.controller.undo()
+        tui.state = PlayingState
+        true
+      case "R" =>
+        tui.state = RestartState
+        tui.state.handleInput("R", tui)
+      case "Q" =>
+        tui.state = QuitState
+        tui.state.handleInput("Q", tui)
+      case _ =>
+        println("Ungültige Eingabe. Optionen: U (Undo), R (Restart), Q (Quit)")
+        true
+    }
   }
 }
-
 case object QuitState extends GameState {
   override def handleInput(input: String, tui: Tui): Boolean = {
     println("Danke für's Spielen!")
