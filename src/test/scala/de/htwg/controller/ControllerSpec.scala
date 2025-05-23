@@ -5,7 +5,8 @@ import de.htwg.utility.Observer
 import de.htwg.model.Board
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
-import de.htwg.command.SetCommand
+import de.htwg.command._
+import de.htwg.controller._
 
 import java.io.{ByteArrayOutputStream, PrintStream}
 
@@ -24,6 +25,24 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       "updated"
     }
   }
+
+  class MockCommand extends Command {
+    var doCalled = false
+    var redoCalled = false
+    var undoCalled = false
+
+    override def doStep(): Unit = {
+
+    }
+    override def redoStep(): Unit = {
+      redoCalled = true
+    }
+
+    override def undoStep(): Unit = {
+      undoCalled = true
+    }
+  }
+
 
   "A Controller" should {
 
@@ -215,5 +234,50 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       outContent.toString.trim shouldBe "Bereits am Anfang des Spiels – nichts mehr rückgängig zu machen."
     }
 
-  }
+
+      "print message when redo is called with empty stack" in {
+        val controller = new Controller(TestBoardFactory)
+
+        val outContent = new ByteArrayOutputStream()
+        Console.withOut(new PrintStream(outContent)) {
+          controller.redo()
+        }
+
+        outContent.toString.trim shouldBe "Du bist bereits im aktuellen Spielstand – nichts zum Wiederholen."
+      }
+
+      "execute redo and update stacks" in {
+        val controller = new Controller(TestBoardFactory)
+        val cmd = new MockCommand()
+
+        // simulate a redoable command
+        controller.getRedoStack.push(cmd)
+
+        controller.redo()
+
+        // redoStep should have been called
+        cmd.redoCalled shouldBe true
+
+        // undoStack should now contain the command
+        controller.getUndoStack should contain(cmd)
+
+        // redoStack should be empty
+        controller.getRedoStack shouldBe empty
+      }
+
+      "return correct undoStackSize and redoStackSize" in {
+        val controller = new Controller(TestBoardFactory)
+
+        controller.getUndoStack shouldBe empty
+        controller.getRedoStack shouldBe empty
+        controller.undoStackSize shouldBe 0
+        controller.redoStackSize shouldBe 0
+
+        controller.getUndoStack.push(new MockCommand())
+        controller.getRedoStack.push(new MockCommand())
+
+        controller.undoStackSize shouldBe 1
+        controller.redoStackSize shouldBe 1
+      }
+    }
 }

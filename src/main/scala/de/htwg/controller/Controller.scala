@@ -93,4 +93,10 @@ class Controller(private var boardFactory: BoardFactory) extends Observable {
   def undoStackSize: Int = undoStack.size
   def redoStackSize: Int = redoStack.size
 
+
+  def getUndoStack: mutable.Stack[Command] = undoStack
+
+  def getRedoStack: mutable.Stack[Command] = redoStack
+
+
 }
