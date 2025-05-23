@@ -33,8 +33,7 @@ class Tui(var controller: Controller) extends Observer {
     var running = true
     while (running) {
       if (state == PlayingState) {
-        println(controller.displayBoardToString())
-      }
+        println(controller.displayBoardToString()) }
       Option(StdIn.readLine()) match {
         case Some(input) =>
           running = state.handleInput(input, this)
@@ -156,9 +155,7 @@ class Tui(var controller: Controller) extends Observer {
                 return true
               } else if (controller.checkWin()) {
                 state = WonState
-                state.handleInput(input, this)
-                return false
-              }
+                state.handleInput(input, this); return false }
             }
             true
 
