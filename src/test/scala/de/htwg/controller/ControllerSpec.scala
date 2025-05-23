@@ -176,7 +176,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
 
 
       controller.getBoard.cells(row)(col).isRevealed shouldBe false
-      val cmd = new SetCommand(row, col, 0, controller)
+      val cmd = new SetCommand(row, col, controller)
 
       cmd.doStep()
       controller.getBoard.cells(row)(col).isRevealed shouldBe true
@@ -194,7 +194,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       val row = 1
       val col = 1
 
-      val cmd = new SetCommand(row, col, 0, controller)
+      val cmd = new SetCommand(row, col, controller)
       controller.doAndStore(cmd)
 
       controller.getBoard.cells(row)(col).isRevealed shouldBe true
@@ -212,7 +212,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
         controller.undo()
       }
 
-      outContent.toString.trim shouldBe "Nichts zum Rückgängig machen."
+      outContent.toString.trim shouldBe "Bereits am Anfang des Spiels – nichts mehr rückgängig zu machen."
     }
 
   }

@@ -18,7 +18,7 @@ class CommandSpec extends AnyWordSpec {
       val row = 0
       val col = 0
 
-      val cmd = new SetCommand(row, col, 0, controller)
+      val cmd = new SetCommand(row, col, controller)
 
       controller.getBoard.cells(row)(col).isRevealed shouldBe false
 
@@ -32,7 +32,7 @@ class CommandSpec extends AnyWordSpec {
       val row = 0
       val col = 0
 
-      val cmd = new SetCommand(row, col, 0, controller)
+      val cmd = new SetCommand(row, col, controller)
 
       cmd.doStep()
       controller.getBoard.cells(row)(col).isRevealed shouldBe true
@@ -46,7 +46,7 @@ class CommandSpec extends AnyWordSpec {
       val row = 0
       val col = 0
 
-      val cmd = new SetCommand(row, col, 0, controller)
+      val cmd = new SetCommand(row, col, controller)
 
       cmd.doStep()
       cmd.undoStep()
@@ -61,7 +61,7 @@ class CommandSpec extends AnyWordSpec {
       val row = 1
       val col = 1
 
-      val cmd = new SetCommand(row, col, 0, controller)
+      val cmd = new SetCommand(row, col, controller)
       controller.doAndStore(cmd)
 
       controller.getBoard.cells(row)(col).isRevealed shouldBe true
