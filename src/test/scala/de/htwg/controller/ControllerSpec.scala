@@ -5,6 +5,9 @@ import de.htwg.utility.Observer
 import de.htwg.model.Board
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
+import de.htwg.command.SetCommand
+
+import java.io.{ByteArrayOutputStream, PrintStream}
 
 class ControllerSpec extends AnyWordSpec with Matchers {
 
@@ -156,14 +159,61 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       controller.getBoard.cells(1)(1).isFlagged should be(true)
       controller.getBoard.cells(0)(0).isRevealed should be(false)
       controller.getBoard.cells(0)(1).isMine should be(false)
-      
+
     }
-    
+
     "push something on stack" in {
       val controller = new Controller(TestBoardFactory)
       val observer = new TestObserver
       controller.add(observer)
-      
+
     }
+
+    "reveal a cell via SetCommand and undo it" in {
+      val controller = new Controller(TestBoardFactory)
+      val row = 0
+      val col = 0
+
+
+      controller.getBoard.cells(row)(col).isRevealed shouldBe false
+      val cmd = new SetCommand(row, col, 0, controller)
+
+      cmd.doStep()
+      controller.getBoard.cells(row)(col).isRevealed shouldBe true
+
+
+      cmd.undoStep()
+      controller.getBoard.cells(row)(col).isRevealed shouldBe false
+
+      cmd.redoStep()
+      controller.getBoard.cells(row)(col).isRevealed shouldBe true
+    }
+
+    "push SetCommand on stack and undo via controller" in {
+      val controller = new Controller(TestBoardFactory)
+      val row = 1
+      val col = 1
+
+      val cmd = new SetCommand(row, col, 0, controller)
+      controller.doAndStore(cmd)
+
+      controller.getBoard.cells(row)(col).isRevealed shouldBe true
+
+      controller.undo()
+
+      controller.getBoard.cells(row)(col).isRevealed shouldBe false
+    }
+
+    "print message when undo is called with empty command stack" in {
+      val controller = new Controller(TestBoardFactory)
+
+      val outContent = new ByteArrayOutputStream()
+      Console.withOut(new PrintStream(outContent)) {
+        controller.undo()
+      }
+
+      outContent.toString.trim shouldBe "Nichts zum Rückgängig machen."
+    }
+
   }
 }

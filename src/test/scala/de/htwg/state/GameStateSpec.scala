@@ -7,8 +7,11 @@ import de.htwg.view.Tui
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
 
+
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream, PrintStream}
 import scala.Console
+
+
 
 class GameStateSpec extends AnyWordSpec {
 
@@ -43,7 +46,10 @@ class GameStateSpec extends AnyWordSpec {
 
       tui.state = PlayingState
       val result = tui.state.handleInput("A1", tui)
-      result shouldBe false
+      result shouldBe true
+
+      val quit = tui.state.handleInput("Q", tui)
+      quit should be (false)
     }
   }
 

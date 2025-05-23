@@ -35,8 +35,13 @@ class Tui(var controller: Controller) extends Observer {
       if (state == PlayingState) {
         println(controller.displayBoardToString())
       }
-      val input = StdIn.readLine()
-      running = state.handleInput(input, this)
+      Option(StdIn.readLine()) match {
+        case Some(input) =>
+          running = state.handleInput(input, this)
+        case None =>
+          println("Eingabestrom beendet.")
+          running = false
+      }
     }
     "Game over."
   }
