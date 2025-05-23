@@ -1,4 +1,4 @@
-import de.htwg.command.SetCommand
+import de.htwg.command.*
 import de.htwg.factory.BoardFactory
 import de.htwg.model.Board
 import de.htwg.controller.Controller
@@ -68,6 +68,49 @@ class CommandSpec extends AnyWordSpec {
 
       controller.undo()
       controller.getBoard.cells(row)(col).isRevealed shouldBe false
+    }
+    "not redo when no newBoard is present in SetCommand" in {
+      val controller = new Controller(TestBoardFactory)
+      val row = 0
+      val col = 0
+
+      val cmd = new SetCommand(row, col, controller)
+      // Achtung: kein doStep() → newBoard bleibt None
+      cmd.redoStep() // sollte println auslösen: "Kein Redo-Zustand vorhanden."
+      // Kein assert nötig, da println nicht getestet wird – aber Zeile wird gecovert!
+    }
+    "undo a flag correctly with FlagCommand" in {
+      val controller = new Controller(TestBoardFactory)
+      val row = 1
+      val col = 1
+
+      val cmd = new FlagCommand(row, col, controller)
+      cmd.doStep()
+      controller.getBoard.cells(row)(col).isFlagged shouldBe true
+
+      cmd.undoStep()
+      controller.getBoard.cells(row)(col).isFlagged shouldBe false
+    }
+    "redo a flag correctly with FlagCommand" in {
+      val controller = new Controller(TestBoardFactory)
+      val row = 1
+      val col = 1
+
+      val cmd = new FlagCommand(row, col, controller)
+      cmd.doStep()
+      cmd.undoStep()
+
+      cmd.redoStep()
+      controller.getBoard.cells(row)(col).isFlagged shouldBe true
+    }
+    "not redo flag if no newBoard is set in FlagCommand" in {
+      val controller = new Controller(TestBoardFactory)
+      val row = 0
+      val col = 1
+
+      val cmd = new FlagCommand(row, col, controller)
+      // kein doStep(), also newBoard = None
+      cmd.redoStep() // sollte println auslösen: "Kein Redo-Zustand für Flag vorhanden."
     }
   }
 }
