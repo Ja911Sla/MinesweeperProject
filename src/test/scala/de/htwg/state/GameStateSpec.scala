@@ -79,6 +79,37 @@ class GameStateSpec extends AnyWordSpec {
       out.toString should include("BOOOM! Du hast verloren.")
       out.toString should include("Spielzeit")
     }
+    "perform undo when 'U' is input" in {
+      val out = new ByteArrayOutputStream()
+      val tui = new Tui(new Controller(TestBoardFactory))
+      tui.state = LostState
+
+      // fake einen Spielzug, damit etwas zum Undo da ist
+      val row = 0
+      val col = 0
+      val cmd = new de.htwg.command.SetCommand(row, col, tui.controller)
+      tui.controller.doAndStore(cmd)
+      tui.controller.getBoard.cells(row)(col).isRevealed shouldBe true
+
+      Console.withOut(new PrintStream(out)) {
+        LostState.handleInput("U", tui)
+      }
+
+      tui.state shouldBe PlayingState
+      tui.controller.getBoard.cells(row)(col).isRevealed shouldBe false
+    }
+    "restart game when 'R' is input in LostState" in {
+      val out = new ByteArrayOutputStream()
+      val tui = new Tui(new Controller(TestBoardFactory))
+      tui.state = LostState
+
+      Console.withOut(new PrintStream(out)) {
+        LostState.handleInput("R", tui)
+      }
+
+      tui.state shouldBe PlayingState
+      out.toString should include("Spiel zurückgesetzt")
+    }
   }
 
   "QuitState" should {
@@ -154,5 +185,6 @@ class GameStateSpec extends AnyWordSpec {
       tui.state shouldBe PlayingState
       out.toString should include("Ungültige Eingabe. Zurück zum Spiel")
     }
+
   }
 }
