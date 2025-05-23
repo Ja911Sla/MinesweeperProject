@@ -284,6 +284,5 @@ class TuiSpec extends AnyWordSpec {
       val output = out.toString
       output should include("Ungültige Eingabe. Zurück zum Spiel.")
     }
-
   }
 }
