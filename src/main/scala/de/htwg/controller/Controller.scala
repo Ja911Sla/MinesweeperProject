@@ -5,12 +5,14 @@ import de.htwg.model._
 import de.htwg.factory.BoardFactory
 import de.htwg.command.Command
 import scala.collection.mutable // veränderbare Datenstrukturen
+import scala.util.Try
 
 
 class Controller(private var boardFactory: BoardFactory) extends Observable {
   private var board: Board = boardFactory.createBoard()
   private val timer = new Timer()
-  private val commandStack: mutable.Stack[Command] = mutable.Stack() // Schtäck für Undo
+  private val undoStack: mutable.Stack[Command] = mutable.Stack() // andu Schtäck
+  private val redoStack: mutable.Stack[Command] = mutable.Stack() // redu Schtäck
 
   def getBoard: Board = board
 
@@ -63,19 +65,32 @@ class Controller(private var boardFactory: BoardFactory) extends Observable {
   }
 
   def doAndStore(cmd: Command): Unit = {
-    cmd.doStep() // irgendein Befehl ausführen
-    commandStack.push(cmd) // Befehl auf den Stack legen
+    cmd.doStep()
+    undoStack.push(cmd)
+    redoStack.clear()
+    notifyObservers()
   }
-  // Macht den letzten Spielzug rückgängig
+
   def undo(): Unit = {
-    if (commandStack.nonEmpty) {
-      val lastCommand = commandStack.pop()
-      lastCommand.undoStep()
-      timer.start() // Timer fortsetzen nach Undo
+    Try(undoStack.pop()).map { cmd =>
+      cmd.undoStep()
+      redoStack.push(cmd)
       notifyObservers()
-    } else {
-      println("Nichts zum Rückgängig machen.")
+    }.getOrElse {
+      println("Bereits am Anfang des Spiels – nichts mehr rückgängig zu machen.")
     }
   }
+
+  def redo(): Unit = {
+    Try(redoStack.pop()).map { cmd =>
+      cmd.redoStep()
+      undoStack.push(cmd)
+      notifyObservers()
+    }.getOrElse {
+      println("Du bist bereits im aktuellen Spielstand – nichts zum Wiederholen.")
+    }
+  }
+  def undoStackSize: Int = undoStack.size
+  def redoStackSize: Int = redoStack.size
 
 }

@@ -1,11 +1,12 @@
 package de.htwg.view
 
+import de.htwg.command.*
 import de.htwg.controller.Controller
-import de.htwg.strategy._
+import de.htwg.strategy.*
 import de.htwg.utility.Observer
-import de.htwg.factory._
-import de.htwg.singleton._
-import de.htwg.state._
+import de.htwg.factory.*
+import de.htwg.singleton.*
+import de.htwg.state.*
 
 import scala.io.StdIn
 
@@ -40,7 +41,7 @@ class Tui(var controller: Controller) extends Observer {
     "Game over."
   }
 
-   def chooseDifficulty(): Unit = {
+  def chooseDifficulty(): Unit = {
     println("Wähle Schwierigkeitsgrad:")
     println("1 - Leicht (6x6, 5 Minen)")
     println("2 - Mittel (9x9, 15 Minen)")
@@ -49,11 +50,11 @@ class Tui(var controller: Controller) extends Observer {
 
     val strategy: GameModeStrategy = StdIn.readLine("Eingabe: ") match {
       case "1" => GameConfig.getInstance.setCustom(6, 5)
-                  CustomStrategy
+        CustomStrategy
       case "2" => GameConfig.getInstance.setCustom(9, 15)
-                  CustomStrategy
+        CustomStrategy
       case "3" => GameConfig.getInstance.setCustom(12, 35)
-                  CustomStrategy
+        CustomStrategy
       case "4" =>
         val size = StdIn.readLine("Boardgröße: (2 bis 26) erlaubt) ").toInt
         val maxMines = size * size - 1
@@ -71,86 +72,97 @@ class Tui(var controller: Controller) extends Observer {
     controller.add(this)
   }
 
-    def processInputLine(input: String): Boolean = {
-        val i = input.trim.toUpperCase
+  def processInputLine(input: String): Boolean = {
+    val i = input.trim.toUpperCase
 
-        i match {
+    i match {
+      case "U" =>
+        controller.undo()
+        println(s"Undo verfügbar: ${controller.undoStackSize} | Redo verfügbar: ${controller.redoStackSize}")
+        true
 
-            case "H" =>
-                println(
-                    """
-                      |Willkommen zu Minesweeper!
-                      |Das Ziel ist es, alle Felder zu öffnen, ohne auf eine Mine zu treten.
-                      |Befehle:
-                      |  C3   -> Zelle aufdecken
-                      |  F C3 -> Flagge setzen/entfernen
-                      |  H    -> Hilfe anzeigen
-                      |  A    -> Anleitung anzeigen
-                      |  T    -> Zeit anzeigen
-                      |  M    -> Game Mode wechseln
-        """.stripMargin
-                )
-                true
+      case "R" =>
+        controller.redo()
+        println(s"Undo verfügbar: ${controller.undoStackSize} | Redo verfügbar: ${controller.redoStackSize}")
+        true
+      case "H" =>
+        println(
+          """
+            |Willkommen zu Minesweeper!
+            |Das Ziel ist es, alle Felder zu öffnen, ohne auf eine Mine zu treten.
+            |Befehle:
+            |  C3   -> Zelle aufdecken
+            |  F C3 -> Flagge setzen/entfernen
+            |  H    -> Hilfe anzeigen
+            |  A    -> Anleitung anzeigen
+            |  T    -> Zeit anzeigen
+            |  M    -> Game Mode wechseln
+                    """.stripMargin
+        )
+        true
 
-            case "A" =>
-                println(
-                    """
-                      |Neu bei Minesweeper? Kein Problem!
-                      |Das Ziel ist es Felder mit potentiellen Minen zu identifizieren und
-                      |mit einer Flagge zu markieren. Es gibt eine sichtbare Menge an Minen mit
-                      |dem der Spieler immer weiß wie viele Minen es noch zu erkennen gibt.
-                      |
-                      |Jedes sichere Feld was revealed wurde, gibt eine Zahl aus um zu signalisieren wieviele Bomben
-                      |sich in direkter Nähe um das Feld befinden. Nun muss man durch Logik, Kombinatorik und manchmal
-                      |auch durch etwas Glück sich auf die Suche nach den Minen begeben.
-                      |
-                      |Viel Erfolg!
+      case "A" =>
+        println(
+          """
+            |Neu bei Minesweeper? Kein Problem!
+            |Das Ziel ist es Felder mit potentiellen Minen zu identifizieren und
+            |mit einer Flagge zu markieren. Es gibt eine sichtbare Menge an Minen mit
+            |dem der Spieler immer weiß wie viele Minen es noch zu erkennen gibt.
+            |
+            |Jedes sichere Feld was revealed wurde, gibt eine Zahl aus um zu signalisieren wieviele Bomben
+            |sich in direkter Nähe um das Feld befinden. Nun muss man durch Logik, Kombinatorik und manchmal
+            |auch durch etwas Glück sich auf die Suche nach den Minen begeben.
+            |
+            |Viel Erfolg!
                         """.stripMargin
-                )
-                true
+        )
+        true
 
-            case "T" =>
-                println("Deine Spielzeit: " + controller.getElapsedTime + " Sekunden.")
-                true
+      case "T" =>
+        println("Deine Spielzeit: " + controller.getElapsedTime + " Sekunden.")
+        true
 
-            case "M" =>
-              state = MenuState
-              state.handleInput(input, this)
+      case "M" =>
+        state = MenuState
+        state.handleInput(input, this)
 
-            case flagPattern(rowChar, colStr) =>
-              val row = rowChar.charAt(0) - 'A'
-              val col = colStr.toInt - 1
-              controller.flagCell(row, col)
-              if (controller.checkWin()) {
-                state = WonState
-                state.handleInput(input, this)
-                return false
-              }
-              true
-
-            case revealPattern(rowChar, colStr) =>
-              val row = rowChar.charAt(0) - 'A'
-              val col = colStr.toInt - 1
-              val safe = controller.revealCell(row, col)
-              if (!safe) {
-                state = LostState
-                state.handleInput("", this) // ich musste das einbauen
-                // weil muss wegen tui.start() noch einmal enter drückem damit ich im lost state bin
-                // und dieses extra enter wird hier für den spieler gemacht.
-                return true // muss true sein damit sich das spiel jetzt nicht mehr sofort beendet
-              } else if (controller.checkWin()) {
-                state = WonState
-                state.handleInput(input, this)
-                return false
-              }
-                true
-            case _ =>
-                println("Ungültige Eingabe. Nutze z.B. 'C3' oder 'F C3'.")
-                true
+      case flagPattern(rowChar, colStr) =>
+        val row = rowChar.charAt(0) - 'A'
+        val col = colStr.toInt - 1
+        val cmd = new FlagCommand(row, col, controller) // jeder spielzug muss auf dem stack
+        controller.doAndStore(cmd)
+        if (controller.checkWin()) {
+          state = WonState
+          state.handleInput(input, this)
+          return false
         }
-    }
+        true
 
-    override def update:String = {
-       "Board wurde aktualisiert."
+      case revealPattern(rowChar, colStr) =>
+        val row = rowChar.charAt(0) - 'A'
+        val col = colStr.toInt - 1
+        val cmd = new SetCommand(row, col, controller) // jeder spielzug muss auf dem stack
+        controller.doAndStore(cmd)
+        val safe = controller.getBoard.cells(row)(col).isRevealed && !controller.getBoard.cells(row)(col).isMine
+        if (!safe) {
+          state = LostState
+          state.handleInput("", this) // ich musste das einbauen
+          // weil muss wegen tui.start() noch einmal enter drückem damit ich im lost state bin
+          // und dieses extra enter wird hier für den spieler gemacht.
+          return true // muss true sein damit sich das spiel jetzt nicht mehr sofort beendet
+        } else if (controller.checkWin()) {
+          state = WonState
+          state.handleInput(input, this)
+          return false
+        }
+        true
+      case _ =>
+        println("Ungültige Eingabe. Nutze z.B. 'C3' oder 'F C3'.")
+        true
     }
+  }
+
+  override def update: String = {
+    "Board wurde aktualisiert."
+  }
 }

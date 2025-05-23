@@ -133,10 +133,15 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
         s"Bomb amount: ${mineCount - flagged}"
     }
 
-    def copyBoard(): Board = {
+    def copyBoard(): Board = { // copy board neu implementiert für die undo und redo funktionen
         val newBoard = new Board(size, mineCount)
         for (r <- 0 until size; c <- 0 until size) {
-            newBoard.cells(r)(c) = this.cells(r)(c).copy()
+            val orig = this.cells(r)(c)
+            val copy = newBoard.cells(r)(c)
+            copy.isMine = orig.isMine
+            copy.isRevealed = orig.isRevealed
+            copy.isFlagged = orig.isFlagged
+            copy.mineCount = orig.mineCount
         }
         newBoard
     }
