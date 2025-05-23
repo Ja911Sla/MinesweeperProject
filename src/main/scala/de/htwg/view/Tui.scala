@@ -80,6 +80,16 @@ class Tui(var controller: Controller) extends Observer {
   def processInputLine(input: String): Boolean = {
     val i = input.trim.toUpperCase
 
+    def parseCoordinate(input: String): Option[(Boolean, Int, Int)] = {
+      i match {
+        case flagPattern(rowChar, colStr) =>
+          Some((true, rowChar.charAt(0) - 'A', colStr.toInt - 1))
+        case revealPattern(rowChar, colStr) =>
+          Some((false, rowChar.charAt(0) - 'A', colStr.toInt - 1))
+        case _ => None
+      }
+    }
+
     i match {
       case "U" =>
         controller.undo()
@@ -90,6 +100,7 @@ class Tui(var controller: Controller) extends Observer {
         controller.redo()
         println(s"Undo verfügbar: ${controller.undoStackSize} | Redo verfügbar: ${controller.redoStackSize}")
         true
+
       case "H" =>
         println(
           """
@@ -102,25 +113,17 @@ class Tui(var controller: Controller) extends Observer {
             |  A    -> Anleitung anzeigen
             |  T    -> Zeit anzeigen
             |  M    -> Game Mode wechseln
-                    """.stripMargin
-        )
+          """.stripMargin)
         true
 
       case "A" =>
         println(
           """
             |Neu bei Minesweeper? Kein Problem!
-            |Das Ziel ist es Felder mit potentiellen Minen zu identifizieren und
-            |mit einer Flagge zu markieren. Es gibt eine sichtbare Menge an Minen mit
-            |dem der Spieler immer weiß wie viele Minen es noch zu erkennen gibt.
-            |
-            |Jedes sichere Feld was revealed wurde, gibt eine Zahl aus um zu signalisieren wieviele Bomben
-            |sich in direkter Nähe um das Feld befinden. Nun muss man durch Logik, Kombinatorik und manchmal
-            |auch durch etwas Glück sich auf die Suche nach den Minen begeben.
-            |
-            |Viel Erfolg!
-                        """.stripMargin
-        )
+            |Das Ziel ist es, Felder mit potentiellen Minen zu identifizieren und
+            |mit einer Flagge zu markieren. Die Zahlen zeigen an, wie viele Minen angrenzen.
+            |Nutze Logik – und etwas Glück!
+          """.stripMargin)
         true
 
       case "T" =>
@@ -131,39 +134,38 @@ class Tui(var controller: Controller) extends Observer {
         state = MenuState
         state.handleInput(input, this)
 
-      case flagPattern(rowChar, colStr) =>
-        val row = rowChar.charAt(0) - 'A'
-        val col = colStr.toInt - 1
-        val cmd = new FlagCommand(row, col, controller) // jeder spielzug muss auf dem stack
-        controller.doAndStore(cmd)
-        if (controller.checkWin()) {
-          state = WonState
-          state.handleInput(input, this)
-          return false
-        }
-        true
-
-      case revealPattern(rowChar, colStr) =>
-        val row = rowChar.charAt(0) - 'A'
-        val col = colStr.toInt - 1
-        val cmd = new SetCommand(row, col, controller) // jeder spielzug muss auf dem stack
-        controller.doAndStore(cmd)
-        val safe = controller.getBoard.cells(row)(col).isRevealed && !controller.getBoard.cells(row)(col).isMine
-        if (!safe) {
-          state = LostState
-          state.handleInput("", this) // ich musste das einbauen
-          // weil muss wegen tui.start() noch einmal enter drückem damit ich im lost state bin
-          // und dieses extra enter wird hier für den spieler gemacht.
-          return true // muss true sein damit sich das spiel jetzt nicht mehr sofort beendet
-        } else if (controller.checkWin()) {
-          state = WonState
-          state.handleInput(input, this)
-          return false
-        }
-        true
       case _ =>
-        println("Ungültige Eingabe. Nutze z.B. 'C3' oder 'F C3'.")
-        true
+        parseCoordinate(i) match {
+          case Some((isFlag, row, col)) =>
+            if (isFlag) {
+              val cmd = new FlagCommand(row, col, controller)
+              controller.doAndStore(cmd)
+              if (controller.checkWin()) {
+                state = WonState
+                state.handleInput(input, this)
+                return false
+              }
+            } else {
+              val cmd = new SetCommand(row, col, controller)
+              controller.doAndStore(cmd)
+              val cellOpt = Option(controller.getBoard.cells(row)(col))
+              val safe = cellOpt.exists(c => c.isRevealed && !c.isMine)
+              if (!safe) {
+                state = LostState
+                state.handleInput("", this)
+                return true
+              } else if (controller.checkWin()) {
+                state = WonState
+                state.handleInput(input, this)
+                return false
+              }
+            }
+            true
+
+          case None =>
+            println("Ungültige Eingabe. Nutze z.B. 'C3' oder 'F C3'.")
+            true
+        }
     }
   }
 
