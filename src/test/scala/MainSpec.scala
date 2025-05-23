@@ -13,7 +13,7 @@ class MainSpec extends AnyWordSpec {
 
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {
-          runMain()
+          main()
         }
       }
 
