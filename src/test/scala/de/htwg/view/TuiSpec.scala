@@ -284,6 +284,53 @@ class TuiSpec extends AnyWordSpec {
       val output = out.toString
       output should include("Ungültige Eingabe. Zurück zum Spiel.")
     }
+    "perform undo and show available undo/redo counts" in {
+      val controller = new Controller(TestBoardFactory)
+      val tui = new Tui(controller)
+
+      // Führe einen Zug aus, damit Undo möglich ist
+      val cmd = new de.htwg.command.SetCommand(0, 1, controller)
+      controller.doAndStore(cmd)
+      controller.getBoard.cells(0)(1).isRevealed shouldBe true
+
+      val out = new ByteArrayOutputStream()
+      Console.withOut(new PrintStream(out)) {
+        tui.processInputLine("U") // ← führt undo aus
+      }
+
+      out.toString should include("Undo verfügbar:")
+      controller.getBoard.cells(0)(1).isRevealed shouldBe false
+    }
+    "perform redo and show available undo/redo counts" in {
+      val controller = new Controller(TestBoardFactory)
+      val tui = new Tui(controller)
+
+      // Führe Zug aus + Undo
+      val cmd = new de.htwg.command.SetCommand(1, 1, controller)
+      controller.doAndStore(cmd)
+      tui.processInputLine("U")
+      controller.getBoard.cells(1)(1).isRevealed shouldBe false
+
+      val out = new ByteArrayOutputStream()
+      Console.withOut(new PrintStream(out)) {
+        tui.processInputLine("R") // ← führt redo aus
+      }
+
+      out.toString should include("Redo verfügbar:")
+      controller.getBoard.cells(1)(1).isRevealed shouldBe true
+    }
+    /*"processInputLine should return true for valid move" in {
+      val controller = new Controller(TestBoardFactory)
+      val tui = new Tui(controller)
+
+      // Stelle sicher, dass Feld (0,0) KEINE Mine ist
+      controller.getBoard.cells(0)(0).isMine = false
+
+      val result = tui.processInputLine("A1") // A1 = (0,0)
+      result shouldBe true
+      controller.getBoard.cells(0)(0).isRevealed shouldBe true
+    }*/
+
 
   }
 }
