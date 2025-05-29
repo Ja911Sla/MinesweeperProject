@@ -11,16 +11,14 @@ class GuiSpec extends AnyWordSpec {
 
   object TestBoardFactory extends BoardFactory {
     override def createBoard(): Board = new Board(6, 5)
-    override def size: Int = 6
-    override def mineCount: Int = 5
+    //override def size: Int = 6
+    //override def mineCount: Int = 5
   }
 
   "Gui" should {
     "initialize without crashing" in {
       noException should be thrownBy {
-        val controller = new Controller(TestBoardFactory)
-        val gui = new Gui(controller)
-        gui.main(Array.empty) // launches the GUI
+        Gui.main(Array.empty)
       }
     }
   }
