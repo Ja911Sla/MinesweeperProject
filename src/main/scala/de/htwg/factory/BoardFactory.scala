@@ -11,21 +11,21 @@ trait BoardFactory {
   def createBoard(): Board
 }
 
-//object EasyBoardFactory extends BoardFactory {
-//  override val size: Int = 6
-//  override val mineCount: Int = 5
-//}
-//
-//object MediumBoardFactory extends BoardFactory {
-//  override val size: Int = 9
-//  override val mineCount: Int = 15
-//}
-//
-//object HardBoardFactory extends BoardFactory {
-//
-//  override val size: Int = 12
-//  override val mineCount: Int = 35
-//}
+object EasyBoardFactory extends BoardFactory {
+  override val size: Int = 6
+  override val mineCount: Int = 5
+}
+
+object MediumBoardFactory extends BoardFactory {
+  override val size: Int = 9
+  override val mineCount: Int = 15
+}
+
+object HardBoardFactory extends BoardFactory {
+
+  override val size: Int = 12
+  override val mineCount: Int = 35
+}
 
 private class ConfigBoardFactory extends BoardFactory {
   override def createBoard(): Board = {

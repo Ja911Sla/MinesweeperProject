@@ -15,6 +15,7 @@ class Tui(var controller: Controller) extends Observer {
   private val flagPattern = "F ([A-Z])([1-9][0-9]*)".r
   private val revealPattern = "([A-Z])([1-9][0-9]*)".r
 
+
   def start(resetBoard: Boolean = true): String = {
     chooseDifficulty()
     if (resetBoard) controller.resetGame()
@@ -28,22 +29,33 @@ class Tui(var controller: Controller) extends Observer {
         |  A    -> Anleitung anzeigen
         |  T    -> Zeit anzeigen
         |  M    -> Game Mode wechseln
+        |  Q    -> Spiel beenden
         |""".stripMargin)
 
-    var running = true
-    while (running) {
+    shouldRun = true
+    while (shouldRun) {
       if (state == PlayingState) {
-        println(controller.displayBoardToString()) }
-      Option(StdIn.readLine()) match {
+        println(controller.displayBoardToString())
+      }
+
+      Option(scala.io.StdIn.readLine()) match {
         case Some(input) =>
-          running = state.handleInput(input, this)
+          if (input.trim.toUpperCase == "Q") {
+            println("Spiel beendet.")
+            shouldRun = false
+            guiQuitCallback() // tell GUI to quit
+          } else {
+            shouldRun = state.handleInput(input, this)
+          }
+
         case None =>
           println("Eingabestrom beendet.")
-          running = false
+          shouldRun = false
       }
     }
     "Game over."
   }
+
 
   def chooseDifficulty(): Unit = {
     println("Wähle Schwierigkeitsgrad:")
@@ -169,4 +181,15 @@ class Tui(var controller: Controller) extends Observer {
   override def update: String = {
     "Board wurde aktualisiert."
   }
+
+  // gui added stuff
+  private var shouldRun = true
+  var guiQuitCallback: () => Unit = () => ()
+  def requestQuit(): Unit = {
+    shouldRun = false
+  }
+
+  tuiThread = new Thread(new Runnable {
+    override def run(): Unit = tui.start()
+  })
 }
