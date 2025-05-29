@@ -46,5 +46,28 @@ class BoardFactorySpec extends AnyWordSpec {
       board.mineCount should be (15)
       
     }
+    "EasyBoardFactory" should {
+      "create a 6x6 board with 5 mines" in {
+        val board: Board = EasyBoardFactory.createBoard()
+        board.size shouldBe 6
+        board.mineCount shouldBe 5
+      }
+    }
+
+    "MediumBoardFactory" should {
+      "create a 9x9 board with 15 mines" in {
+        val board: Board = MediumBoardFactory.createBoard()
+        board.size shouldBe 9
+        board.mineCount shouldBe 15
+      }
+    }
+
+    "HardBoardFactory" should {
+      "create a 12x12 board with 35 mines" in {
+        val board: Board = HardBoardFactory.createBoard()
+        board.size shouldBe 12
+        board.mineCount shouldBe 35
+      }
+    }
   }
 }
