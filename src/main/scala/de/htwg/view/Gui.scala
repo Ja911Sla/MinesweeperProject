@@ -13,6 +13,8 @@ object Gui extends SimpleSwingApplication {
   var tui: Tui = _
   var tuiThread: Thread = _
 
+  var startGameHandler: BoardFactory => Unit = startGame _      // Für Tests
+
   // Main panel to hold everything
   val mainPanel = new BorderPanel
 
@@ -29,11 +31,11 @@ object Gui extends SimpleSwingApplication {
 
     reactions += {
       case ButtonClicked(`easyButton`) =>
-        startGame(EasyBoardFactory)
+        startGameHandler(EasyBoardFactory)        // startGame(EasyBoardFactory) ursprünglich - angepasst für Tests
       case ButtonClicked(`mediumButton`) =>
-        startGame(MediumBoardFactory)
+        startGameHandler(MediumBoardFactory)
       case ButtonClicked(`hardButton`) =>
-        startGame(HardBoardFactory)
+        startGameHandler(HardBoardFactory)
     }
   }
 
@@ -99,7 +101,7 @@ object Gui extends SimpleSwingApplication {
             } else {
               controller.revealCell(row, col)
             }
-            
+
           case e: MouseClicked if e.peer.getButton == java.awt.event.MouseEvent.BUTTON3 =>
             controller.flagCell(row, col)
         }
