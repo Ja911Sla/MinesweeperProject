@@ -90,10 +90,16 @@ object Gui extends SimpleSwingApplication {
     for (row <- 0 until size; col <- 0 until size) {
       val cellButton = new Button {
         text = "⬜"
-        listenTo(mouse.clicks)  // <- HIER hinein
+        listenTo(mouse.clicks)
         reactions += {
           case e: MouseClicked if e.peer.getButton == java.awt.event.MouseEvent.BUTTON1 =>
-            controller.revealCell(row, col)
+            if (controller.getBoard.cells(row)(col).isMine) {
+              val isMineHit = controller.revealCell(row, col)
+              handleGameOver()
+            } else {
+              controller.revealCell(row, col)
+            }
+            
           case e: MouseClicked if e.peer.getButton == java.awt.event.MouseEvent.BUTTON3 =>
             controller.flagCell(row, col)
         }
@@ -107,6 +113,24 @@ object Gui extends SimpleSwingApplication {
 
     mainPanel.peer.revalidate()
     mainPanel.peer.repaint()
+  }
+
+  private def handleGameOver(): Unit = {
+    // Deaktiviere alle Buttons
+    for (button <- gridPanel.contents)
+      button.enabled = false
+
+    // Zeige alle Zellen (force update)
+    for (row <- 0 until controller.getBoard.size;
+         col <- 0 until controller.getBoard.size) {
+      controller.getBoard.cells(row)(col).isRevealed = true
+    }
+
+    // GUI aktualisieren
+    GuiObserver.update
+
+    // Zeige Dialog
+    Dialog.showMessage(mainPanel, "💥 Game Over – Du hast eine Mine erwischt!", "Verloren", Dialog.Message.Error)
   }
 
   // Observer to update the GUI when controller notifies
