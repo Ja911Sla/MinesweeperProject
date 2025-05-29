@@ -1,6 +1,7 @@
 # Ignore Scala build directory
 /target/
-
+/project/target/
+/project/project/
 # Ignore class files (Java/Scala compilation)
 *.class
 

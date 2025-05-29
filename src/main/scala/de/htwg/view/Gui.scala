@@ -1,109 +1,116 @@
 package de.htwg.view
 
-import scala.swing._
-import scala.swing.event._
+import scala.swing.*
+import scala.swing.event.{MouseClicked, ButtonClicked}
 import javax.swing.SwingUtilities
 import de.htwg.controller.Controller
 import de.htwg.utility.Observer
-import de.htwg.factory._
-import de.htwg.view.Tui
-import de.htwg.model.GameCell
-import de.htwg.factory._
-import scala.swing.event.MouseEvent
+import de.htwg.factory.*
 
-
-object Gui extends SimpleSwingApplication with Observer {
+object Gui extends SimpleSwingApplication {
 
   var controller: Controller = _
   var tui: Tui = _
   var tuiThread: Thread = _
 
+  // Main panel to hold everything
+  val mainPanel = new BorderPanel
+
+  // Difficulty selection panel
+  val difficultyPanel: BoxPanel = new BoxPanel(Orientation.Vertical) {
+    contents += new Label("Schwierigkeit wählen:")
+    val easyButton = new Button("Leicht (6x6, 5 Minen)")
+    val mediumButton = new Button("Mittel (9x9, 15 Minen)")
+    val hardButton = new Button("Schwer (12x12, 35 Minen)")
+
+    contents ++= Seq(easyButton, mediumButton, hardButton)
+
+    listenTo(easyButton, mediumButton, hardButton)
+
+    reactions += {
+      case ButtonClicked(`easyButton`) =>
+        startGame(EasyBoardFactory)
+      case ButtonClicked(`mediumButton`) =>
+        startGame(MediumBoardFactory)
+      case ButtonClicked(`hardButton`) =>
+        startGame(HardBoardFactory)
+    }
+  }
+
+  // Grid panel for the game board
+  val gridPanel = new GridPanel(1, 1) // darf nicht 0,0 sein
+
+  // Lazy new game button (so it can reference itself)
+  lazy val newGameButton: Button = new Button(Action("Neues Spiel") {
+    mainPanel.layout -= gridPanel
+    mainPanel.layout -= newGameButton
+    mainPanel.layout(difficultyPanel) = BorderPanel.Position.Center
+    mainPanel.peer.revalidate()
+    mainPanel.peer.repaint()
+  })
+
   def top: Frame = new MainFrame {
     title = "Minesweeper"
     preferredSize = new Dimension(500, 500)
 
-    // Beim Schließen sicherstellen, dass alles sauber beendet wird
+    contents = mainPanel
+
+    // On close, make sure to stop TUI thread
     override def closeOperation(): Unit = {
       println("Programm wird beendet.")
-      if (tui != null) tui.requestQuit()  // Signal an TUI
+      if (tui != null) tui.requestQuit()
       sys.exit(0)
     }
 
-    // Schwierigkeit Auswahl Panel
-    val difficultyPanel = new BoxPanel(Orientation.Vertical) {
-      contents += new Label("Schwierigkeit wählen:")
-      val easyButton = new Button("Leicht (6x6, 5 Minen)")
-      val mediumButton = new Button("Mittel (9x9, 15 Minen)")
-      val hardButton = new Button("Schwer (12x12, 35 Minen)")
+    // Initially show difficulty panel
+    mainPanel.layout(difficultyPanel) = BorderPanel.Position.Center
+  }
 
-      contents += easyButton
-      contents += mediumButton
-      contents += hardButton
+  def startGame(factory: BoardFactory): Unit = {
+    controller = new Controller(factory)
+    controller.add(GuiObserver)
 
-      listenTo(easyButton, mediumButton, hardButton)
-
-      reactions += {
-        case ButtonClicked(`easyButton`) =>
-          startGame(EasyBoardFactory)
-        case ButtonClicked(`mediumButton`) =>
-          startGame(MediumBoardFactory)
-        case ButtonClicked(`hardButton`) =>
-          startGame(HardBoardFactory)
+    if (tui == null) {
+      tui = new Tui(controller)
+      tui.guiQuitCallback = () => {
+        println("TUI hat Quit-Signal gegeben. Beende GUI...")
+        top.close()
       }
+      tuiThread = new Thread(new Runnable {
+        override def run(): Unit = tui.start()
+      })
+      tuiThread.start()
     }
 
-    // Spiel-Grid Panel
-    val gridPanel = new GridPanel(0, 0)
+    val size = controller.getBoard.size
+    gridPanel.rows = size
+    gridPanel.columns = size
+    gridPanel.contents.clear()
 
-    contents = difficultyPanel
-
-    def startGame(factory: BoardFactory): Unit = {
-      controller = new Controller(factory)
-      controller.add(this)
-
-      if (tui == null) {
-        tui = new Tui(controller)
-        tui.guiQuitCallback = () => {
-          println("TUI hat Quit-Signal gegeben. Beende GUI...")
-          close()
+    for (row <- 0 until size; col <- 0 until size) {
+      val cellButton = new Button {
+        text = "⬜"
+        reactions += {
+          case e: MouseClicked if e.peer.getButton == java.awt.event.MouseEvent.BUTTON1 =>
+            controller.revealCell(row, col)
+          case e: MouseClicked if e.peer.getButton == java.awt.event.MouseEvent.BUTTON3 =>
+            controller.flagCell(row, col)
         }
-        tuiThread = new Thread(() => tui.start())
-        tuiThread.start()
       }
-
-      val size = controller.getBoard.size
-      gridPanel.rows = size
-      gridPanel.columns = size
-      gridPanel.contents.clear()
-
-      for (row <- 0 until size; col <- 0 until size) {
-        val cellButton = new Button {
-          text = "⬜"
-          reactions += {
-            case MouseClicked(_, _, MouseEvent.Left, _, _) =>
-              controller.revealCell(row, col)
-            case MouseClicked(_, _, MouseEvent.Right, _, _) =>
-              controller.flagCell(row, col)
-          }
-        }
-        listenTo(cellButton.mouse.clicks)
-        gridPanel.contents += cellButton
-      }
-
-      contents = new BorderPanel {
-        layout(gridPanel) = BorderPanel.Position.Center
-        layout(new Button(Action("Neues Spiel") {
-          contents = new BoxPanel(Orientation.Vertical) {
-            contents += difficultyPanel
-          }
-        })) = BorderPanel.Position.South
-      }
-
-      revalidate()
-      repaint()
+      listenTo(cellButton.mouse.clicks)
+      gridPanel.contents += cellButton
     }
 
-    override def update(): String = {
+    mainPanel.layout(gridPanel) = BorderPanel.Position.Center
+    mainPanel.layout(newGameButton) = BorderPanel.Position.South
+
+    mainPanel.peer.revalidate()
+    mainPanel.peer.repaint()
+  }
+
+  // Observer to update the GUI when controller notifies
+  private object GuiObserver extends Observer {
+    override def update: String = {
       SwingUtilities.invokeLater(() => {
         val board = controller.getBoard
         for ((button, idx) <- gridPanel.contents.zipWithIndex) {

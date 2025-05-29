@@ -188,8 +188,4 @@ class Tui(var controller: Controller) extends Observer {
   def requestQuit(): Unit = {
     shouldRun = false
   }
-
-  tuiThread = new Thread(new Runnable {
-    override def run(): Unit = tui.start()
-  })
 }
