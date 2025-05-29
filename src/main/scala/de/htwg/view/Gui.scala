@@ -90,6 +90,7 @@ object Gui extends SimpleSwingApplication {
     for (row <- 0 until size; col <- 0 until size) {
       val cellButton = new Button {
         text = "⬜"
+        listenTo(mouse.clicks)  // <- HIER hinein
         reactions += {
           case e: MouseClicked if e.peer.getButton == java.awt.event.MouseEvent.BUTTON1 =>
             controller.revealCell(row, col)
@@ -97,7 +98,7 @@ object Gui extends SimpleSwingApplication {
             controller.flagCell(row, col)
         }
       }
-      listenTo(cellButton.mouse.clicks)
+      //listenTo(cellButton.mouse.clicks)
       gridPanel.contents += cellButton
     }
 
