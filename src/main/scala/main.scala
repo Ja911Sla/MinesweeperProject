@@ -18,9 +18,13 @@ def main(): Unit = runMain()
 def runMain(): Unit = {
   val controller = new Controller(BoardFactory.getInstance)
   val tui = new Tui(controller)
-  Future { // separate thread für die parallel Threads
+
+  Gui.attachController(controller)
+
+  Future {
     Gui.main(Array.empty)
   }
+
   println(tui.start())
 }
 

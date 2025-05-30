@@ -58,6 +58,12 @@ class Tui(var controller: Controller) extends Observer {
 
 
   def chooseDifficulty(): Unit = {
+    if (controller.isDifficultySet) {
+      println("Schwierigkeit bereits durch GUI gesetzt.")
+      controller.add(this)
+      return
+    }
+
     println("Wähle Schwierigkeitsgrad:")
     println("1 - Leicht (6x6, 5 Minen)")
     println("2 - Mittel (9x9, 15 Minen)")
@@ -83,10 +89,13 @@ class Tui(var controller: Controller) extends Observer {
         CustomStrategy
     }
 
-    val factory = strategy.getBoardFactory()
-    controller = new Controller(factory)
     controller.add(this)
+
+    val factory = strategy.getBoardFactory()
+    controller.createNewBoard(factory)
+    controller.isDifficultySet = true
   }
+
 
   def processInputLine(input: String): Boolean = {
     val i = input.trim.toUpperCase

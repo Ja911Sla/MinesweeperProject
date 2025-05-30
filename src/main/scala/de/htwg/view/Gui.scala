@@ -19,7 +19,9 @@ object Gui extends SimpleSwingApplication {
   val mainPanel = new BorderPanel
 
   // Difficulty selection panel
+
   val difficultyPanel: BoxPanel = new BoxPanel(Orientation.Vertical) {
+
     contents += new Label("Schwierigkeit wählen:")
     val easyButton = new Button("Leicht (6x6, 5 Minen)")
     val mediumButton = new Button("Mittel (9x9, 15 Minen)")
@@ -32,10 +34,13 @@ object Gui extends SimpleSwingApplication {
     reactions += {
       case ButtonClicked(`easyButton`) =>
         startGameHandler(EasyBoardFactory)        // startGame(EasyBoardFactory) ursprünglich - angepasst für Tests
+        controller.createNewBoard(EasyBoardFactory)
       case ButtonClicked(`mediumButton`) =>
         startGameHandler(MediumBoardFactory)
+        controller.createNewBoard(MediumBoardFactory)
       case ButtonClicked(`hardButton`) =>
         startGameHandler(HardBoardFactory)
+        controller.createNewBoard(HardBoardFactory)
     }
   }
 
@@ -68,9 +73,13 @@ object Gui extends SimpleSwingApplication {
     mainPanel.layout(difficultyPanel) = BorderPanel.Position.Center
   }
 
-  def startGame(factory: BoardFactory): Unit = {
-    controller = new Controller(factory)
+  def attachController(sharedController: Controller): Unit = {
+    this.controller = sharedController
     controller.add(GuiObserver)
+  }
+  def startGame(factory: BoardFactory): Unit = {
+    controller.createNewBoard(factory)
+
 
     if (tui == null) {
       tui = new Tui(controller)

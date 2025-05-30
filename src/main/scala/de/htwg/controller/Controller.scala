@@ -23,9 +23,11 @@ class Controller(private var boardFactory: BoardFactory) extends Observable {
 
   def getElapsedTime: Int = timer.getTime
 
+  var isDifficultySet: Boolean = false
   def createNewBoard(factory: BoardFactory): Unit = {
     boardFactory = factory
     board = boardFactory.createBoard()
+    isDifficultySet = true
     notifyObservers()
   }
 
