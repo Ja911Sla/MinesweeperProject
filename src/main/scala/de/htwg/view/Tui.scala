@@ -17,8 +17,14 @@ class Tui(var controller: Controller) extends Observer {
 
 
   def start(resetBoard: Boolean = true): String = {
+
+
     chooseDifficulty()
     if (resetBoard) controller.resetGame()
+    if (controller.getBoard == null || controller.getBoard.cells.flatten.isEmpty) {
+      chooseDifficulty()
+      if (resetBoard) controller.resetGame()
+    }
     println(
       """Willkommen zu Minesweeper!
         |Das Ziel ist es, alle Felder zu öffnen, ohne auf eine Mine zu treten.
@@ -188,7 +194,8 @@ class Tui(var controller: Controller) extends Observer {
   }
 
   override def update: String = {
-    "Board wurde aktualisiert."
+    println(controller.displayBoardToString())
+    ""
   }
 
   // gui added stuff

@@ -17,14 +17,9 @@ def main(): Unit = runMain()
 // $COVERAGE-ON$
 def runMain(): Unit = {
   val controller = new Controller(BoardFactory.getInstance)
+  Gui.attachController(controller)
   val tui = new Tui(controller)
 
-  Gui.attachController(controller)
-
-  Future {
-    Gui.main(Array.empty)
-  }
-
+  Future { Gui.main(Array.empty) }
   println(tui.start())
 }
-

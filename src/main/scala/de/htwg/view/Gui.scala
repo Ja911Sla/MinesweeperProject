@@ -9,9 +9,13 @@ import de.htwg.factory.*
 
 object Gui extends SimpleSwingApplication {
 
-  var controller: Controller = _
   var tui: Tui = _
   var tuiThread: Thread = _
+  var controller: Controller = _
+
+  def initialize(c: Controller): Unit = {
+    controller = c
+  }
 
   var startGameHandler: BoardFactory => Unit = startGame _      // Für Tests
 
@@ -80,6 +84,8 @@ object Gui extends SimpleSwingApplication {
   def startGame(factory: BoardFactory): Unit = {
     controller.createNewBoard(factory)
 
+    // Observer nur einmal registrieren
+    controller.add(GuiObserver)
 
     if (tui == null) {
       tui = new Tui(controller)
@@ -105,9 +111,11 @@ object Gui extends SimpleSwingApplication {
         reactions += {
           case e: MouseClicked if e.peer.getButton == java.awt.event.MouseEvent.BUTTON1 =>
             if (controller.getBoard.cells(row)(col).isMine) {
-              val isMineHit = controller.revealCell(row, col)
+              controller.revealCell(row, col)
               handleGameOver()
-            } else {
+            } else if (controller.getBoard.checkWin()) {
+              handleGameWon()
+            }else{
               controller.revealCell(row, col)
             }
 
@@ -115,7 +123,6 @@ object Gui extends SimpleSwingApplication {
             controller.flagCell(row, col)
         }
       }
-      //listenTo(cellButton.mouse.clicks)
       gridPanel.contents += cellButton
     }
 
@@ -125,7 +132,7 @@ object Gui extends SimpleSwingApplication {
     mainPanel.peer.revalidate()
     mainPanel.peer.repaint()
   }
-
+  // Handle game over scenario
   private def handleGameOver(): Unit = {
     // Deaktiviere alle Buttons
     for (button <- gridPanel.contents)
@@ -142,6 +149,19 @@ object Gui extends SimpleSwingApplication {
 
     // Zeige Dialog
     Dialog.showMessage(mainPanel, "💥 Game Over – Du hast eine Mine erwischt!", "Verloren", Dialog.Message.Error)
+  }
+
+  private def handleGameWon(): Unit = {
+    for (button <- gridPanel.contents)
+      button.enabled = false
+
+    for (row <- 0 until controller.getBoard.size;
+         col <- 0 until controller.getBoard.size) {
+      controller.getBoard.cells(row)(col).isRevealed = true
+    }
+
+    GuiObserver.update
+    Dialog.showMessage(mainPanel, "Gewonnen, Glückwunsch!", "Gewonnen", Dialog.Message.Info)
   }
 
   // Observer to update the GUI when controller notifies
@@ -162,6 +182,9 @@ object Gui extends SimpleSwingApplication {
             } else if (cell.isFlagged) "🚩"
             else "⬜"
         }
+        // Nach dem Update sicherstellen, dass das Panel neu gezeichnet wird
+        mainPanel.peer.revalidate()
+        mainPanel.peer.repaint()
       })
       ""
     }
