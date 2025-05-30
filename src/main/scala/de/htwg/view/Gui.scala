@@ -157,4 +157,5 @@ object Gui extends SimpleSwingApplication {
       ""
     }
   }
+  def runObserverUpdate(): Unit = GuiObserver.update // öffentliche methode für die tests
 }
