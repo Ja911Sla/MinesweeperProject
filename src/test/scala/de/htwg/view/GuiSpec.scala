@@ -140,109 +140,111 @@ class GuiSpec extends AnyWordSpec {
       mainPanel.layout.get(gridPanel) should contain(BorderPanel.Position.Center)
       mainPanel.layout.get(newGameButton) should contain(BorderPanel.Position.South)
     }
+    "GuiObserver update" should {
+      "set 💣 if cell is revealed and is mine" in {
+        val cell = new de.htwg.model.GameCell()
+        cell.isRevealed = true
+        cell.isMine = true
 
+        val button = new scala.swing.Button()
+        Gui.gridPanel.contents.clear()
+        Gui.gridPanel.contents += button
+
+        val board = new de.htwg.model.Board(1, 0)
+        board.cells(0)(0) = cell
+        Gui.controller = new de.htwg.controller.Controller(new de.htwg.factory.BoardFactory {
+          override def createBoard(): de.htwg.model.Board = board
+        })
+
+        Gui.runObserverUpdate()
+
+        button.text shouldBe "💣"
+      }
+
+      "set number if cell is revealed and has adjacent mines" in {
+        assume(!GraphicsEnvironment.isHeadless(), "GUI tests are skipped in headle Eenvironments")
+        val cell = new de.htwg.model.GameCell()
+        cell.isRevealed = true
+        cell.isMine = false
+        cell.mineCount = 3
+
+        val button = new scala.swing.Button()
+        Gui.gridPanel.contents.clear()
+        Gui.gridPanel.contents += button
+
+        val board = new de.htwg.model.Board(1, 0)
+        board.cells(0)(0) = cell
+        Gui.controller = new de.htwg.controller.Controller(new de.htwg.factory.BoardFactory {
+          override def createBoard(): de.htwg.model.Board = board
+        })
+
+        Gui.runObserverUpdate()
+
+        button.text shouldBe "3"
+      }
+
+      "set empty string if cell is revealed and has no adjacent mines" in {
+        val cell = new de.htwg.model.GameCell()
+        cell.isRevealed = true
+        cell.isMine = false
+        cell.mineCount = 0
+
+        val button = new scala.swing.Button()
+        Gui.gridPanel.contents.clear()
+        Gui.gridPanel.contents += button
+
+        val board = new de.htwg.model.Board(1, 0)
+        board.cells(0)(0) = cell
+        Gui.controller = new de.htwg.controller.Controller(new de.htwg.factory.BoardFactory {
+          override def createBoard(): de.htwg.model.Board = board
+        })
+
+        Gui.runObserverUpdate()
+
+        button.text shouldBe ""
+      }
+
+      "set 🚩 if cell is flagged but not revealed" in {
+        val cell = new de.htwg.model.GameCell()
+        cell.isRevealed = false
+        cell.isFlagged = true
+
+        val button = new scala.swing.Button()
+        Gui.gridPanel.contents.clear()
+        Gui.gridPanel.contents += button
+
+        val board = new de.htwg.model.Board(1, 0)
+        board.cells(0)(0) = cell
+        Gui.controller = new de.htwg.controller.Controller(new de.htwg.factory.BoardFactory {
+          override def createBoard(): de.htwg.model.Board = board
+        })
+
+        Gui.runObserverUpdate()
+
+        button.text shouldBe "🚩"
+      }
+
+      "set ⬜ if cell is neither revealed nor flagged" in {
+        val cell = new de.htwg.model.GameCell()
+        cell.isRevealed = false
+        cell.isFlagged = false
+
+        val button = new scala.swing.Button()
+        Gui.gridPanel.contents.clear()
+        Gui.gridPanel.contents += button
+
+        val board = new de.htwg.model.Board(1, 0)
+        board.cells(0)(0) = cell
+        Gui.controller = new de.htwg.controller.Controller(new de.htwg.factory.BoardFactory {
+          override def createBoard(): de.htwg.model.Board = board
+        })
+
+        Gui.runObserverUpdate()
+
+        button.text shouldBe "⬜"
+      }
+    }
   }
-  "GuiObserver update" should {
-    "set 💣 if cell is revealed and is mine" in {
-      val cell = new de.htwg.model.GameCell()
-      cell.isRevealed = true
-      cell.isMine = true
 
-      val button = new scala.swing.Button()
-      Gui.gridPanel.contents.clear()
-      Gui.gridPanel.contents += button
-
-      val board = new de.htwg.model.Board(1, 0)
-      board.cells(0)(0) = cell
-      Gui.controller = new de.htwg.controller.Controller(new de.htwg.factory.BoardFactory {
-        override def createBoard(): de.htwg.model.Board = board
-      })
-
-      Gui.runObserverUpdate()
-
-      button.text shouldBe "💣"
-    }
-
-    "set number if cell is revealed and has adjacent mines" in {
-      val cell = new de.htwg.model.GameCell()
-      cell.isRevealed = true
-      cell.isMine = false
-      cell.mineCount = 3
-
-      val button = new scala.swing.Button()
-      Gui.gridPanel.contents.clear()
-      Gui.gridPanel.contents += button
-
-      val board = new de.htwg.model.Board(1, 0)
-      board.cells(0)(0) = cell
-      Gui.controller = new de.htwg.controller.Controller(new de.htwg.factory.BoardFactory {
-        override def createBoard(): de.htwg.model.Board = board
-      })
-
-      Gui.runObserverUpdate()
-
-      button.text shouldBe "3"
-    }
-
-    "set empty string if cell is revealed and has no adjacent mines" in {
-      val cell = new de.htwg.model.GameCell()
-      cell.isRevealed = true
-      cell.isMine = false
-      cell.mineCount = 0
-
-      val button = new scala.swing.Button()
-      Gui.gridPanel.contents.clear()
-      Gui.gridPanel.contents += button
-
-      val board = new de.htwg.model.Board(1, 0)
-      board.cells(0)(0) = cell
-      Gui.controller = new de.htwg.controller.Controller(new de.htwg.factory.BoardFactory {
-        override def createBoard(): de.htwg.model.Board = board
-      })
-
-      Gui.runObserverUpdate()
-
-      button.text shouldBe ""
-    }
-
-    "set 🚩 if cell is flagged but not revealed" in {
-      val cell = new de.htwg.model.GameCell()
-      cell.isRevealed = false
-      cell.isFlagged = true
-
-      val button = new scala.swing.Button()
-      Gui.gridPanel.contents.clear()
-      Gui.gridPanel.contents += button
-
-      val board = new de.htwg.model.Board(1, 0)
-      board.cells(0)(0) = cell
-      Gui.controller = new de.htwg.controller.Controller(new de.htwg.factory.BoardFactory {
-        override def createBoard(): de.htwg.model.Board = board
-      })
-
-      Gui.runObserverUpdate()
-
-      button.text shouldBe "🚩"
-    }
-
-    "set ⬜ if cell is neither revealed nor flagged" in {
-      val cell = new de.htwg.model.GameCell()
-      cell.isRevealed = false
-      cell.isFlagged = false
-
-      val button = new scala.swing.Button()
-      Gui.gridPanel.contents.clear()
-      Gui.gridPanel.contents += button
-
-      val board = new de.htwg.model.Board(1, 0)
-      board.cells(0)(0) = cell
-      Gui.controller = new de.htwg.controller.Controller(new de.htwg.factory.BoardFactory {
-        override def createBoard(): de.htwg.model.Board = board
-      })
-
-      Gui.runObserverUpdate()
-
-      button.text shouldBe "⬜"
-    }
-  }
 }
+
