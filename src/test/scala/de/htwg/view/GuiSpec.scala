@@ -11,6 +11,7 @@ import scala.swing.{BorderPanel, Button, Frame}
 import scala.swing.event.{ButtonClicked, MouseClicked, MouseEvent}
 import de.htwg.factory.*
 
+import java.awt.GraphicsEnvironment
 import javax.swing.SwingUtilities
 
 class GuiSpec extends AnyWordSpec {
@@ -84,17 +85,20 @@ class GuiSpec extends AnyWordSpec {
       }
     }
     "have the correct title" in {
+      assume(!GraphicsEnvironment.isHeadless(), "Skipping GUI test in headless environment")
       val frame: Frame = Gui.top
       frame.title should be("Minesweeper")
     }
 
     "have the correct preferred size" in {
+      assume(!GraphicsEnvironment.isHeadless(), "Skipping GUI test in headless environment")
       val frame: Frame = Gui.top
       frame.preferredSize.width should be(500)
       frame.preferredSize.height should be(500)
     }
 
     "contain the main panel as its contents" in {
+      assume(!GraphicsEnvironment.isHeadless(), "Skipping GUI test in headless environment")
       val frame: Frame = Gui.top
       frame.contents should be(Seq(Gui.mainPanel))
 
