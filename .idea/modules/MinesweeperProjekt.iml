@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id="root [file:/C:/HTWG_Module/Minesweeper_Project/MinesweeperProject/]" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="SBT" type="JAVA_MODULE" version="4">
+<module external.linked.project.id="root [file:/C:/Users/Jan/Desktop/HTWG/Drittes%20Semester/Software%20Engineering/MinesweeperProject/]" external.linked.project.path="$MODULE_DIR$/../.." external.root.project.path="$MODULE_DIR$/../.." external.system.id="SBT" type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_23">
     <output url="file://$MODULE_DIR$/../../target/scala-3.3.5/classes" />
     <output-test url="file://$MODULE_DIR$/../../target/scala-3.3.5/test-classes" />
