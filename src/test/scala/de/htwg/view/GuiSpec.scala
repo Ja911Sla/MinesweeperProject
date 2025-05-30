@@ -142,6 +142,7 @@ class GuiSpec extends AnyWordSpec {
     }
     "GuiObserver update" should {
       "set 💣 if cell is revealed and is mine" in {
+        assume(!GraphicsEnvironment.isHeadless(), "GUI tests are skipped in headle Eenvironments")
         val cell = new de.htwg.model.GameCell()
         cell.isRevealed = true
         cell.isMine = true
@@ -184,6 +185,7 @@ class GuiSpec extends AnyWordSpec {
       }
 
       "set empty string if cell is revealed and has no adjacent mines" in {
+        assume(!GraphicsEnvironment.isHeadless(), "GUI tests are skipped in headle Eenvironments")
         val cell = new de.htwg.model.GameCell()
         cell.isRevealed = true
         cell.isMine = false
@@ -205,6 +207,7 @@ class GuiSpec extends AnyWordSpec {
       }
 
       "set 🚩 if cell is flagged but not revealed" in {
+        assume(!GraphicsEnvironment.isHeadless(), "GUI tests are skipped in headle Eenvironments")
         val cell = new de.htwg.model.GameCell()
         cell.isRevealed = false
         cell.isFlagged = true
