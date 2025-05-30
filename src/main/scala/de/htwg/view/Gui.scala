@@ -133,22 +133,23 @@ object Gui extends SimpleSwingApplication {
     mainPanel.peer.repaint()
   }
   // Handle game over scenario
+  var isGameOver = false
   private def handleGameOver(): Unit = {
-    // Deaktiviere alle Buttons
-    for (button <- gridPanel.contents)
-      button.enabled = false
+    if (!isGameOver) {
+      isGameOver = true
+      // Deaktiviere alle Buttons
+      for (button <- gridPanel.contents)
+        button.enabled = false
 
-    // Zeige alle Zellen (force update)
-    for (row <- 0 until controller.getBoard.size;
-         col <- 0 until controller.getBoard.size) {
-      controller.getBoard.cells(row)(col).isRevealed = true
+      // Zeige alle Zellen
+      for (row <- 0 until controller.getBoard.size;
+           col <- 0 until controller.getBoard.size) {
+        controller.getBoard.cells(row)(col).isRevealed = true
+      }
+
+      GuiObserver.update
+      Dialog.showMessage(mainPanel, "💥 Game Over – Du hast eine Mine erwischt!", "Verloren", Dialog.Message.Error)
     }
-
-    // GUI aktualisieren
-    GuiObserver.update
-
-    // Zeige Dialog
-    Dialog.showMessage(mainPanel, "💥 Game Over – Du hast eine Mine erwischt!", "Verloren", Dialog.Message.Error)
   }
 
   private def handleGameWon(): Unit = {
@@ -169,6 +170,42 @@ object Gui extends SimpleSwingApplication {
     override def update: String = {
       SwingUtilities.invokeLater(() => {
         val board = controller.getBoard
+
+        if (gridPanel.rows != board.size || gridPanel.columns != board.size) {
+          gridPanel.rows = board.size
+          gridPanel.columns = board.size
+          gridPanel.contents.clear()
+
+          for (row <- 0 until board.size; col <- 0 until board.size) {
+            val cellButton = new Button {
+              text = "⬜"
+              listenTo(mouse.clicks)
+              reactions += {
+                case e: MouseClicked if e.peer.getButton == java.awt.event.MouseEvent.BUTTON1 =>
+                  if (!isGameOver) {
+                    if (controller.getBoard.cells(row)(col).isMine) {
+                      controller.revealCell(row, col)
+                      handleGameOver()
+                    } else if (controller.getBoard.checkWin()) {
+                      handleGameWon()
+                    } else {
+                      controller.revealCell(row, col)
+                    }
+                  }
+                case e: MouseClicked if e.peer.getButton == java.awt.event.MouseEvent.BUTTON3 =>
+                  controller.flagCell(row, col)
+              }
+            }
+            gridPanel.contents += cellButton
+          }
+
+          mainPanel.layout(gridPanel) = BorderPanel.Position.Center
+          mainPanel.layout(newGameButton) = BorderPanel.Position.South
+          mainPanel.peer.revalidate()
+          mainPanel.peer.repaint()
+        }
+
+        // Update alle Buttons
         for ((button, idx) <- gridPanel.contents.zipWithIndex) {
           val row = idx / board.size
           val col = idx % board.size
@@ -182,7 +219,6 @@ object Gui extends SimpleSwingApplication {
             } else if (cell.isFlagged) "🚩"
             else "⬜"
         }
-        // Nach dem Update sicherstellen, dass das Panel neu gezeichnet wird
         mainPanel.peer.revalidate()
         mainPanel.peer.repaint()
       })

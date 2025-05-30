@@ -13,6 +13,8 @@ class Controller(private var boardFactory: BoardFactory) extends Observable {
   private val timer = new Timer()
   private val undoStack: mutable.Stack[Command] = mutable.Stack() // andu Schtäck
   private val redoStack: mutable.Stack[Command] = mutable.Stack() // redu Schtäck
+  var isGameOver: Boolean = false
+  var isWon: Boolean = false
 
   def getBoard: Board = board
 
@@ -33,9 +35,15 @@ class Controller(private var boardFactory: BoardFactory) extends Observable {
 
   def revealCell(row: Int, col: Int): Boolean = {
     val safe = board.reveal(row, col)
+    if (!safe) {
+      isGameOver = true
+    } else if (checkWin()) {
+      isWon = true
+    }
     notifyObservers()
     safe
   }
+
 
   def flagCell(x: Int, y: Int): Unit = {
     board.toggleFlag(x, y)
