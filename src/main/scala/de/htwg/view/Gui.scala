@@ -22,7 +22,7 @@ object Gui extends SimpleSwingApplication {
   // Main panel to hold everything
   val mainPanel = new BorderPanel
 
-  val flagCountLabel = new Label("🚩 Verbleibende Flaggen: ?")
+  val flagCountLabel = new Label()
 
 
   // Difficulty selection panel
