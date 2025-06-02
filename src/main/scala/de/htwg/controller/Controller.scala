@@ -100,6 +100,11 @@ class Controller(private var boardFactory: BoardFactory) extends Observable {
       println("Du bist bereits im aktuellen Spielstand – nichts zum Wiederholen.")
     }
   }
+  
+  
+  def remainingFlags(): Int = board.remainingFlags()
+
+  
   def undoStackSize: Int = undoStack.size
   def redoStackSize: Int = redoStack.size
 

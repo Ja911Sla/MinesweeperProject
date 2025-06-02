@@ -22,6 +22,9 @@ object Gui extends SimpleSwingApplication {
   // Main panel to hold everything
   val mainPanel = new BorderPanel
 
+  val flagCountLabel = new Label("🚩 Verbleibende Flaggen: ?")
+
+
   // Difficulty selection panel
 
   val difficultyPanel: BoxPanel = new BoxPanel(Orientation.Vertical) {
@@ -55,10 +58,12 @@ object Gui extends SimpleSwingApplication {
   lazy val newGameButton: Button = new Button(Action("Neues Spiel") {
     mainPanel.layout -= gridPanel
     mainPanel.layout -= newGameButton
-    mainPanel.layout(difficultyPanel) = BorderPanel.Position.Center
+    mainPanel.layout(difficultyPanel) = BorderPanel.Position.North
     mainPanel.peer.revalidate()
     mainPanel.peer.repaint()
+
   })
+
 
   def top: Frame = new MainFrame {
     title = "Minesweeper"
@@ -76,6 +81,14 @@ object Gui extends SimpleSwingApplication {
     // Initially show difficulty panel
     mainPanel.layout(difficultyPanel) = BorderPanel.Position.Center
   }
+
+  // Panel für Flag count
+  val topControlPanel = new BorderPanel {
+    layout(newGameButton) = BorderPanel.Position.Center
+    layout(flagCountLabel) = BorderPanel.Position.East
+    border = Swing.EmptyBorder(5, 10, 5, 10)
+  }
+
 
   def attachController(sharedController: Controller): Unit = {
     this.controller = sharedController
@@ -126,8 +139,10 @@ object Gui extends SimpleSwingApplication {
       gridPanel.contents += cellButton
     }
 
+    mainPanel.layout(topControlPanel) = BorderPanel.Position.North
+    //mainPanel.layout(topPanel) = BorderPanel.Position.North
     mainPanel.layout(gridPanel) = BorderPanel.Position.Center
-    mainPanel.layout(newGameButton) = BorderPanel.Position.South
+    //mainPanel.layout(newGameButton) = BorderPanel.Position.South
 
     mainPanel.peer.revalidate()
     mainPanel.peer.repaint()
@@ -219,6 +234,7 @@ object Gui extends SimpleSwingApplication {
             } else if (cell.isFlagged) "🚩"
             else "⬜"
         }
+        flagCountLabel.text = s"🚩: ${controller.remainingFlags()}"
         mainPanel.peer.revalidate()
         mainPanel.peer.repaint()
       })

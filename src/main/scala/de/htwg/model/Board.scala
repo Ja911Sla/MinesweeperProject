@@ -145,4 +145,8 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) {
         }
         newBoard
     }
+
+    def remainingFlags(): Int = {
+        mineCount - cells.flatten.count(_.isFlagged)
+    }
 }
