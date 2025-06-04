@@ -82,12 +82,15 @@ object Gui extends SimpleSwingApplication {
     mainPanel.layout(difficultyPanel) = BorderPanel.Position.Center
   }
 
+
   // Panel für Flag count
   val topControlPanel = new BorderPanel {
-    layout(newGameButton) = BorderPanel.Position.Center
+    layout(new FlowPanel(FlowPanel.Alignment.Center)(newGameButton)) = BorderPanel.Position.Center
     layout(flagCountLabel) = BorderPanel.Position.East
-    border = Swing.EmptyBorder(5, 10, 5, 10)
+    flagCountLabel.border = Swing.EmptyBorder(0, 30, 0, 0) // oben, links, unten, rechts
+    border = Swing.EmptyBorder(5, 65, 5, 10)
   }
+
 
 
   def attachController(sharedController: Controller): Unit = {
