@@ -1,11 +1,11 @@
 package de.htwg.singleton
 
+import de.htwg.controller.controllerComponent.controllerBase.Controller
 import de.htwg.model.Board
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
 
 import scala.Console
-import de.htwg.controller.Controller
 import de.htwg.factory.{BoardFactory, ConfigBoardFactory}
 import de.htwg.singleton.GameConfig
 

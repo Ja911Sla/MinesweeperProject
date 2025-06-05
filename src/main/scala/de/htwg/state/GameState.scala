@@ -1,7 +1,7 @@
 package de.htwg.state
 
+import de.htwg.controller.controllerComponent.controllerBase.Controller
 import de.htwg.view.Tui
-import de.htwg.controller.Controller
 
 trait GameState {
   def handleInput(input: String, tui: Tui): Boolean

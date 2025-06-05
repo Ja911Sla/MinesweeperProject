@@ -1,7 +1,7 @@
-import de.htwg.command.*
+//import de.htwg.command.*
+import de.htwg.controller.controllerComponent.controllerBase.{Controller, FlagCommand, SetCommand}
 import de.htwg.factory.BoardFactory
 import de.htwg.model.Board
-import de.htwg.controller.Controller
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers.*
 

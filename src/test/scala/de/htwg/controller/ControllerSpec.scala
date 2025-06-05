@@ -5,8 +5,9 @@ import de.htwg.utility.Observer
 import de.htwg.model.Board
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
-import de.htwg.command.*
+// import de.htwg.command.*
 import de.htwg.controller.*
+import de.htwg.controller.controllerComponent.controllerBase.{Command, Controller, SetCommand}
 
 import java.io.{ByteArrayOutputStream, PrintStream}
 

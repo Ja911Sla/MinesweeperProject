@@ -1,6 +1,6 @@
-package de.htwg.command
+package de.htwg.controller.controllerComponent.controllerBase
 
-import de.htwg.controller.Controller
+import de.htwg.controller.controllerComponent.controllerBase.Controller
 import de.htwg.model.Board
 
 

@@ -1,10 +1,10 @@
 package de.htwg.factory
 
+import de.htwg.controller.controllerComponent.controllerBase.Controller
 import de.htwg.model.Board
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
 import scala.Console
-import de.htwg.controller.Controller
 import de.htwg.singleton.GameConfig
 
 

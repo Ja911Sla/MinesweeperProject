@@ -1,7 +1,6 @@
 package de.htwg.state
 
-import de.htwg.command.SetCommand
-import de.htwg.controller.Controller
+import de.htwg.controller.controllerComponent.controllerBase.{Controller, SetCommand}
 import de.htwg.factory.BoardFactory
 import de.htwg.model.Board
 import de.htwg.view.Tui

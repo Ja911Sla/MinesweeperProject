@@ -2,7 +2,7 @@
 //
 //import org.scalatest.wordspec.AnyWordSpec
 //import org.scalatest.matchers.should.Matchers.*
-//import de.htwg.controller.Controller
+//import de.htwg.controller.controllerComponent.controllerBase.Controller
 //import de.htwg.factory.BoardFactory
 //import de.htwg.model.Board
 //import de.htwg.view.Gui
@@ -153,7 +153,7 @@
 //
 //        val board = new de.htwg.model.Board(1, 0)
 //        board.cells(0)(0) = cell
-//        Gui.controller = new de.htwg.controller.Controller(new de.htwg.factory.BoardFactory {
+//        Gui.controller = new de.htwg.controller.controllerComponent.controllerBase.Controller(new de.htwg.factory.BoardFactory {
 //          override def createBoard(): de.htwg.model.Board = board
 //        })
 //
@@ -175,7 +175,7 @@
 //
 //        val board = new de.htwg.model.Board(1, 0)
 //        board.cells(0)(0) = cell
-//        Gui.controller = new de.htwg.controller.Controller(new de.htwg.factory.BoardFactory {
+//        Gui.controller = new de.htwg.controller.controllerComponent.controllerBase.Controller(new de.htwg.factory.BoardFactory {
 //          override def createBoard(): de.htwg.model.Board = board
 //        })
 //
@@ -197,7 +197,7 @@
 //
 //        val board = new de.htwg.model.Board(1, 0)
 //        board.cells(0)(0) = cell
-//        Gui.controller = new de.htwg.controller.Controller(new de.htwg.factory.BoardFactory {
+//        Gui.controller = new de.htwg.controller.controllerComponent.controllerBase.Controller(new de.htwg.factory.BoardFactory {
 //          override def createBoard(): de.htwg.model.Board = board
 //        })
 //
@@ -218,7 +218,7 @@
 //
 //        val board = new de.htwg.model.Board(1, 0)
 //        board.cells(0)(0) = cell
-//        Gui.controller = new de.htwg.controller.Controller(new de.htwg.factory.BoardFactory {
+//        Gui.controller = new de.htwg.controller.controllerComponent.controllerBase.Controller(new de.htwg.factory.BoardFactory {
 //          override def createBoard(): de.htwg.model.Board = board
 //        })
 //
@@ -238,7 +238,7 @@
 //
 //        val board = new de.htwg.model.Board(1, 0)
 //        board.cells(0)(0) = cell
-//        Gui.controller = new de.htwg.controller.Controller(new de.htwg.factory.BoardFactory {
+//        Gui.controller = new de.htwg.controller.controllerComponent.controllerBase.Controller(new de.htwg.factory.BoardFactory {
 //          override def createBoard(): de.htwg.model.Board = board
 //        })
 //
