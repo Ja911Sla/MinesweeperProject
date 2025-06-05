@@ -1,12 +1,12 @@
 package de.htwg.state
 
+import de.htwg.command.SetCommand
 import de.htwg.controller.Controller
 import de.htwg.factory.BoardFactory
 import de.htwg.model.Board
 import de.htwg.view.Tui
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
-
 
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream, PrintStream}
 import scala.Console
@@ -87,7 +87,7 @@ class GameStateSpec extends AnyWordSpec {
       // fake einen Spielzug, damit etwas zum Undo da ist
       val row = 0
       val col = 0
-      val cmd = new de.htwg.command.SetCommand(row, col, tui.controller)
+      val cmd = new SetCommand(row, col, tui.controller)
       tui.controller.doAndStore(cmd)
       tui.controller.getBoard.cells(row)(col).isRevealed shouldBe true
 

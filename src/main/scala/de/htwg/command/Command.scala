@@ -4,6 +4,7 @@ import de.htwg.controller.Controller
 import de.htwg.model.Board
 
 
+
 trait Command {
   def doStep(): Unit
   def undoStep(): Unit

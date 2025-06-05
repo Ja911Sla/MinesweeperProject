@@ -1,9 +1,9 @@
 package de.htwg.controller
 
+import de.htwg.command.Command
 import de.htwg.utility.Observable
 import de.htwg.model._
 import de.htwg.factory.BoardFactory
-import de.htwg.command.Command
 import scala.collection.mutable // veränderbare Datenstrukturen
 import scala.util.Try
 

@@ -5,7 +5,7 @@ import de.htwg.factory._
 import scala.util.Random
 import java.util.Scanner
 
-case class Board(val size: Int = 9, val mineCount: Int = 10) {
+case class Board(val size: Int = 9, val mineCount: Int = 10) extends IBoard{
     val cells: Array[Array[GameCell]] = Array.fill(size, size)(GameCell()) //cells füllt das 2D Array mit GameCell Objekten
     private val directions = List((-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)) // liste von alle möglichen Nachbarn
 

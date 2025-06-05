@@ -1,5 +1,6 @@
 package de.htwg.view
 
+import de.htwg.command.SetCommand
 import de.htwg.controller.Controller
 import de.htwg.factory.BoardFactory
 import de.htwg.model.Board
@@ -289,7 +290,7 @@ class TuiSpec extends AnyWordSpec {
       val tui = new Tui(controller)
 
       // Führe einen Zug aus, damit Undo möglich ist
-      val cmd = new de.htwg.command.SetCommand(0, 1, controller)
+      val cmd = new SetCommand(0, 1, controller)
       controller.doAndStore(cmd)
       controller.getBoard.cells(0)(1).isRevealed shouldBe true
 
@@ -306,7 +307,7 @@ class TuiSpec extends AnyWordSpec {
       val tui = new Tui(controller)
 
       // Führe Zug aus + Undo
-      val cmd = new de.htwg.command.SetCommand(1, 1, controller)
+      val cmd = new SetCommand(1, 1, controller)
       controller.doAndStore(cmd)
       tui.processInputLine("U")
       controller.getBoard.cells(1)(1).isRevealed shouldBe false

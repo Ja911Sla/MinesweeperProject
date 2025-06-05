@@ -1,6 +1,6 @@
 package de.htwg.singleton
 
-class GameConfig private() { //object GameConfig {
+class GameConfig private() extends IGameConfig { //object GameConfig {
   private var _boardSize: Int = 9
   private var _mineCount: Int = 15
 
