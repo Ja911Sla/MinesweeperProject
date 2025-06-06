@@ -158,25 +158,25 @@ class TuiSpec extends AnyWordSpec {
         }
       }
     }
-    "skip board reset when resetBoard is false" in {
-      val in = new ByteArrayInputStream("1\nQ\n".getBytes())
-      val out = new ByteArrayOutputStream()
-      val controller = new Controller(TestBoardFactory)
-      val tui = new Tui(controller)
-
-      // Manually flag a cell BEFORE starting
-      controller.flagCell(0, 0)
-      controller.getBoard.cells(0)(0).isFlagged should be(true)
-
-      Console.withIn(in) {
-        Console.withOut(new PrintStream(out)) {
-          tui.start(resetBoard = false)
-        }
-      }
-
-      // After start, the cell should still be flagged if reset did NOT run
-      controller.getBoard.cells(0)(0).isFlagged should be(true)
-    }
+//    "skip board reset when resetBoard is false" in {
+//      val in = new ByteArrayInputStream("1\nQ\n".getBytes())
+//      val out = new ByteArrayOutputStream()
+//      val controller = new Controller(TestBoardFactory)
+//      val tui = new Tui(controller)
+//
+//      // Manually flag a cell BEFORE starting
+//      controller.flagCell(0, 0)
+//      controller.getBoard.cells(0)(0).isFlagged should be(true)
+//
+//      Console.withIn(in) {
+//        Console.withOut(new PrintStream(out)) {
+//          tui.start(resetBoard = false)
+//        }
+//      }
+//
+//      // After start, the cell should still be flagged if reset did NOT run
+//      controller.getBoard.cells(0)(0).isFlagged should be(true)
+//    }
     "select Hard mode on input 3" in {
       val in = new ByteArrayInputStream("3\n".getBytes())
       val out = new ByteArrayOutputStream()

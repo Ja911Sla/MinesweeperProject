@@ -1,12 +1,13 @@
 package de.htwg.factory
 
 import de.htwg.controller.controllerBase.Controller
+import de.htwg.model.BoardInterface
 import de.htwg.model.boardBase.Board
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
+
 import scala.Console
 import de.htwg.singleton.GameConfig
-
 
 import java.io.*
 
@@ -48,7 +49,7 @@ class BoardFactorySpec extends AnyWordSpec {
     }
     "EasyBoardFactory" should {
       "create a 6x6 board with 5 mines" in {
-        val board: Board = EasyBoardFactory.createBoard()
+        val board: BoardInterface = EasyBoardFactory.createBoard()
         board.size shouldBe 6
         board.mineCount shouldBe 5
       }
@@ -56,7 +57,7 @@ class BoardFactorySpec extends AnyWordSpec {
 
     "MediumBoardFactory" should {
       "create a 9x9 board with 15 mines" in {
-        val board: Board = MediumBoardFactory.createBoard()
+        val board: BoardInterface = MediumBoardFactory.createBoard()
         board.size shouldBe 9
         board.mineCount shouldBe 15
       }
@@ -64,7 +65,7 @@ class BoardFactorySpec extends AnyWordSpec {
 
     "HardBoardFactory" should {
       "create a 12x12 board with 35 mines" in {
-        val board: Board = HardBoardFactory.createBoard()
+        val board: BoardInterface = HardBoardFactory.createBoard()
         board.size shouldBe 12
         board.mineCount shouldBe 35
       }

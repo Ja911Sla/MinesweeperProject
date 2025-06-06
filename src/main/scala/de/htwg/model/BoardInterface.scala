@@ -14,11 +14,12 @@ trait BoardInterface {
   def checkWin(): Boolean
 
   def display(revealAll: Boolean = false): String
-
+  
+  
   def bombCountDisplayString(): String
 
   def copyBoard(): BoardInterface
-
+  def mineCount: Int
   def remainingFlags(): Int
   def countAdjacentMines(row: Int, col: Int): Int
   def revealAdjacent(row: Int, col: Int): Unit

@@ -5,6 +5,8 @@ import org.scalatest.wordspec.AnyWordSpec
 
 class ObservableSpec extends AnyWordSpec with Matchers {
 
+  class TestObservable extends Observable
+
   class TestObserver extends Observer {
     var updated = false
 
@@ -16,7 +18,7 @@ class ObservableSpec extends AnyWordSpec with Matchers {
 
   "An Observable" should {
     "notify added observers" in {
-      val observable = new Observable
+      val observable = new TestObservable
       val observer = new TestObserver
 
       observable.add(observer)
@@ -26,7 +28,7 @@ class ObservableSpec extends AnyWordSpec with Matchers {
     }
 
     "not notify removed observers" in {
-      val observable = new Observable
+      val observable = new TestObservable
       val observer = new TestObserver
 
       observable.add(observer)
