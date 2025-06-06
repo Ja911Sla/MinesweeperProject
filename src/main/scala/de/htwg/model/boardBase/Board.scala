@@ -3,7 +3,7 @@ package de.htwg.model.boardBase
 import de.htwg.model.BoardInterface
 
 case class Board(val size: Int = 9, val mineCount: Int = 10) extends BoardInterface {
-  val cells: Array[Array[GameCell]] = Array.fill(size, size)(GameCell()) //cells füllt das 2D Array mit GameCell Objekten
+  override val cells: Array[Array[GameCell]] = Array.fill(size, size)(GameCell()) //cells füllt das 2D Array mit GameCell Objekten
   private val directions = List((-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)) // liste von alle möglichen Nachbarn
 
   private def dynamicHeader: String = {
@@ -132,7 +132,7 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) extends BoardInterf
     s"Bomb amount: ${mineCount - flagged}"
   }
 
-  def copyBoard(): Board = { // copy board neu implementiert für die undo und redo funktionen
+  override def copyBoard(): BoardInterface = { // copy board neu implementiert für die undo und redo funktionen
     val newBoard = new Board(size, mineCount)
     for (r <- 0 until size; c <- 0 until size) {
       val orig = this.cells(r)(c)

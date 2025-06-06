@@ -28,5 +28,5 @@ trait ControllerInterface {
   def undoStackSize: Int
   def redoStackSize: Int
   def add(observer: Observer): Unit
-  def remove(observer: Observer): Unit
+  def remove(observer: Observer):Unit
 }

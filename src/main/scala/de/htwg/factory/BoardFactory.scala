@@ -2,13 +2,14 @@ package de.htwg.factory
 
 import de.htwg.model.boardBase.Board
 import de.htwg.singleton.GameConfig
+import de.htwg.model.BoardInterface
 
 trait BoardFactory {
-  def createBoard(): Board
+  def createBoard(): BoardInterface
 }
 
 object EasyBoardFactory extends BoardFactory {
-  override def createBoard(): Board = {
+  override def createBoard(): BoardInterface = {
     val board = new Board(6, 5)
     board.placeMines()
     board
@@ -16,7 +17,7 @@ object EasyBoardFactory extends BoardFactory {
 }
 
 object MediumBoardFactory extends BoardFactory {
-  override def createBoard(): Board = {
+  override def createBoard(): BoardInterface = {
     val board = new Board(9, 15)
     board.placeMines()
     board
@@ -24,7 +25,7 @@ object MediumBoardFactory extends BoardFactory {
 }
 
 object HardBoardFactory extends BoardFactory {
-  override def createBoard(): Board = {
+  override def createBoard(): BoardInterface = {
     val board = new Board(12, 35)
     board.placeMines()
     board
@@ -32,7 +33,7 @@ object HardBoardFactory extends BoardFactory {
 }
 
 private class ConfigBoardFactory extends BoardFactory {
-  override def createBoard(): Board = {
+  override def createBoard(): BoardInterface = {
     val config = GameConfig.getInstance
     val board = new Board(config.boardSize, config.mineCount)
     board.placeMines()

@@ -4,7 +4,7 @@ trait Observer {
   def update: String
 }
 
-class Observable {
+trait Observable {
   private var subscribers: Vector[Observer] = Vector() // privat da es sonst gegen die Enkapselung verstößt
   def add(s: Observer): Unit = subscribers = subscribers :+ s
   def remove(s: Observer): Unit = subscribers = subscribers.filterNot(o => o == s)

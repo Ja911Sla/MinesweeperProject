@@ -10,17 +10,19 @@ import scala.collection.mutable
 import scala.util.Try
 
 
-class Controller(private var boardFactory: BoardFactory) extends Observable {
-  private var board: Board = boardFactory.createBoard()
+class Controller(private var boardFactory: BoardFactory)
+  extends ControllerInterface with Observable {
+  //class Controller(private var boardFactory: BoardFactory) extends ControllerInterface, Observable {
+  private var board: BoardInterface = boardFactory.createBoard()
   private val timer = new Timer()
   private val undoStack: mutable.Stack[Command] = mutable.Stack() // andu Schtäck
   private val redoStack: mutable.Stack[Command] = mutable.Stack() // redu Schtäck
   var isGameOver: Boolean = false
   var isWon: Boolean = false
 
-  def getBoard: Board = board
+  def getBoard: BoardInterface = board
 
-  def setBoard(storedBoard: Board): Unit = {
+  def setBoard(storedBoard: BoardInterface): Unit = {
     board = storedBoard
     notifyObservers()
   }
@@ -71,7 +73,7 @@ class Controller(private var boardFactory: BoardFactory) extends Observable {
     board.display(revealAll)
   }
 
-  def copyBoard(): Board = {
+  override def copyBoard(): BoardInterface = {
     val storedBoard = board.copyBoard()
     storedBoard
   }

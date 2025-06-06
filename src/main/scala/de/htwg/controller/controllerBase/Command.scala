@@ -1,5 +1,6 @@
 package de.htwg.controller.controllerBase
 
+import de.htwg.model.BoardInterface
 import de.htwg.model.boardBase.Board
 
 
@@ -10,8 +11,8 @@ trait Command {
 }
 
 class SetCommand(row: Int, col: Int, controller: Controller) extends Command {
-  private val oldBoard: Board = controller.copyBoard()
-  private var newBoard: Option[Board] = None
+  private val oldBoard: BoardInterface = controller.copyBoard()
+  private var newBoard: Option[BoardInterface] = None
 
   override def doStep(): Unit = {
     controller.revealCell(row, col)
@@ -30,8 +31,8 @@ class SetCommand(row: Int, col: Int, controller: Controller) extends Command {
   }
 }
 class FlagCommand(row: Int, col: Int, controller: Controller) extends Command {
-  private val oldBoard: Board = controller.copyBoard()
-  private var newBoard: Option[Board] = None
+  private val oldBoard: BoardInterface = controller.copyBoard()
+  private var newBoard: Option[BoardInterface] = None
 
   override def doStep(): Unit = {
     controller.flagCell(row, col)
