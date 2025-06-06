@@ -1,12 +1,28 @@
 package de.htwg.model.boardMock
 
 
+import de.htwg.controller.controllerBase.Command
+import de.htwg.controller.controllerMock.Controller
+import de.htwg.factory.BoardFactory
 import de.htwg.model.boardBase.GameCell
 import de.htwg.model.BoardInterface
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
 
 class BoardSpec extends AnyWordSpec {
+
+  // Dummy Command für Tests
+  class DummyCommand extends Command {
+    override def doStep(): Unit = {}
+
+    override def undoStep(): Unit = {}
+
+    override def redoStep(): Unit = {}
+  }
+
+  class DummyFactory extends BoardFactory {
+    override def createBoard() = null // für diesen Test nicht relevant
+  }
 
   "A BoardMock" should {
 
@@ -71,6 +87,26 @@ class BoardSpec extends AnyWordSpec {
 
     "return 0 for remaining flags" in {
       board.remainingFlags() shouldBe 0
+    }
+
+    val controller = new Controller(new DummyFactory())
+
+    "not fail when doAndStore is called" in {
+      noException should be thrownBy {
+        controller.doAndStore(new DummyCommand)
+      }
+    }
+
+    "not fail when undo is called" in {
+      noException should be thrownBy {
+        controller.undo()
+      }
+    }
+
+    "not fail when redo is called" in {
+      noException should be thrownBy {
+        controller.redo()
+      }
     }
   }
 }

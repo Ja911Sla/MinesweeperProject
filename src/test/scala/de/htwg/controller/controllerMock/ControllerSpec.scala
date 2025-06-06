@@ -8,7 +8,7 @@ import de.htwg.utility.Observer
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
 
-class ControllerMockSpec extends AnyWordSpec {
+class ControllerSpec extends AnyWordSpec {
 
   class DummyFactory extends BoardFactory {
     override def createBoard(): BoardInterface = new de.htwg.model.boardMock.Board()
