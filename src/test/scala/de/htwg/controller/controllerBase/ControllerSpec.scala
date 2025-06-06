@@ -1,10 +1,10 @@
-package de.htwg.controller
+package de.htwg.controller.controllerBase
 
 import de.htwg.factory.BoardFactory
 import de.htwg.model.boardBase.Board
 import de.htwg.utility.Observer
-import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 // import de.htwg.command.*
 import de.htwg.controller.*
 import de.htwg.controller.controllerBase.{Command, Controller, SetCommand}

@@ -1,7 +1,7 @@
 package de.htwg.controller.controllerBase
 
 import de.htwg.controller.ControllerInterface
-import de.htwg.factory.BoardFactory
+import de.htwg.factory.{BoardFactory, BoardFactoryInterface}
 import de.htwg.model.*
 import de.htwg.model.boardBase.{Board, Timer}
 import de.htwg.utility.Observable
@@ -42,8 +42,7 @@ class Controller(private var boardFactory: BoardFactory)
     if (!safe) {
       isGameOver = true
     } else if (checkWin()) {
-      isWon = true
-    }
+      isWon = true }
     notifyObservers()
     safe
   }

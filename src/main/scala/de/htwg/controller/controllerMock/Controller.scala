@@ -9,7 +9,7 @@ import de.htwg.model.BoardInterface
 import de.htwg.factory.*
 import de.htwg.model.boardBase.Board
 
-class Controller(private var boardFactory: BoardFactoryInterface) extends ControllerInterface {
+class Controller(private var boardFactory: BoardFactory) extends ControllerInterface {
   private var board: BoardInterface = new Board()
   private var observers: List[Observer] = List.empty
   var revealed: Boolean = false

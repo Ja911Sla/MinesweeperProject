@@ -3,7 +3,7 @@ package de.htwg.controller
 import de.htwg.controller.controllerBase.Command
 import de.htwg.utility.*
 import de.htwg.model.*
-import de.htwg.factory.BoardFactory
+import de.htwg.factory.{BoardFactory, BoardFactoryInterface}
 
 import scala.collection.mutable
 import scala.util.Try
