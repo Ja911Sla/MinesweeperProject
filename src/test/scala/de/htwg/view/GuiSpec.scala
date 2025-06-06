@@ -4,7 +4,7 @@
 //import org.scalatest.matchers.should.Matchers.*
 //import de.htwg.controller.controllerComponent.controllerBase.Controller
 //import de.htwg.factory.BoardFactory
-//import de.htwg.model.Board
+//import de.htwg.model.boardBase.Board
 //import de.htwg.view.Gui
 //
 //import scala.swing.{BorderPanel, Button, Frame}
@@ -143,7 +143,7 @@
 //    "GuiObserver update" should {
 //      "set 💣 if cell is revealed and is mine" in {
 //        assume(!GraphicsEnvironment.isHeadless(), "GUI tests are skipped in headle Eenvironments")
-//        val cell = new de.htwg.model.GameCell()
+//        val cell = new de.htwg.model.boardBase.GameCell()
 //        cell.isRevealed = true
 //        cell.isMine = true
 //
@@ -151,10 +151,10 @@
 //        Gui.gridPanel.contents.clear()
 //        Gui.gridPanel.contents += button
 //
-//        val board = new de.htwg.model.Board(1, 0)
+//        val board = new de.htwg.model.boardBase.Board(1, 0)
 //        board.cells(0)(0) = cell
 //        Gui.controller = new de.htwg.controller.controllerComponent.controllerBase.Controller(new de.htwg.factory.BoardFactory {
-//          override def createBoard(): de.htwg.model.Board = board
+//          override def createBoard(): de.htwg.model.boardBase.Board = board
 //        })
 //
 //        Gui.runObserverUpdate()
@@ -164,7 +164,7 @@
 //
 //      "set number if cell is revealed and has adjacent mines" in {
 //        assume(!GraphicsEnvironment.isHeadless(), "GUI tests are skipped in headle Eenvironments")
-//        val cell = new de.htwg.model.GameCell()
+//        val cell = new de.htwg.model.boardBase.GameCell()
 //        cell.isRevealed = true
 //        cell.isMine = false
 //        cell.mineCount = 3
@@ -173,10 +173,10 @@
 //        Gui.gridPanel.contents.clear()
 //        Gui.gridPanel.contents += button
 //
-//        val board = new de.htwg.model.Board(1, 0)
+//        val board = new de.htwg.model.boardBase.Board(1, 0)
 //        board.cells(0)(0) = cell
 //        Gui.controller = new de.htwg.controller.controllerComponent.controllerBase.Controller(new de.htwg.factory.BoardFactory {
-//          override def createBoard(): de.htwg.model.Board = board
+//          override def createBoard(): de.htwg.model.boardBase.Board = board
 //        })
 //
 //        Gui.runObserverUpdate()
@@ -186,7 +186,7 @@
 //
 //      "set empty string if cell is revealed and has no adjacent mines" in {
 //        assume(!GraphicsEnvironment.isHeadless(), "GUI tests are skipped in headle Eenvironments")
-//        val cell = new de.htwg.model.GameCell()
+//        val cell = new de.htwg.model.boardBase.GameCell()
 //        cell.isRevealed = true
 //        cell.isMine = false
 //        cell.mineCount = 0
@@ -195,10 +195,10 @@
 //        Gui.gridPanel.contents.clear()
 //        Gui.gridPanel.contents += button
 //
-//        val board = new de.htwg.model.Board(1, 0)
+//        val board = new de.htwg.model.boardBase.Board(1, 0)
 //        board.cells(0)(0) = cell
 //        Gui.controller = new de.htwg.controller.controllerComponent.controllerBase.Controller(new de.htwg.factory.BoardFactory {
-//          override def createBoard(): de.htwg.model.Board = board
+//          override def createBoard(): de.htwg.model.boardBase.Board = board
 //        })
 //
 //        Gui.runObserverUpdate()
@@ -208,7 +208,7 @@
 //
 //      "set 🚩 if cell is flagged but not revealed" in {
 //        assume(!GraphicsEnvironment.isHeadless(), "GUI tests are skipped in headle Eenvironments")
-//        val cell = new de.htwg.model.GameCell()
+//        val cell = new de.htwg.model.boardBase.GameCell()
 //        cell.isRevealed = false
 //        cell.isFlagged = true
 //
@@ -216,10 +216,10 @@
 //        Gui.gridPanel.contents.clear()
 //        Gui.gridPanel.contents += button
 //
-//        val board = new de.htwg.model.Board(1, 0)
+//        val board = new de.htwg.model.boardBase.Board(1, 0)
 //        board.cells(0)(0) = cell
 //        Gui.controller = new de.htwg.controller.controllerComponent.controllerBase.Controller(new de.htwg.factory.BoardFactory {
-//          override def createBoard(): de.htwg.model.Board = board
+//          override def createBoard(): de.htwg.model.boardBase.Board = board
 //        })
 //
 //        Gui.runObserverUpdate()
@@ -228,7 +228,7 @@
 //      }
 //
 //      "set ⬜ if cell is neither revealed nor flagged" in {
-//        val cell = new de.htwg.model.GameCell()
+//        val cell = new de.htwg.model.boardBase.GameCell()
 //        cell.isRevealed = false
 //        cell.isFlagged = false
 //
@@ -236,10 +236,10 @@
 //        Gui.gridPanel.contents.clear()
 //        Gui.gridPanel.contents += button
 //
-//        val board = new de.htwg.model.Board(1, 0)
+//        val board = new de.htwg.model.boardBase.Board(1, 0)
 //        board.cells(0)(0) = cell
 //        Gui.controller = new de.htwg.controller.controllerComponent.controllerBase.Controller(new de.htwg.factory.BoardFactory {
-//          override def createBoard(): de.htwg.model.Board = board
+//          override def createBoard(): de.htwg.model.boardBase.Board = board
 //        })
 //
 //        Gui.runObserverUpdate()

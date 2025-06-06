@@ -1,10 +1,10 @@
 
 import de.htwg.*
-import de.htwg.controller.controllerComponent.controllerBase.Controller
+import de.htwg.controller.controllerBase.Controller
 import de.htwg.view.Tui
-import de.htwg.model.Board
 import de.htwg.utility.Observer
 import de.htwg.factory._
+import de.htwg.model.boardBase.Board
 import de.htwg.singleton.GameConfig
 import de.htwg.strategy.GameModeStrategy
 import scala.concurrent.ExecutionContext.Implicits.global

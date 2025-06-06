@@ -1,7 +1,8 @@
 package de.htwg.view
 
 //import de.htwg.command.*
-import de.htwg.controller.controllerComponent.controllerBase.{Controller, FlagCommand, SetCommand}
+
+import de.htwg.controller.controllerBase.{Controller, FlagCommand, SetCommand}
 import de.htwg.strategy.*
 import de.htwg.utility.Observer
 import de.htwg.factory.*

@@ -1,6 +1,6 @@
 package de.htwg.view
 
-import de.htwg.controller.controllerComponent.controllerBase.Controller
+import de.htwg.controller.controllerBase.Controller
 import scala.swing.*
 import scala.swing.event.{MouseClicked, ButtonClicked}
 import javax.swing.SwingUtilities

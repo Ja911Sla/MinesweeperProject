@@ -1,6 +1,6 @@
 package de.htwg.state
 
-import de.htwg.controller.controllerComponent.controllerBase.Controller
+import de.htwg.controller.controllerBase.Controller
 import de.htwg.view.Tui
 
 trait GameState {

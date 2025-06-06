@@ -8,9 +8,9 @@ import de.htwg.utility._
 import de.htwg.factory.*
 
 trait GuiInterface {
-  def initialize(controller: IController): Unit
-  def attachController(controller: IController): Unit
-  def startGame(factory: IBoardFactory): Unit
+  def initialize(controller: ControllerInterface): Unit
+  def attachController(controller: ControllerInterface): Unit
+  def startGame(factory: BoardFactoryInterface): Unit
   def runObserverUpdate(): Unit
 }
 

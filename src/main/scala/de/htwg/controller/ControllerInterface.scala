@@ -1,6 +1,6 @@
 package de.htwg.controller
 
-import de.htwg.controller.controllerComponent.controllerBase.Command
+import de.htwg.controller.controllerBase.Command
 import de.htwg.utility.*
 import de.htwg.model.*
 import de.htwg.factory.BoardFactory
@@ -10,16 +10,16 @@ import scala.util.Try
 import scala.collection.mutable
 import scala.util.Try
 
-trait IController {
-  def getBoard: IBoard
-  def setBoard(board: IBoard): Unit
+trait ControllerInterface {
+  def getBoard: BoardInterface
+  def setBoard(board: BoardInterface): Unit
   def createNewBoard(factory: BoardFactory): Unit
   def revealCell(row: Int, col: Int): Boolean
   def flagCell(row: Int, col: Int): Unit
   def checkWin(): Boolean
   def resetGame(): String
   def displayBoardToString(revealAll: Boolean = false): String
-  def copyBoard(): IBoard
+  def copyBoard(): BoardInterface
   def doAndStore(cmd: Command): Unit
   def undo(): Unit
   def redo(): Unit

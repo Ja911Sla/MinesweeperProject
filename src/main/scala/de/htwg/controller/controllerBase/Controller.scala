@@ -1,7 +1,9 @@
-package de.htwg.controller.controllerComponent.controllerBase
+package de.htwg.controller.controllerBase
 
+import de.htwg.controller.ControllerInterface
 import de.htwg.factory.BoardFactory
 import de.htwg.model.*
+import de.htwg.model.boardBase.{Board, Timer}
 import de.htwg.utility.Observable
 
 import scala.collection.mutable

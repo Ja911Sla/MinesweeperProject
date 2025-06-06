@@ -1,5 +1,6 @@
 package de.htwg.model
 
+import de.htwg.model.boardBase.Timer
 import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers.*
 

@@ -1,8 +1,6 @@
-package de.htwg.controller.controllerComponent.controllerBase
+package de.htwg.controller.controllerBase
 
-import de.htwg.controller.controllerComponent.controllerBase.Controller
-import de.htwg.model.Board
-
+import de.htwg.model.boardBase.Board
 
 
 trait Command {

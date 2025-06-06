@@ -1,8 +1,8 @@
 package de.htwg.state
 
-import de.htwg.controller.controllerComponent.controllerBase.{Controller, SetCommand}
+import de.htwg.controller.controllerBase.{Controller, SetCommand}
 import de.htwg.factory.BoardFactory
-import de.htwg.model.Board
+import de.htwg.model.boardBase.Board
 import de.htwg.view.Tui
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec

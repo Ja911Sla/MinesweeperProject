@@ -1,7 +1,7 @@
 package de.htwg.factory
 
-import de.htwg.controller.controllerComponent.controllerBase.Controller
-import de.htwg.model.Board
+import de.htwg.controller.controllerBase.Controller
+import de.htwg.model.boardBase.Board
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
 import scala.Console

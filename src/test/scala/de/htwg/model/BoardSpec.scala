@@ -1,6 +1,6 @@
 package de.htwg.model
 
-import de.htwg.model.Board
+import de.htwg.model.boardBase.Board
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
 import scala.Console

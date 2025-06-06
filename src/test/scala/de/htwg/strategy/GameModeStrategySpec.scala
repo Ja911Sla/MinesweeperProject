@@ -1,13 +1,12 @@
 package de.htwg.strategy
 
-
-import de.htwg.controller.controllerComponent.controllerBase.Controller
-import de.htwg.model.Board
+import de.htwg.controller.controllerBase.Controller
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
 
 import scala.Console
 import de.htwg.factory._
+import de.htwg.model.boardBase.Board
 import de.htwg.singleton.GameConfig
 
 class GameModeStrategySpec extends AnyWordSpec {

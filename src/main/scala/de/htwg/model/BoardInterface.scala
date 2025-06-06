@@ -1,6 +1,6 @@
 package de.htwg.model
 
-trait IBoard {
+trait BoardInterface {
   def reset(): String
   def placeMines(): Int
   def reveal(row: Int, col: Int): Boolean
@@ -8,7 +8,7 @@ trait IBoard {
   def checkWin(): Boolean
   def display(revealAll: Boolean = false): String
   def bombCountDisplayString(): String
-  def copyBoard(): IBoard
+  def copyBoard(): BoardInterface
   def remainingFlags(): Int
   def countAdjacentMines(row: Int, col: Int): Int
 }
