@@ -12,7 +12,7 @@ class BoardSpec extends AnyWordSpec {
 
     val board: BoardInterface = new Board()
 
-    "have correct size and mineCount" in {
+    "have correct size and mineCountt" in {
       board.size shouldBe 9
       board.mineCount shouldBe 10
     }
