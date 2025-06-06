@@ -2,7 +2,7 @@ package de.htwg.controller.controllerMock
 
 import de.htwg.controller.ControllerInterface
 import de.htwg.controller.controllerMock.Controller
-import de.htwg.factory.BoardFactoryInterface
+import de.htwg.factory.{BoardFactory, BoardFactoryInterface}
 import de.htwg.model.BoardInterface
 import de.htwg.utility.Observer
 import org.scalatest.matchers.should.Matchers.*
@@ -10,7 +10,7 @@ import org.scalatest.wordspec.AnyWordSpec
 
 class ControllerMockSpec extends AnyWordSpec {
 
-  class DummyFactory extends BoardFactoryInterface {
+  class DummyFactory extends BoardFactory {
     override def createBoard(): BoardInterface = new de.htwg.model.boardMock.Board()
   }
 
