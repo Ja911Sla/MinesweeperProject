@@ -1,7 +1,7 @@
 package de.htwg.view
 
 import de.htwg.controller.controllerBase.{Controller, SetCommand}
-import de.htwg.factory.BoardFactory
+import de.htwg.factory.{BoardFactory, EasyBoardFactory}
 import de.htwg.model.boardBase.Board
 import de.htwg.singleton.GameConfig
 import org.scalatest.matchers.should.Matchers.*
@@ -330,6 +330,69 @@ class TuiSpec extends AnyWordSpec {
       result shouldBe true
       controller.getBoard.cells(0)(0).isRevealed shouldBe true
     }*/
+    "A fresh start should call chooseDifficulty and resetGame" in {
+      val in = new ByteArrayInputStream("1\nQ\n".getBytes())
+      val out = new ByteArrayOutputStream()
+      val tui = new Tui(new Controller(BoardFactory.getInstance))
+
+      Console.withIn(in) {
+        Console.withOut(new PrintStream(out)) {
+          tui.start(resetBoard = true)
+        }
+      }
+
+      val output = out.toString
+      output should include("Willkommen zu Minesweeper")
+      output should include("Spiel beendet.")
+    }
+    "Print welcome message during start" in {
+      val in = new ByteArrayInputStream("1\nQ\n".getBytes())
+      val out = new ByteArrayOutputStream()
+      val tui = new Tui(new Controller(BoardFactory.getInstance))
+
+      Console.withIn(in) {
+        Console.withOut(new PrintStream(out)) {
+          tui.start()
+        }
+      }
+
+      out.toString should include("Willkommen zu Minesweeper")
+    }
+    "preserve manual flag when not resetting board" in {
+      val controller = new Controller(BoardFactory.getInstance)
+      val tui = new Tui(controller)
+
+      // Simuliere manuelles Setup: Schwierigkeit & gesetzte Flagge
+      controller.createNewBoard(EasyBoardFactory)
+      controller.flagCell(0, 0)
+      controller.isDifficultySet = true
+
+      val before = controller.getBoard
+
+      // Nicht `tui.start`, sondern gezielt Methoden
+      tui.chooseDifficulty() // wird sofort returnen, da isDifficultySet = true
+
+      // Sicherstellen, dass Board nicht verändert wurde
+      controller.getBoard eq before shouldBe true
+
+      // Flagge noch vorhanden
+      controller.getBoard.cells(0)(0).isFlagged shouldBe true
+    }
+    "Display the board while in PlayingState" in {
+      val in = new ByteArrayInputStream("1\nQ\n".getBytes())
+      val out = new ByteArrayOutputStream()
+      val tui = new Tui(new Controller(BoardFactory.getInstance))
+
+      Console.withIn(in) {
+        Console.withOut(new PrintStream(out)) {
+          tui.start()
+        }
+      }
+
+      val output = out.toString
+      output should include("⬜") // typisches Zeichen aus dem Board
+    }
+    
 
 
   }
