@@ -1,11 +1,11 @@
-package de.htwg.model
+package de.htwg.model.boardBase
 
 import de.htwg.model.boardBase.Board
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
-import scala.Console
 
 import java.io.*
+import scala.Console
 
 
 class BoardSpec extends AnyWordSpec {

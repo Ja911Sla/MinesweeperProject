@@ -1,4 +1,6 @@
-package de.htwg.model
+package de.htwg.model.boardBase
+
+
 
 /*import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers._

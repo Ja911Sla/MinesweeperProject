@@ -1,8 +1,8 @@
-package de.htwg.model
+package de.htwg.model.boardBase
 
 import de.htwg.model.boardBase.Timer
-import org.scalatest.wordspec.AnyWordSpec
 import org.scalatest.matchers.should.Matchers.*
+import org.scalatest.wordspec.AnyWordSpec
 
 class TimerSpec extends AnyWordSpec {
 

@@ -1,4 +1,4 @@
-package de.htwg.model
+package de.htwg.model.boardBase
 
 import de.htwg.*
 import de.htwg.model.boardBase.GameCell
