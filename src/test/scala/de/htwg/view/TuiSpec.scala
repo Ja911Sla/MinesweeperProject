@@ -2,6 +2,7 @@ package de.htwg.view
 
 import de.htwg.controller.controllerBase.{Controller, SetCommand}
 import de.htwg.factory.{BoardFactory, EasyBoardFactory}
+import de.htwg.model.BoardInterface
 import de.htwg.model.boardBase.Board
 import de.htwg.singleton.GameConfig
 import org.scalatest.matchers.should.Matchers.*
@@ -393,6 +394,71 @@ class TuiSpec extends AnyWordSpec {
       output should include("⬜") // typisches Zeichen aus dem Board
     }
     
+// neu
+    "should print 'Eingabestrom beendet.' on None input" in {
+      val controller = new Controller(BoardFactory.getInstance)
+      val tui = new Tui(controller)
+      controller.isDifficultySet = true
+      controller.createNewBoard(EasyBoardFactory)
+
+      val in = new java.io.ByteArrayInputStream(Array[Byte]()) // sofort EOF
+      val out = new ByteArrayOutputStream()
+
+      Console.withIn(in) {
+        Console.withOut(new PrintStream(out)) {
+          tui.start()
+        }
+      }
+
+      out.toString should include("Eingabestrom beendet.")
+    }
+    "should trigger second chooseDifficulty when board is null or empty" in {
+      val controller = new Controller(BoardFactory.getInstance) {
+        override def getBoard: BoardInterface = new Board(6, 0) {
+          override val cells: Array[Array[GameCell]] = Array.ofDim[GameCell](0, 0)
+        }
+      }
+      val tui = new Tui(controller)
+
+      val in = new ByteArrayInputStream("1\nQ\n".getBytes())
+      val out = new ByteArrayOutputStream()
+
+      Console.withIn(in) {
+        Console.withOut(new PrintStream(out)) {
+          tui.start()
+        }
+      }
+
+      out.toString should include("Wähle Schwierigkeitsgrad:")
+    }
+    "should return false after winning" in {
+      val controller = new Controller(BoardFactory.getInstance)
+      val tui = new Tui(controller)
+
+      controller.getBoard.cells(0)(0).isMine = true
+      controller.getBoard.cells(0)(1).isMine = false
+      controller.getBoard.cells(1)(0).isMine = false
+      controller.getBoard.cells(1)(1).isMine = false
+
+      val out = new ByteArrayOutputStream()
+      Console.withOut(new PrintStream(out)) {
+        tui.processInputLine("F A1") // korrekt flaggen
+        tui.processInputLine("B1")
+        tui.processInputLine("B2")
+        tui.processInputLine("A2")
+      }
+
+      out.toString should include("Du hast gewonnen!")
+    }
+    "should stop the tui loop when requestQuit is called" in {
+      val controller = new Controller(BoardFactory.getInstance)
+      val tui = new Tui(controller)
+
+      tui.requestQuit()
+      val method = tui.getClass.getDeclaredField("shouldRun")
+      method.setAccessible(true)
+      method.get(tui) shouldBe false
+    }
 
 
   }

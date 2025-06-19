@@ -13,7 +13,9 @@ import de.htwg.view.Gui
 
 // $COVERAGE-OFF$
 @main
-def main(): Unit = runMain()
+def main(): Unit = {
+  MinesweeperModule.start()
+}
 // $COVERAGE-ON$
 def runMain(): Unit = {
   val controller = new Controller(BoardFactory.getInstance)
