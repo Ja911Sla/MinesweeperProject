@@ -13,7 +13,14 @@ lazy val root = (project in file("."))
       // UI
       "org.scala-lang.modules" %% "scala-swing" % "3.0.0",
 
-      // Dependency Injection
+      // JSON (Play-JSON für Scala 3)
+      "com.typesafe.play" %% "play-json" % "2.10.0-RC9" cross CrossVersion.for3Use2_13,
+
+
+// XML
+      "org.scala-lang.modules" %% "scala-xml" % "2.4.0",
+
+      // Dependency Injection (optional, falls nicht genutzt)
       "com.google.inject" % "guice" % "7.0.0",
       "net.codingwell" %% "scala-guice" % "7.0.0" cross CrossVersion.for3Use2_13,
 
@@ -25,5 +32,5 @@ lazy val root = (project in file("."))
     // Testeinstellungen
     coverageEnabled := true,
     coverageFailOnMinimum := false,
-    Test / fork:=true
-)
+    Test / fork := true
+  )

@@ -87,4 +87,8 @@ class Controller(private var boardFactory: BoardFactory) extends ControllerInter
 
   override def getUndoStack: mutable.Stack[Command] = undoStack
   override def getRedoStack: mutable.Stack[Command] = redoStack
+
+  override def save(): Unit = ???
+
+  override def load(): Unit = ???
 }

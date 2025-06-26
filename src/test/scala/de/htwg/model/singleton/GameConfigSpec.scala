@@ -2,6 +2,7 @@ package de.htwg.model.singleton
 
 import de.htwg.controller.controllerBase.Controller
 import de.htwg.controller.factory.BoardFactory
+import de.htwg.fileio.FileIOInterface
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
 
@@ -10,35 +11,42 @@ import de.htwg.model.boardBase.Board
 import de.htwg.model.singleton.GameConfig
 
 class GameConfigSpec extends AnyWordSpec {
-    "A board's configuration" should {
+
+  class DummyFileIO extends FileIOInterface {
+    override def save(board: de.htwg.model.BoardInterface): Unit = {}
+
+    override def load(): de.htwg.model.BoardInterface = new Board(2, 1)
+  }
+
+  "A board's configuration" should {
       "have default values set" in {
         GameConfig.getInstance.setCustom(9, 15)
-        val controller = new Controller(BoardFactory.getInstance)
+        val controller = new Controller(BoardFactory.getInstance, new DummyFileIO())
         GameConfig.getInstance.reset
         GameConfig.getInstance.boardSize should be (9)
         GameConfig.getInstance.mineCount should be (10)
       }
       "have an easy size" in {
         GameConfig.getInstance.setCustom(6, 5)
-        val controller = new Controller(BoardFactory.getInstance)
+        val controller = new Controller(BoardFactory.getInstance, new DummyFileIO())
         controller.getBoard.size should be (6)
         controller.getBoard.mineCount should be (5)
       }
       "have a medium size" in {
         GameConfig.getInstance.setCustom(9, 15)
-        val controller = new Controller(BoardFactory.getInstance)
+        val controller = new Controller(BoardFactory.getInstance, new DummyFileIO())
         controller.getBoard.size should be (9)
         controller.getBoard.mineCount should be (15)
       }
       "have a big size" in {
         GameConfig.getInstance.setCustom(12, 35)
-        val controller = new Controller(BoardFactory.getInstance)
+        val controller = new Controller(BoardFactory.getInstance, new DummyFileIO())
         controller.getBoard.size should be(12)
         controller.getBoard.mineCount should be(35)
       }
       "have a custom size" in {
         GameConfig.getInstance.setCustom(8, 25)
-        val controller = new Controller(BoardFactory.getInstance)
+        val controller = new Controller(BoardFactory.getInstance, new DummyFileIO())
         controller.getBoard.size should be(8)
         controller.getBoard.mineCount should be(25)
       }

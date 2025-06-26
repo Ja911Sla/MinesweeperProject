@@ -1,6 +1,8 @@
 package de.htwg.model.boardBase
 
 import de.htwg.model.BoardInterface
+import play.api.libs.json._
+import scala.xml._
 
 case class Board(val size: Int = 9, val mineCount: Int = 10) extends BoardInterface {
   override val cells: Array[Array[GameCell]] = Array.fill(size, size)(GameCell()) //cells füllt das 2D Array mit GameCell Objekten
@@ -147,5 +149,95 @@ case class Board(val size: Int = 9, val mineCount: Int = 10) extends BoardInterf
 
   def remainingFlags(): Int = {
     mineCount - cells.flatten.count(_.isFlagged)
+  }
+}
+
+object Board {
+  import play.api.libs.json._
+  import scala.xml._
+
+  // JSON-Format aus vorheriger Antwort
+  implicit val boardFormat: Format[Board] = new Format[Board] {
+    override def reads(json: JsValue): JsResult[Board] = {
+      val size = (json \ "size").as[Int]
+      val mineCount = (json \ "mineCount").as[Int]
+      val board = new Board(size, mineCount)
+      val cellsJson = (json \ "cells").as[JsArray]
+
+      for (cellJson <- cellsJson.value) {
+        val row = (cellJson \ "row").as[Int]
+        val col = (cellJson \ "col").as[Int]
+        val cell = board.cells(row)(col)
+        cell.isMine = (cellJson \ "isMine").as[Boolean]
+        cell.isRevealed = (cellJson \ "isRevealed").as[Boolean]
+        cell.isFlagged = (cellJson \ "isFlagged").as[Boolean]
+        cell.mineCount = (cellJson \ "mineCount").as[Int]
+      }
+
+      JsSuccess(board)
+    }
+
+    override def writes(board: Board): JsValue = Json.obj(
+      "size" -> board.size,
+      "mineCount" -> board.mineCount,
+      "cells" -> JsArray(
+        for {
+          row <- board.cells.indices
+          col <- board.cells(row).indices
+        } yield Json.obj(
+          "row" -> row,
+          "col" -> col,
+          "isMine" -> board.cells(row)(col).isMine,
+          "isRevealed" -> board.cells(row)(col).isRevealed,
+          "isFlagged" -> board.cells(row)(col).isFlagged,
+          "mineCount" -> board.cells(row)(col).mineCount
+        )
+      )
+    )
+  }
+
+  def toJson(board: BoardInterface): JsValue =
+    Json.toJson(board.asInstanceOf[Board])
+
+  def fromJson(json: JsValue): Board =
+    json.as[Board]
+
+  def toXml(board: BoardInterface): Elem = {
+    <board size={board.size.toString} mineCount={board.mineCount.toString}>
+      {
+      for {
+        row <- board.cells.indices
+        col <- board.cells(row).indices
+      } yield {
+        val cell = board.cells(row)(col)
+          <cell
+          row={row.toString}
+          col={col.toString}
+          isMine={cell.isMine.toString}
+          isRevealed={cell.isRevealed.toString}
+          isFlagged={cell.isFlagged.toString}
+          mineCount={cell.mineCount.toString}
+          />
+      }
+      }
+    </board>
+  }
+
+  def fromXml(xml: Elem): Board = {
+    val size = (xml \ "@size").text.toInt
+    val mineCount = (xml \ "@mineCount").text.toInt
+    val board = new Board(size, mineCount)
+
+    for (cell <- xml \\ "cell") {
+      val row = (cell \ "@row").text.toInt
+      val col = (cell \ "@col").text.toInt
+      val c = board.cells(row)(col)
+      c.isMine = (cell \ "@isMine").text.toBoolean
+      c.isRevealed = (cell \ "@isRevealed").text.toBoolean
+      c.isFlagged = (cell \ "@isFlagged").text.toBoolean
+      c.mineCount = (cell \ "@mineCount").text.toInt
+    }
+
+    board
   }
 }

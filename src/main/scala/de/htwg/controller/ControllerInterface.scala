@@ -37,4 +37,7 @@ trait ControllerInterface {
   def getUndoStack: mutable.Stack[Command]
 
   def getRedoStack: mutable.Stack[Command]
+
+  def save(): Unit
+  def load(): Unit
 }

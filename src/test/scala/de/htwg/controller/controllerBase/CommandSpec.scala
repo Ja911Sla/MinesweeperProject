@@ -4,6 +4,7 @@ package de.htwg.controller.controllerBase
 
 import de.htwg.controller.controllerBase.{Controller, FlagCommand, SetCommand}
 import de.htwg.controller.factory.BoardFactory
+import de.htwg.fileio.FileIOInterface
 import de.htwg.model.boardBase.Board
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
@@ -11,13 +12,19 @@ import org.scalatest.wordspec.AnyWordSpec
 
 class CommandSpec extends AnyWordSpec {
 
+  class DummyFileIO extends FileIOInterface {
+    override def save(board: de.htwg.model.BoardInterface): Unit = {}
+
+    override def load(): de.htwg.model.BoardInterface = new Board(2, 1)
+  }
+
   object TestBoardFactory extends BoardFactory {
     override def createBoard(): Board = new Board(2, 1) 
   }
   
   "A SetCommand" should {
     "reveal a cell when doStep is called" in {
-      val controller = new Controller(TestBoardFactory)
+      val controller = new Controller(TestBoardFactory, new DummyFileIO())
       val row = 0
       val col = 0
 
@@ -31,7 +38,7 @@ class CommandSpec extends AnyWordSpec {
     }
 
     "undo the reveal when undoStep is called" in {
-      val controller = new Controller(TestBoardFactory)
+      val controller = new Controller(TestBoardFactory, new DummyFileIO())
       val row = 0
       val col = 0
 
@@ -45,7 +52,7 @@ class CommandSpec extends AnyWordSpec {
     }
 
     "redo the reveal when redoStep is called" in {
-      val controller = new Controller(TestBoardFactory)
+      val controller = new Controller(TestBoardFactory, new DummyFileIO())
       val row = 0
       val col = 0
 
@@ -60,7 +67,7 @@ class CommandSpec extends AnyWordSpec {
     }
 
     "work with Controller.doAndStore and undo" in {
-      val controller = new Controller(TestBoardFactory)
+      val controller = new Controller(TestBoardFactory, new DummyFileIO())
       val row = 1
       val col = 1
 
@@ -73,7 +80,7 @@ class CommandSpec extends AnyWordSpec {
       controller.getBoard.cells(row)(col).isRevealed shouldBe false
     }
     "not redo when no newBoard is present in SetCommand" in {
-      val controller = new Controller(TestBoardFactory)
+      val controller = new Controller(TestBoardFactory, new DummyFileIO())
       val row = 0
       val col = 0
 
@@ -83,7 +90,7 @@ class CommandSpec extends AnyWordSpec {
       // Kein assert nötig, da println nicht getestet wird – aber Zeile wird gecovert!
     }
     "undo a flag correctly with FlagCommand" in {
-      val controller = new Controller(TestBoardFactory)
+      val controller = new Controller(TestBoardFactory, new DummyFileIO())
       val row = 1
       val col = 1
 
@@ -95,7 +102,7 @@ class CommandSpec extends AnyWordSpec {
       controller.getBoard.cells(row)(col).isFlagged shouldBe false
     }
     "redo a flag correctly with FlagCommand" in {
-      val controller = new Controller(TestBoardFactory)
+      val controller = new Controller(TestBoardFactory, new DummyFileIO())
       val row = 1
       val col = 1
 
@@ -107,7 +114,7 @@ class CommandSpec extends AnyWordSpec {
       controller.getBoard.cells(row)(col).isFlagged shouldBe true
     }
     "not redo flag if no newBoard is set in FlagCommand" in {
-      val controller = new Controller(TestBoardFactory)
+      val controller = new Controller(TestBoardFactory, new DummyFileIO())
       val row = 0
       val col = 1
 

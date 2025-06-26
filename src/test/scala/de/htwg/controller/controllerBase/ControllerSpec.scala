@@ -1,6 +1,7 @@
 package de.htwg.controller.controllerBase
 
 import de.htwg.controller.factory.BoardFactory
+import de.htwg.fileio.FileIOInterface
 import de.htwg.model.boardBase.Board
 import de.htwg.utility.Observer
 import org.scalatest.matchers.should.Matchers
@@ -12,6 +13,12 @@ import de.htwg.controller.controllerBase.{Command, Controller, SetCommand}
 import java.io.{ByteArrayOutputStream, PrintStream}
 
 class ControllerSpec extends AnyWordSpec with Matchers {
+
+  class DummyFileIO extends FileIOInterface {
+    override def save(board: de.htwg.model.BoardInterface): Unit = {}
+
+    override def load(): de.htwg.model.BoardInterface = new Board(2, 1)
+  }
 
   // Factory für Testzwecke 
   object TestBoardFactory extends BoardFactory {
@@ -48,7 +55,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
   "A Controller" should {
 
     "after creating a new game notify its observer" in {
-      val controller = new Controller(TestBoardFactory)
+      val controller = new Controller(TestBoardFactory, new DummyFileIO())
       val observer = new TestObserver
       controller.add(observer)
 
@@ -59,7 +66,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
     }
 
     "after revealing a cell notify its observer" in {
-      val controller = new Controller(TestBoardFactory)
+      val controller = new Controller(TestBoardFactory, new DummyFileIO())
       val observer = new TestObserver
       controller.add(observer)
 
@@ -70,7 +77,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
     }
 
     "after flagging a cell notify its observer" in {
-      val controller = new Controller(TestBoardFactory)
+      val controller = new Controller(TestBoardFactory, new DummyFileIO())
       val observer = new TestObserver
       controller.add(observer)
 
@@ -84,7 +91,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       //val controller = new Controller(() => new Board(1, 1)) // anonyme Factory
       //val observer = new TestObserver
 
-      val controller = new Controller(TestBoardFactory)
+      val controller = new Controller(TestBoardFactory, new DummyFileIO())
       val observer = new TestObserver
 
       controller.add(observer)
@@ -109,7 +116,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
     }
 
     "after resetting a game notify its observer" in {
-      val controller = new Controller(TestBoardFactory)
+      val controller = new Controller(TestBoardFactory, new DummyFileIO())
       val observer = new TestObserver
       controller.add(observer)
 
@@ -124,7 +131,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
     }
 
     "create a copy" in {
-      val controller = new Controller(TestBoardFactory)
+      val controller = new Controller(TestBoardFactory, new DummyFileIO())
       val observer = new TestObserver
       controller.add(observer)
 
@@ -150,7 +157,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
     }
 
     "to put a board in place and notify its observer" in {
-      val controller = new Controller(TestBoardFactory)
+      val controller = new Controller(TestBoardFactory, new DummyFileIO())
       val observer = new TestObserver
       controller.add(observer)
 
@@ -183,14 +190,14 @@ class ControllerSpec extends AnyWordSpec with Matchers {
     }
 
     "push something on stack" in {
-      val controller = new Controller(TestBoardFactory)
+      val controller = new Controller(TestBoardFactory, new DummyFileIO())
       val observer = new TestObserver
       controller.add(observer)
 
     }
 
     "reveal a cell via SetCommand and undo it" in {
-      val controller = new Controller(TestBoardFactory)
+      val controller = new Controller(TestBoardFactory, new DummyFileIO())
       val row = 0
       val col = 0
 
@@ -210,7 +217,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
     }
 
     "push SetCommand on stack and undo via controller" in {
-      val controller = new Controller(TestBoardFactory)
+      val controller = new Controller(TestBoardFactory, new DummyFileIO())
       val row = 1
       val col = 1
 
@@ -225,7 +232,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
     }
 
     "print message when undo is called with empty command stack" in {
-      val controller = new Controller(TestBoardFactory)
+      val controller = new Controller(TestBoardFactory, new DummyFileIO())
 
       val outContent = new ByteArrayOutputStream()
       Console.withOut(new PrintStream(outContent)) {
@@ -237,7 +244,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
 
 
       "print message when redo is called with empty stack" in {
-        val controller = new Controller(TestBoardFactory)
+        val controller = new Controller(TestBoardFactory, new DummyFileIO())
 
         val outContent = new ByteArrayOutputStream()
         Console.withOut(new PrintStream(outContent)) {
@@ -248,7 +255,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       }
 
       "execute redo and update stacks" in {
-        val controller = new Controller(TestBoardFactory)
+        val controller = new Controller(TestBoardFactory, new DummyFileIO())
         val cmd = new MockCommand()
 
         // simulate a redoable command
@@ -267,7 +274,7 @@ class ControllerSpec extends AnyWordSpec with Matchers {
       }
 
       "return correct undoStackSize and redoStackSize" in {
-        val controller = new Controller(TestBoardFactory)
+        val controller = new Controller(TestBoardFactory, new DummyFileIO())
 
         controller.getUndoStack shouldBe empty
         controller.getRedoStack shouldBe empty

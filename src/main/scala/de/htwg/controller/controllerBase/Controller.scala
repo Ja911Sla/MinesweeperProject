@@ -4,13 +4,15 @@ import de.htwg.controller.ControllerInterface
 import de.htwg.model.*
 import de.htwg.model.boardBase.{Board, Timer}
 import de.htwg.utility.Observable
+
 import scala.collection.mutable
 import scala.util.Try
 import de.htwg.controller.factory.{BoardFactory, BoardFactoryInterface}
 import de.htwg.model.BoardInterface
 import de.htwg.utility.Observer
+import de.htwg.fileio.{FileIOInterface, FileIOJson}
 
-class Controller(private var boardFactory: BoardFactory)
+class Controller(private var boardFactory: BoardFactory, val fileIO: FileIOInterface)
   extends ControllerInterface with Observable {
   //class Controller(private var boardFactory: BoardFactory) extends ControllerInterface, Observable {
   private var board: BoardInterface = boardFactory.createBoard()
@@ -19,6 +21,8 @@ class Controller(private var boardFactory: BoardFactory)
   private val redoStack: mutable.Stack[Command] = mutable.Stack() // redu Schtäck
   var isGameOver: Boolean = false
   var isWon: Boolean = false
+
+  //val fileIO0: FileIOInterface = new FileIOJson()
 
   override def getBoard: BoardInterface = board
 
@@ -129,7 +133,13 @@ class Controller(private var boardFactory: BoardFactory)
 
   override def remove(observer: Observer): Unit = super.remove(observer)
 
+  def save(): Unit = fileIO.save(board)
+
+  def load(): Unit = {
+    board = fileIO.load()
+    notifyObservers()
+  }
 
 }
 // Die zentrale given-Instanz
-given ControllerInterface = new Controller(BoardFactory.getInstance)
+given ControllerInterface = new Controller(BoardFactory.getInstance, new FileIOJson())

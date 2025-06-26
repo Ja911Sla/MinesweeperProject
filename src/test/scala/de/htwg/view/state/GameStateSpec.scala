@@ -9,12 +9,20 @@ import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
 import de.htwg.controller.controllerBase.given_ControllerInterface
 import de.htwg.controller.ControllerInterface
+import de.htwg.fileio.FileIOInterface
+
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream, PrintStream}
 import scala.Console
 
 
 
 class GameStateSpec extends AnyWordSpec {
+
+  class DummyFileIO extends FileIOInterface {
+    override def save(board: de.htwg.model.BoardInterface): Unit = {}
+
+    override def load(): de.htwg.model.BoardInterface = new Board(2, 1)
+  }
 
   object TestBoardFactory extends BoardFactory {
     override def createBoard(): Board = new Board(9, 1)
@@ -26,7 +34,7 @@ class GameStateSpec extends AnyWordSpec {
       val out = new ByteArrayOutputStream()
 
       // für die Tui erstellung erzeige ich einen controller und binde es mit given
-      val controller = new Controller(TestBoardFactory)
+      val controller = new Controller(TestBoardFactory, new DummyFileIO())
       given ControllerInterface = controller
       val tui = new Tui()
 
@@ -44,7 +52,7 @@ class GameStateSpec extends AnyWordSpec {
   "PlayingState" should {
 
     "process input that ends the game by hitting a mine" in {
-      val controller = new Controller(TestBoardFactory)
+      val controller = new Controller(TestBoardFactory, new DummyFileIO())
       given ControllerInterface = controller
       val tui = new Tui()
 
@@ -62,7 +70,7 @@ class GameStateSpec extends AnyWordSpec {
   "WonState" should {
     "display winning message" in {
       val out = new ByteArrayOutputStream()
-      val controller = new Controller(TestBoardFactory)
+      val controller = new Controller(TestBoardFactory, new DummyFileIO())
       given ControllerInterface = controller
       val tui = new Tui()
 
@@ -78,7 +86,7 @@ class GameStateSpec extends AnyWordSpec {
   "LostState" should {
     "display losing message" in {
       val out = new ByteArrayOutputStream()
-      val controller = new Controller(TestBoardFactory)
+      val controller = new Controller(TestBoardFactory, new DummyFileIO())
       given ControllerInterface = controller
       val tui = new Tui()
 
@@ -91,7 +99,7 @@ class GameStateSpec extends AnyWordSpec {
     }
     "perform undo when 'U' is input" in {
       val out = new ByteArrayOutputStream()
-      val controller = new Controller(TestBoardFactory)
+      val controller = new Controller(TestBoardFactory, new DummyFileIO())
       given ControllerInterface = controller
       val tui = new Tui()
       tui.state = LostState
@@ -112,7 +120,7 @@ class GameStateSpec extends AnyWordSpec {
     }
     "restart game when 'R' is input in LostState" in {
       val out = new ByteArrayOutputStream()
-      val controller = new Controller(TestBoardFactory)
+      val controller = new Controller(TestBoardFactory, new DummyFileIO())
 
       given ControllerInterface = controller
 
@@ -131,7 +139,7 @@ class GameStateSpec extends AnyWordSpec {
   "QuitState" should {
     "print quit message and return false" in {
       val out = new ByteArrayOutputStream()
-      val controller = new Controller(TestBoardFactory)
+      val controller = new Controller(TestBoardFactory, new DummyFileIO())
 
       given ControllerInterface = controller
 
@@ -149,7 +157,7 @@ class GameStateSpec extends AnyWordSpec {
   "RestartState" should {
     "reset game and return to PlayingState" in {
       val out = new ByteArrayOutputStream()
-      val controller = new Controller(TestBoardFactory)
+      val controller = new Controller(TestBoardFactory, new DummyFileIO())
 
       given ControllerInterface = controller
 
@@ -168,7 +176,7 @@ class GameStateSpec extends AnyWordSpec {
     "restart game when selecting option 1" in {
       val in = new ByteArrayInputStream("1\n1\n".getBytes()) // Select "1" to change difficulty, then select easy mode again
       val out = new ByteArrayOutputStream()
-      val controller = new Controller(TestBoardFactory)
+      val controller = new Controller(TestBoardFactory, new DummyFileIO())
 
       given ControllerInterface = controller
 
@@ -187,7 +195,7 @@ class GameStateSpec extends AnyWordSpec {
     "go back to game when selecting option 2" in {
       val in = new ByteArrayInputStream("2\n".getBytes())
       val out = new ByteArrayOutputStream()
-      val controller = new Controller(TestBoardFactory)
+      val controller = new Controller(TestBoardFactory, new DummyFileIO())
 
       given ControllerInterface = controller
 
@@ -206,7 +214,7 @@ class GameStateSpec extends AnyWordSpec {
     "handle invalid option and go back to game" in {
       val in = new ByteArrayInputStream("invalid\n".getBytes())
       val out = new ByteArrayOutputStream()
-      val controller = new Controller(TestBoardFactory)
+      val controller = new Controller(TestBoardFactory, new DummyFileIO())
 
       given ControllerInterface = controller
 

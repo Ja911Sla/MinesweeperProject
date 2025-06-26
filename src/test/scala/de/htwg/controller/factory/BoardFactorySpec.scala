@@ -2,6 +2,7 @@ package de.htwg.controller.factory
 
 import de.htwg.controller.controllerBase.Controller
 import de.htwg.controller.factory.{BoardFactory, EasyBoardFactory, HardBoardFactory, MediumBoardFactory}
+import de.htwg.fileio.FileIOInterface
 import de.htwg.model.BoardInterface
 import de.htwg.model.boardBase.Board
 import de.htwg.model.singleton.GameConfig
@@ -13,10 +14,18 @@ import java.io.*
 
 
 class BoardFactorySpec extends AnyWordSpec {
+
+  class DummyFileIO extends FileIOInterface {
+    override def save(board: de.htwg.model.BoardInterface): Unit = {}
+
+    override def load(): de.htwg.model.BoardInterface = new Board(2, 1)
+  }
+
+  
   "A Board" should {
     "have an easy mode" in {
       GameConfig.getInstance.setCustom(6, 5)
-      val controller = new Controller(BoardFactory.getInstance)
+      val controller = new Controller(BoardFactory.getInstance, new DummyFileIO())
       val board = controller.getBoard
       
       board.size should be (6)
@@ -24,7 +33,7 @@ class BoardFactorySpec extends AnyWordSpec {
     }
     "have a medium mode" in {
       GameConfig.getInstance.setCustom(9, 15)
-      val controller = new Controller(BoardFactory.getInstance)
+      val controller = new Controller(BoardFactory.getInstance, new DummyFileIO())
       val board = controller.getBoard
 
       board.size should be(9)
@@ -32,7 +41,7 @@ class BoardFactorySpec extends AnyWordSpec {
     }
     "have a hard mode" in {
       GameConfig.getInstance.setCustom(12, 35)
-      val controller = new Controller(BoardFactory.getInstance)
+      val controller = new Controller(BoardFactory.getInstance, new DummyFileIO())
       val board = controller.getBoard
 
       board.size should be(12)
@@ -40,7 +49,7 @@ class BoardFactorySpec extends AnyWordSpec {
     }
     "have a user friendly creation mode" in {
       GameConfig.getInstance.setCustom(9, 15)
-      val controller = new Controller(BoardFactory.getInstance)
+      val controller = new Controller(BoardFactory.getInstance, new DummyFileIO())
       val board = controller.getBoard
       
       board.size should be (9)

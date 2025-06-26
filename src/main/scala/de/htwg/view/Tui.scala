@@ -78,6 +78,11 @@ class Tui (using var controller: ControllerInterface) extends Observer {
     println("3 - Schwer (12x12, 35 Minen)")
     println("4 - Benutzerdefiniert")
 
+    //println("SAVE - Spiel speichern")
+    //println("LOAD - Spiel laden")
+
+
+
     val strategy: GameModeStrategy = StdIn.readLine("Eingabe: ") match {
       case "1" => GameConfig.getInstance.setCustom(6, 5)
         CustomStrategy
@@ -152,6 +157,17 @@ class Tui (using var controller: ControllerInterface) extends Observer {
             |mit einer Flagge zu markieren. Die Zahlen zeigen an, wie viele Minen angrenzen.
             |Nutze Logik – und etwas Glück!
           """.stripMargin)
+        true
+
+      case "SAVE" =>
+        controller.save()
+        println("Spiel gespeichert.")
+        true
+
+      case "LOAD" =>
+        controller.load()
+        println("Spielstand geladen.")
+        println(controller.displayBoardToString())
         true
 
       case "T" =>
