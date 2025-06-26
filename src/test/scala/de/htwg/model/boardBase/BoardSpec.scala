@@ -340,6 +340,42 @@ class BoardSpec extends AnyWordSpec {
     output.cells(0)(1).isMine should be (false)
   }
 
+  "be correctly serialized and deserialized to and from JSON" in {
+    val board = new Board(3, 2)
+    board.cells(1)(1).isMine = true
+    board.cells(1)(1).isRevealed = true
+    board.cells(1)(1).isFlagged = true
+    board.cells(1)(1).mineCount = 3
+
+    val json = Board.toJson(board)
+    val deserialized = Board.fromJson(json)
+
+    deserialized.size shouldBe board.size
+    deserialized.mineCount shouldBe board.mineCount
+    deserialized.cells(1)(1).isMine shouldBe true
+    deserialized.cells(1)(1).isRevealed shouldBe true
+    deserialized.cells(1)(1).isFlagged shouldBe true
+    deserialized.cells(1)(1).mineCount shouldBe 3
+  }
+
+  "be correctly serialized and deserialized to and from XML" in {
+    val board = new Board(3, 2)
+    board.cells(2)(0).isMine = true
+    board.cells(2)(0).isRevealed = true
+    board.cells(2)(0).isFlagged = true
+    board.cells(2)(0).mineCount = 2
+
+    val xml = Board.toXml(board)
+    val deserialized = Board.fromXml(xml)
+
+    deserialized.size shouldBe board.size
+    deserialized.mineCount shouldBe board.mineCount
+    deserialized.cells(2)(0).isMine shouldBe true
+    deserialized.cells(2)(0).isRevealed shouldBe true
+    deserialized.cells(2)(0).isFlagged shouldBe true
+    deserialized.cells(2)(0).mineCount shouldBe 2
+  }
+
 }
 
 
