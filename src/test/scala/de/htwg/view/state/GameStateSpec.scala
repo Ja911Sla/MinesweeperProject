@@ -1,12 +1,14 @@
-package de.htwg.state
+package de.htwg.view.state
 
 import de.htwg.controller.controllerBase.{Controller, SetCommand}
-import de.htwg.factory.BoardFactory
+import de.htwg.controller.factory.BoardFactory
 import de.htwg.model.boardBase.Board
 import de.htwg.view.Tui
+import de.htwg.view.state.{IdleState, LostState, MenuState, PlayingState, QuitState, RestartState, WonState}
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
-
+import de.htwg.controller.controllerBase.given_ControllerInterface
+import de.htwg.controller.ControllerInterface
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream, PrintStream}
 import scala.Console
 
@@ -22,7 +24,11 @@ class GameStateSpec extends AnyWordSpec {
     "start a new game and switch to PlayingState" in {
       val in = new ByteArrayInputStream("1\n".getBytes()) // Select easy mode
       val out = new ByteArrayOutputStream()
-      val tui = new Tui(new Controller(TestBoardFactory))
+
+      // für die Tui erstellung erzeige ich einen controller und binde es mit given
+      val controller = new Controller(TestBoardFactory)
+      given ControllerInterface = controller
+      val tui = new Tui()
 
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {
@@ -39,7 +45,8 @@ class GameStateSpec extends AnyWordSpec {
 
     "process input that ends the game by hitting a mine" in {
       val controller = new Controller(TestBoardFactory)
-      val tui = new Tui(controller)
+      given ControllerInterface = controller
+      val tui = new Tui()
 
       controller.getBoard.cells(0)(0).isMine = true
 
@@ -55,7 +62,9 @@ class GameStateSpec extends AnyWordSpec {
   "WonState" should {
     "display winning message" in {
       val out = new ByteArrayOutputStream()
-      val tui = new Tui(new Controller(TestBoardFactory))
+      val controller = new Controller(TestBoardFactory)
+      given ControllerInterface = controller
+      val tui = new Tui()
 
       Console.withOut(new PrintStream(out)) {
         WonState.handleInput("any", tui)
@@ -69,7 +78,9 @@ class GameStateSpec extends AnyWordSpec {
   "LostState" should {
     "display losing message" in {
       val out = new ByteArrayOutputStream()
-      val tui = new Tui(new Controller(TestBoardFactory))
+      val controller = new Controller(TestBoardFactory)
+      given ControllerInterface = controller
+      val tui = new Tui()
 
       Console.withOut(new PrintStream(out)) {
         LostState.handleInput("any", tui)
@@ -80,7 +91,9 @@ class GameStateSpec extends AnyWordSpec {
     }
     "perform undo when 'U' is input" in {
       val out = new ByteArrayOutputStream()
-      val tui = new Tui(new Controller(TestBoardFactory))
+      val controller = new Controller(TestBoardFactory)
+      given ControllerInterface = controller
+      val tui = new Tui()
       tui.state = LostState
 
       // fake einen Spielzug, damit etwas zum Undo da ist
@@ -99,7 +112,11 @@ class GameStateSpec extends AnyWordSpec {
     }
     "restart game when 'R' is input in LostState" in {
       val out = new ByteArrayOutputStream()
-      val tui = new Tui(new Controller(TestBoardFactory))
+      val controller = new Controller(TestBoardFactory)
+
+      given ControllerInterface = controller
+
+      val tui = new Tui()
       tui.state = LostState
 
       Console.withOut(new PrintStream(out)) {
@@ -114,7 +131,11 @@ class GameStateSpec extends AnyWordSpec {
   "QuitState" should {
     "print quit message and return false" in {
       val out = new ByteArrayOutputStream()
-      val tui = new Tui(new Controller(TestBoardFactory))
+      val controller = new Controller(TestBoardFactory)
+
+      given ControllerInterface = controller
+
+      val tui = new Tui()
 
       val result = Console.withOut(new PrintStream(out)) {
         QuitState.handleInput("any", tui)
@@ -128,7 +149,11 @@ class GameStateSpec extends AnyWordSpec {
   "RestartState" should {
     "reset game and return to PlayingState" in {
       val out = new ByteArrayOutputStream()
-      val tui = new Tui(new Controller(TestBoardFactory))
+      val controller = new Controller(TestBoardFactory)
+
+      given ControllerInterface = controller
+
+      val tui = new Tui()
 
       Console.withOut(new PrintStream(out)) {
         RestartState.handleInput("any", tui)
@@ -143,7 +168,11 @@ class GameStateSpec extends AnyWordSpec {
     "restart game when selecting option 1" in {
       val in = new ByteArrayInputStream("1\n1\n".getBytes()) // Select "1" to change difficulty, then select easy mode again
       val out = new ByteArrayOutputStream()
-      val tui = new Tui(new Controller(TestBoardFactory))
+      val controller = new Controller(TestBoardFactory)
+
+      given ControllerInterface = controller
+
+      val tui = new Tui()
 
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {
@@ -158,7 +187,11 @@ class GameStateSpec extends AnyWordSpec {
     "go back to game when selecting option 2" in {
       val in = new ByteArrayInputStream("2\n".getBytes())
       val out = new ByteArrayOutputStream()
-      val tui = new Tui(new Controller(TestBoardFactory))
+      val controller = new Controller(TestBoardFactory)
+
+      given ControllerInterface = controller
+
+      val tui = new Tui()
 
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {
@@ -173,7 +206,11 @@ class GameStateSpec extends AnyWordSpec {
     "handle invalid option and go back to game" in {
       val in = new ByteArrayInputStream("invalid\n".getBytes())
       val out = new ByteArrayOutputStream()
-      val tui = new Tui(new Controller(TestBoardFactory))
+      val controller = new Controller(TestBoardFactory)
+
+      given ControllerInterface = controller
+
+      val tui = new Tui()
 
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {

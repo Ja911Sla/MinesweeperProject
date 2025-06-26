@@ -1,6 +1,7 @@
-package de.htwg.strategy
+package de.htwg.controller.strategy
 
-import de.htwg.factory.BoardFactory
+import de.htwg.controller.factory
+import de.htwg.controller.factory.BoardFactory
 
 trait GameModeStrategy {
   def getBoardFactory(): BoardFactory
@@ -20,7 +21,7 @@ trait GameModeStrategy {
 
 object CustomStrategy extends GameModeStrategy {
   override def getBoardFactory(): BoardFactory = {
-    de.htwg.factory.BoardFactory.getInstance
+    factory.BoardFactory.getInstance
 
   }
 }

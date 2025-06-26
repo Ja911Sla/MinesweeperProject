@@ -1,14 +1,14 @@
 package de.htwg.controller.controllerBase
 
 import de.htwg.controller.ControllerInterface
-import de.htwg.factory.{BoardFactory, BoardFactoryInterface}
 import de.htwg.model.*
 import de.htwg.model.boardBase.{Board, Timer}
 import de.htwg.utility.Observable
-
 import scala.collection.mutable
 import scala.util.Try
-
+import de.htwg.controller.factory.{BoardFactory, BoardFactoryInterface}
+import de.htwg.model.BoardInterface
+import de.htwg.utility.Observer
 
 class Controller(private var boardFactory: BoardFactory)
   extends ControllerInterface with Observable {
@@ -20,47 +20,55 @@ class Controller(private var boardFactory: BoardFactory)
   var isGameOver: Boolean = false
   var isWon: Boolean = false
 
-  def getBoard: BoardInterface = board
+  override def getBoard: BoardInterface = board
 
-  def setBoard(storedBoard: BoardInterface): Unit = {
+  override def setBoard(storedBoard: BoardInterface): Unit = {
     board = storedBoard
     notifyObservers()
   }
 
-  def getElapsedTime: Int = timer.getTime
+  override def getElapsedTime: Int = timer.getTime
 
-  var isDifficultySet: Boolean = false
-  def createNewBoard(factory: BoardFactory): Unit = {
+  private var _isDifficultySet: Boolean = false
+
+  override def isDifficultySet: Boolean = _isDifficultySet
+
+  override def setDifficultySet(flag: Boolean): Unit = {
+    _isDifficultySet = flag
+  }
+
+  override def createNewBoard(factory: BoardFactory): Unit = {
     boardFactory = factory
     board = boardFactory.createBoard()
-    isDifficultySet = true
+    _isDifficultySet = true
     notifyObservers()
   }
 
-  def revealCell(row: Int, col: Int): Boolean = {
+  override def revealCell(row: Int, col: Int): Boolean = {
     val safe = board.reveal(row, col)
     if (!safe) {
       isGameOver = true
     } else if (checkWin()) {
-      isWon = true }
+      isWon = true
+    }
     notifyObservers()
     safe
   }
 
 
-  def flagCell(x: Int, y: Int): Unit = {
+  override def flagCell(x: Int, y: Int): Unit = {
     board.toggleFlag(x, y)
     notifyObservers()
   }
 
-  def checkWin(): Boolean = {
+  override def checkWin(): Boolean = {
     val result = board.checkWin()
     if (result) timer.stop()
     notifyObservers()
     result
   }
 
-  def resetGame(): String = {
+  override def resetGame(): String = {
     timer.reset()
     val resetMessage = board.reset()
     timer.start()
@@ -68,7 +76,7 @@ class Controller(private var boardFactory: BoardFactory)
     resetMessage
   }
 
-  def displayBoardToString(revealAll: Boolean = false): String = {
+  override def displayBoardToString(revealAll: Boolean = false): String = {
     board.display(revealAll)
   }
 
@@ -77,14 +85,14 @@ class Controller(private var boardFactory: BoardFactory)
     storedBoard
   }
 
-  def doAndStore(cmd: Command): Unit = {
+  override def doAndStore(cmd: Command): Unit = {
     cmd.doStep()
     undoStack.push(cmd)
     redoStack.clear()
     notifyObservers()
   }
 
-  def undo(): Unit = {
+  override def undo(): Unit = {
     Try(undoStack.pop()).map { cmd =>
       cmd.undoStep()
       redoStack.push(cmd)
@@ -94,7 +102,7 @@ class Controller(private var boardFactory: BoardFactory)
     }
   }
 
-  def redo(): Unit = {
+  override def redo(): Unit = {
     Try(redoStack.pop()).map { cmd =>
       cmd.redoStep()
       undoStack.push(cmd)
@@ -103,18 +111,25 @@ class Controller(private var boardFactory: BoardFactory)
       println("Du bist bereits im aktuellen Spielstand – nichts zum Wiederholen.")
     }
   }
-  
-  
-  def remainingFlags(): Int = board.remainingFlags()
-
-  
-  def undoStackSize: Int = undoStack.size
-  def redoStackSize: Int = redoStack.size
 
 
-  def getUndoStack: mutable.Stack[Command] = undoStack
+  override def remainingFlags(): Int = board.remainingFlags()
 
-  def getRedoStack: mutable.Stack[Command] = redoStack
+
+  override def undoStackSize: Int = undoStack.size
+
+  override def redoStackSize: Int = redoStack.size
+
+
+  override def getUndoStack: mutable.Stack[Command] = undoStack
+
+  override def getRedoStack: mutable.Stack[Command] = redoStack
+ // new
+  override def add(observer: Observer): Unit = super.add(observer)
+
+  override def remove(observer: Observer): Unit = super.remove(observer)
 
 
 }
+// Die zentrale given-Instanz
+given ControllerInterface = new Controller(BoardFactory.getInstance)

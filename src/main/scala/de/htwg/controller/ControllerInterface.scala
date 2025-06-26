@@ -1,9 +1,9 @@
 package de.htwg.controller
 
 import de.htwg.controller.controllerBase.Command
+import de.htwg.controller.factory.{BoardFactory, BoardFactoryInterface}
 import de.htwg.utility.*
 import de.htwg.model.*
-import de.htwg.factory.{BoardFactory, BoardFactoryInterface}
 
 import scala.collection.mutable
 import scala.util.Try
@@ -29,4 +29,12 @@ trait ControllerInterface {
   def redoStackSize: Int
   def add(observer: Observer): Unit
   def remove(observer: Observer):Unit
+
+  def isDifficultySet: Boolean
+
+  def setDifficultySet(flag: Boolean): Unit
+
+  def getUndoStack: mutable.Stack[Command]
+
+  def getRedoStack: mutable.Stack[Command]
 }

@@ -1,8 +1,8 @@
-package de.htwg.factory
+package de.htwg.controller.factory
 
 import de.htwg.model.boardBase.Board
-import de.htwg.singleton.GameConfig
 import de.htwg.model.BoardInterface
+import de.htwg.model.singleton.GameConfig
 
 trait BoardFactory {
   def createBoard(): BoardInterface

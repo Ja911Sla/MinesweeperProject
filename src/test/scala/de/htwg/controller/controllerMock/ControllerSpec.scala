@@ -2,7 +2,7 @@ package de.htwg.controller.controllerMock
 
 import de.htwg.controller.ControllerInterface
 import de.htwg.controller.controllerMock.Controller
-import de.htwg.factory.{BoardFactory, BoardFactoryInterface}
+import de.htwg.controller.factory.{BoardFactory, BoardFactoryInterface}
 import de.htwg.model.BoardInterface
 import de.htwg.utility.Observer
 import org.scalatest.matchers.should.Matchers.*

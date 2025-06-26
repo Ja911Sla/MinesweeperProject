@@ -2,19 +2,20 @@ package de.htwg.view
 
 //import de.htwg.command.*
 
+import de.htwg.controller.ControllerInterface
 import de.htwg.controller.controllerBase.{Controller, FlagCommand, SetCommand}
-import de.htwg.strategy.*
 import de.htwg.utility.Observer
-import de.htwg.factory.*
-import de.htwg.singleton.*
-import de.htwg.state.*
+import de.htwg.controller.strategy.{CustomStrategy, GameModeStrategy}
+import de.htwg.model.singleton.GameConfig
+import de.htwg.view.state.{GameState, LostState, MenuState, PlayingState, WonState}
 
 import scala.io.StdIn
 
-class Tui(var controller: Controller) extends Observer {
+class Tui (using var controller: ControllerInterface) extends Observer {
   var state: GameState = PlayingState
   private val flagPattern = "F ([A-Z])([1-9][0-9]*)".r
   private val revealPattern = "([A-Z])([1-9][0-9]*)".r
+
 
 
   def start(resetBoard: Boolean = true): String = {
@@ -100,7 +101,7 @@ class Tui(var controller: Controller) extends Observer {
 
     val factory = strategy.getBoardFactory()
     controller.createNewBoard(factory)
-    controller.isDifficultySet = true
+    controller.setDifficultySet(true)
   }
 
 
@@ -205,4 +206,5 @@ class Tui(var controller: Controller) extends Observer {
   def requestQuit(): Unit = {
     shouldRun = false
   }
+  def isRunning: Boolean = shouldRun
 }

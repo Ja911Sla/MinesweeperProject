@@ -1,20 +1,22 @@
 package de.htwg.view
 
 import de.htwg.controller.controllerBase.{Controller, SetCommand}
-import de.htwg.factory.{BoardFactory, EasyBoardFactory}
+import de.htwg.controller.factory.{BoardFactory, EasyBoardFactory}
 import de.htwg.model.BoardInterface
 import de.htwg.model.boardBase.Board
-import de.htwg.singleton.GameConfig
+import de.htwg.model.singleton.GameConfig
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
-import de.htwg.strategy.*
+import de.htwg.controller.controllerBase.given_ControllerInterface
+import de.htwg.controller.ControllerInterface
+import de.htwg.model.boardBase.GameCell
 
 import java.io.{ByteArrayInputStream, ByteArrayOutputStream, PrintStream}
 import scala.Console
-import de.htwg.state.{IdleState, LostState, MenuState, PlayingState, QuitState, RestartState, WonState}
+import de.htwg.view.state.{IdleState, LostState, MenuState, PlayingState, QuitState, RestartState, WonState}
 
 class TuiSpec extends AnyWordSpec {
-
+  given ControllerInterface = new Controller(BoardFactory.getInstance)
   object TestBoardFactory extends BoardFactory {
     override def createBoard(): Board = new Board(9, 1)
     
@@ -33,7 +35,7 @@ class TuiSpec extends AnyWordSpec {
       val in = new ByteArrayInputStream("1\nH\nQ\n".getBytes())
       val out = new ByteArrayOutputStream()
       val controller = new Controller(TestBoardFactory)
-      val tui = new Tui(controller)
+      val tui = new Tui
 
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {
@@ -49,7 +51,7 @@ class TuiSpec extends AnyWordSpec {
       val in = new ByteArrayInputStream("1\nA\nQ\n".getBytes())
       val out = new ByteArrayOutputStream()
       val controller = new Controller(TestBoardFactory)
-      val tui = new Tui(controller)
+      val tui = new Tui
 
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {
@@ -65,7 +67,7 @@ class TuiSpec extends AnyWordSpec {
 //      val in = new ByteArrayInputStream("1\nR\nQ\n".getBytes())
 //      val out = new ByteArrayOutputStream()
 //      val controller = new Controller(TestBoardFactory)
-//      val tui = new Tui(controller)
+//      val tui = new Tui
 //
 //      Console.withIn(in) {
 //        Console.withOut(new PrintStream(out)) {
@@ -81,7 +83,7 @@ class TuiSpec extends AnyWordSpec {
       val in = new ByteArrayInputStream("1\nT\nQ\n".getBytes())
       val out = new ByteArrayOutputStream()
       val controller = new Controller(TestBoardFactory)
-      val tui = new Tui(controller)
+      val tui = new Tui
 
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {
@@ -95,14 +97,14 @@ class TuiSpec extends AnyWordSpec {
 
     "toggle flag with F A1" in {
       val controller = new Controller(TestBoardFactory)
-      val tui = new Tui(controller)
+      val tui = new Tui
       tui.processInputLine("F A1")
       controller.getBoard.cells(0)(0).isFlagged should be(true)
     }
 
     "reveal a cell with A1" in {
       val controller = new Controller(TestBoardFactory)
-      val tui = new Tui(controller)
+      val tui = new Tui
       tui.processInputLine("A1")
       controller.getBoard.cells(0)(0).isRevealed should be(true)
     }
@@ -111,7 +113,7 @@ class TuiSpec extends AnyWordSpec {
       val in = new ByteArrayInputStream("1\nXYZ\nQ\n".getBytes())
       val out = new ByteArrayOutputStream()
       val controller = new Controller(TestBoardFactory)
-      val tui = new Tui(controller)
+      val tui = new Tui
 
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {
@@ -131,7 +133,7 @@ class TuiSpec extends AnyWordSpec {
       board.cells(0)(0).isMine = true
 
       val controller = new Controller(TestBoardFactory)
-      val tui = new Tui(controller)
+      val tui = new Tui
 
       val out = new ByteArrayOutputStream()
       Console.withOut(new PrintStream(out)) {
@@ -150,7 +152,7 @@ class TuiSpec extends AnyWordSpec {
 
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {
-          val tui = new Tui(new Controller(BoardFactory.getInstance))
+          val tui = new Tui()
           val method = tui.getClass.getDeclaredMethod("chooseDifficulty")
           method.setAccessible(true)
           method.invoke(tui)
@@ -163,7 +165,7 @@ class TuiSpec extends AnyWordSpec {
 //      val in = new ByteArrayInputStream("1\nQ\n".getBytes())
 //      val out = new ByteArrayOutputStream()
 //      val controller = new Controller(TestBoardFactory)
-//      val tui = new Tui(controller)
+//      val tui = new Tui
 //
 //      // Manually flag a cell BEFORE starting
 //      controller.flagCell(0, 0)
@@ -184,7 +186,7 @@ class TuiSpec extends AnyWordSpec {
 
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {
-          val tui = new Tui(new Controller(BoardFactory.getInstance))
+          val tui = new Tui()
           val method = tui.getClass.getDeclaredMethod("chooseDifficulty")
           method.setAccessible(true)
           method.invoke(tui)
@@ -199,7 +201,7 @@ class TuiSpec extends AnyWordSpec {
 
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {
-          val tui = new Tui(new Controller(BoardFactory.getInstance))
+          val tui = new Tui()
           val method = tui.getClass.getDeclaredMethod("chooseDifficulty")
           method.setAccessible(true)
           method.invoke(tui)
@@ -214,7 +216,8 @@ class TuiSpec extends AnyWordSpec {
 
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {
-          val tui = new Tui(new Controller(BoardFactory.getInstance))
+          given ControllerInterface = new Controller(BoardFactory.getInstance)
+          val tui = new Tui()
           val method = tui.getClass.getDeclaredMethod("chooseDifficulty")
           method.setAccessible(true)
           method.invoke(tui)
@@ -228,7 +231,7 @@ class TuiSpec extends AnyWordSpec {
     }
     "show winning message when all mines are flagged after flag input" in {
       val controller = new Controller(TestBoardFactory)
-      val tui = new Tui(controller)
+      val tui = new Tui
 
       // Set up a single mine at A1
       controller.getBoard.cells(0)(0).isMine = true
@@ -244,7 +247,7 @@ class TuiSpec extends AnyWordSpec {
     }
     "show losing message when revealing a mine" in {
       val controller = new Controller(TestBoardFactory)
-      val tui = new Tui(controller)
+      val tui = new Tui
 
       // Set up a single mine at A1
       controller.getBoard.cells(0)(0).isMine = true
@@ -260,7 +263,8 @@ class TuiSpec extends AnyWordSpec {
     }
 
     "handle M mode change correctly and go back to game" in {
-      val tui = new Tui(new Controller(TestBoardFactory))
+      given ControllerInterface = new Controller(BoardFactory.getInstance)
+      val tui = new Tui()
 
       val in = new ByteArrayInputStream("2\n".getBytes())
       Console.withIn(in) {
@@ -274,7 +278,7 @@ class TuiSpec extends AnyWordSpec {
       val in = new ByteArrayInputStream("1\nM\ninvalid\nQ\n".getBytes())
       val out = new ByteArrayOutputStream()
       val controller = new Controller(TestBoardFactory)
-      val tui = new Tui(controller)
+      val tui = new Tui
 
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {
@@ -287,7 +291,7 @@ class TuiSpec extends AnyWordSpec {
     }
     "perform undo and show available undo/redo counts" in {
       val controller = new Controller(TestBoardFactory)
-      val tui = new Tui(controller)
+      val tui = new Tui
 
       // Führe einen Zug aus, damit Undo möglich ist
       val cmd = new SetCommand(0, 1, controller)
@@ -304,7 +308,7 @@ class TuiSpec extends AnyWordSpec {
     }
     "perform redo and show available undo/redo counts" in {
       val controller = new Controller(TestBoardFactory)
-      val tui = new Tui(controller)
+      val tui = new Tui
 
       // Führe Zug aus + Undo
       val cmd = new SetCommand(1, 1, controller)
@@ -322,7 +326,7 @@ class TuiSpec extends AnyWordSpec {
     }
     /*"processInputLine should return true for valid move" in {
       val controller = new Controller(TestBoardFactory)
-      val tui = new Tui(controller)
+      val tui = new Tui
 
       // Stelle sicher, dass Feld (0,0) KEINE Mine ist
       controller.getBoard.cells(0)(0).isMine = false
@@ -334,7 +338,9 @@ class TuiSpec extends AnyWordSpec {
     "A fresh start should call chooseDifficulty and resetGame" in {
       val in = new ByteArrayInputStream("1\nQ\n".getBytes())
       val out = new ByteArrayOutputStream()
-      val tui = new Tui(new Controller(BoardFactory.getInstance))
+
+      given ControllerInterface = new Controller(BoardFactory.getInstance)
+      val tui = new Tui()
 
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {
@@ -349,7 +355,9 @@ class TuiSpec extends AnyWordSpec {
     "Print welcome message during start" in {
       val in = new ByteArrayInputStream("1\nQ\n".getBytes())
       val out = new ByteArrayOutputStream()
-      val tui = new Tui(new Controller(BoardFactory.getInstance))
+
+      given ControllerInterface = new Controller(BoardFactory.getInstance)
+      val tui = new Tui()
 
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {
@@ -361,12 +369,15 @@ class TuiSpec extends AnyWordSpec {
     }
     "preserve manual flag when not resetting board" in {
       val controller = new Controller(BoardFactory.getInstance)
-      val tui = new Tui(controller)
+
+      given ControllerInterface = new Controller(BoardFactory.getInstance)
+
+      val tui = new Tui()
 
       // Simuliere manuelles Setup: Schwierigkeit & gesetzte Flagge
       controller.createNewBoard(EasyBoardFactory)
       controller.flagCell(0, 0)
-      controller.isDifficultySet = true
+      controller.setDifficultySet(true)
 
       val before = controller.getBoard
 
@@ -382,7 +393,10 @@ class TuiSpec extends AnyWordSpec {
     "Display the board while in PlayingState" in {
       val in = new ByteArrayInputStream("1\nQ\n".getBytes())
       val out = new ByteArrayOutputStream()
-      val tui = new Tui(new Controller(BoardFactory.getInstance))
+
+      given ControllerInterface = new Controller(BoardFactory.getInstance)
+
+      val tui = new Tui()
 
       Console.withIn(in) {
         Console.withOut(new PrintStream(out)) {
@@ -397,8 +411,8 @@ class TuiSpec extends AnyWordSpec {
 // neu
     "should print 'Eingabestrom beendet.' on None input" in {
       val controller = new Controller(BoardFactory.getInstance)
-      val tui = new Tui(controller)
-      controller.isDifficultySet = true
+      val tui = new Tui
+      controller.setDifficultySet(true)
       controller.createNewBoard(EasyBoardFactory)
 
       val in = new java.io.ByteArrayInputStream(Array[Byte]()) // sofort EOF
@@ -418,7 +432,7 @@ class TuiSpec extends AnyWordSpec {
           override val cells: Array[Array[GameCell]] = Array.ofDim[GameCell](0, 0)
         }
       }
-      val tui = new Tui(controller)
+      val tui = new Tui
 
       val in = new ByteArrayInputStream("1\nQ\n".getBytes())
       val out = new ByteArrayOutputStream()
@@ -433,7 +447,7 @@ class TuiSpec extends AnyWordSpec {
     }
     "should return false after winning" in {
       val controller = new Controller(BoardFactory.getInstance)
-      val tui = new Tui(controller)
+      val tui = new Tui
 
       controller.getBoard.cells(0)(0).isMine = true
       controller.getBoard.cells(0)(1).isMine = false
@@ -452,12 +466,12 @@ class TuiSpec extends AnyWordSpec {
     }
     "should stop the tui loop when requestQuit is called" in {
       val controller = new Controller(BoardFactory.getInstance)
-      val tui = new Tui(controller)
 
+      given ControllerInterface = controller
+
+      val tui = new Tui()
       tui.requestQuit()
-      val method = tui.getClass.getDeclaredField("shouldRun")
-      method.setAccessible(true)
-      method.get(tui) shouldBe false
+      tui.isRunning shouldBe false
     }
 
 

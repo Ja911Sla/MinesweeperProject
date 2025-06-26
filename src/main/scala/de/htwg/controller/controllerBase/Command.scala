@@ -2,7 +2,7 @@ package de.htwg.controller.controllerBase
 
 import de.htwg.model.BoardInterface
 import de.htwg.model.boardBase.Board
-
+import de.htwg.controller.ControllerInterface
 
 trait Command {
   def doStep(): Unit
@@ -10,7 +10,7 @@ trait Command {
   def redoStep(): Unit
 }
 
-class SetCommand(row: Int, col: Int, controller: Controller) extends Command {
+class SetCommand(row: Int, col: Int, controller: ControllerInterface) extends Command {
   private val oldBoard: BoardInterface = controller.copyBoard()
   private var newBoard: Option[BoardInterface] = None
 
@@ -30,7 +30,7 @@ class SetCommand(row: Int, col: Int, controller: Controller) extends Command {
     }
   }
 }
-class FlagCommand(row: Int, col: Int, controller: Controller) extends Command {
+class FlagCommand(row: Int, col: Int, controller: ControllerInterface) extends Command {
   private val oldBoard: BoardInterface = controller.copyBoard()
   private var newBoard: Option[BoardInterface] = None
 

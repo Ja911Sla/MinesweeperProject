@@ -1,4 +1,4 @@
-package de.htwg.singleton
+package de.htwg.model.singleton
 
 trait GameConfigInterface {
   def boardSize: Int

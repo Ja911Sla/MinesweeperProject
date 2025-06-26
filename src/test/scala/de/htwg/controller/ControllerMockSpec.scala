@@ -1,10 +1,9 @@
 package de.htwg.controller
 
-
-import de.htwg.factory.BoardFactory
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
 import de.htwg.controller.controllerMock.Controller
+import de.htwg.controller.factory.BoardFactory
 
 
 class ControllerMockSpec extends AnyWordSpec {

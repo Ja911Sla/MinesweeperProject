@@ -1,23 +1,18 @@
-package de.htwg
+/*package de.htwg
 
+import com.google.inject.AbstractModule
+import net.codingwell.scalaguice.ScalaModule
 import de.htwg.controller.ControllerInterface
 import de.htwg.controller.controllerBase.Controller
-import de.htwg.factory.BoardFactory
-import de.htwg.view.{Gui, Tui}
+import de.htwg.controller.factory.{BoardFactory, BoardFactoryInterface}
 
-object MinesweeperModule {
-  // Hier binden wir Interfaces zu konkreten Instanzen
-  val boardFactory: BoardFactory = BoardFactory.getInstance
-  val controller: ControllerInterface = new Controller(boardFactory)
-  val tui: Tui = new Tui(controller.asInstanceOf[de.htwg.controller.controllerBase.Controller])
-  val gui: Gui.type = Gui
-
-  def start(): Unit = {
-    gui.attachController(controller.asInstanceOf[de.htwg.controller.controllerBase.Controller])
-    scala.concurrent.Future {
-      gui.main(Array.empty)
-    }(scala.concurrent.ExecutionContext.global)
-
-    println(tui.start())
+class MinesweeperModule extends AbstractModule with ScalaModule {
+  override def configure(): Unit = {
+    binder()
+    bind(classOf[ControllerInterface]).to(classOf[Controller])
+    bind(classOf[BoardFactory]).toInstance(BoardFactory.getInstance)
   }
 }
+// benutze mit given /using
+
+ */

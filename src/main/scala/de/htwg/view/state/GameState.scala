@@ -1,4 +1,4 @@
-package de.htwg.state
+package de.htwg.view.state
 
 import de.htwg.controller.controllerBase.Controller
 import de.htwg.view.Tui

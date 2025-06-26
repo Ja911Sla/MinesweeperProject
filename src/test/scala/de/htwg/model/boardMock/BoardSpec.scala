@@ -3,7 +3,7 @@ package de.htwg.model.boardMock
 
 import de.htwg.controller.controllerBase.Command
 import de.htwg.controller.controllerMock.Controller
-import de.htwg.factory.BoardFactory
+import de.htwg.controller.factory.BoardFactory
 import de.htwg.model.boardBase.GameCell
 import de.htwg.model.BoardInterface
 import org.scalatest.matchers.should.Matchers.*

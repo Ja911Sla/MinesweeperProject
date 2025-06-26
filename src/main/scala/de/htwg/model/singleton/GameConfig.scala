@@ -1,4 +1,4 @@
-package de.htwg.singleton
+package de.htwg.model.singleton
 
 class GameConfig private() extends GameConfigInterface { //object GameConfig {
   private var _boardSize: Int = 9

@@ -1,6 +1,6 @@
 package de.htwg.controller.controllerBase
 
-import de.htwg.factory.BoardFactory
+import de.htwg.controller.factory.BoardFactory
 import de.htwg.model.boardBase.Board
 import de.htwg.utility.Observer
 import org.scalatest.matchers.should.Matchers

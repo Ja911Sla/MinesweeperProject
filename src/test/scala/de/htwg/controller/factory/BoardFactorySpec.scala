@@ -1,14 +1,14 @@
-package de.htwg.factory
+package de.htwg.controller.factory
 
 import de.htwg.controller.controllerBase.Controller
+import de.htwg.controller.factory.{BoardFactory, EasyBoardFactory, HardBoardFactory, MediumBoardFactory}
 import de.htwg.model.BoardInterface
 import de.htwg.model.boardBase.Board
+import de.htwg.model.singleton.GameConfig
 import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
 
 import scala.Console
-import de.htwg.singleton.GameConfig
-
 import java.io.*
 
 

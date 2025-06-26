@@ -4,10 +4,11 @@ package de.htwg.controller.controllerMock
 
 import de.htwg.controller.ControllerInterface
 import de.htwg.controller.controllerBase.Command
+import de.htwg.controller.factory.BoardFactory
 import de.htwg.utility.*
 import de.htwg.model.BoardInterface
-import de.htwg.factory.*
 import de.htwg.model.boardBase.Board
+import scala.collection.mutable
 
 class Controller(private var boardFactory: BoardFactory) extends ControllerInterface {
   private var board: BoardInterface = new Board()
@@ -17,6 +18,10 @@ class Controller(private var boardFactory: BoardFactory) extends ControllerInter
   var resetCalled: Boolean = false
 
   override def getBoard: BoardInterface = board
+
+  override def isDifficultySet: Boolean = false
+
+  override def setDifficultySet(flag: Boolean): Unit = {}
 
   override def setBoard(newBoard: BoardInterface): Unit = {
     board = newBoard
@@ -76,4 +81,10 @@ class Controller(private var boardFactory: BoardFactory) extends ControllerInter
   override def remove(observer: Observer): Unit = {
     observers = observers.filterNot(_ ==observer)
     }
+
+  private val undoStack: mutable.Stack[Command] = mutable.Stack()
+  private val redoStack: mutable.Stack[Command] = mutable.Stack()
+
+  override def getUndoStack: mutable.Stack[Command] = undoStack
+  override def getRedoStack: mutable.Stack[Command] = redoStack
 }
