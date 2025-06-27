@@ -156,7 +156,6 @@ object Board {
   import play.api.libs.json._
   import scala.xml._
 
-  // JSON-Format aus vorheriger Antwort
   implicit val boardFormat: Format[Board] = new Format[Board] {
     override def reads(json: JsValue): JsResult[Board] = {
       val size = (json \ "size").as[Int]

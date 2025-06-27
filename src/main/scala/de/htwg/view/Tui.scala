@@ -16,6 +16,7 @@ class Tui (using var controller: ControllerInterface) extends Observer {
   private val flagPattern = "F ([A-Z])([1-9][0-9]*)".r
   private val revealPattern = "([A-Z])([1-9][0-9]*)".r
 
+  def runObserverUpdate(): Unit = update
 
 
   def start(resetBoard: Boolean = true): String = {
@@ -69,9 +70,10 @@ class Tui (using var controller: ControllerInterface) extends Observer {
     if (controller.isDifficultySet) {
       println("Schwierigkeit bereits durch GUI gesetzt.")
       controller.add(this)
+      println(controller.displayBoardToString()) // <- Damit TUI gleich was sieht
       return
     }
-
+    // GUI hat noch keine Schwierigkeit gesetzt, also TUI übernimmt
     println("Wähle Schwierigkeitsgrad:")
     println("1 - Leicht (6x6, 5 Minen)")
     println("2 - Mittel (9x9, 15 Minen)")
