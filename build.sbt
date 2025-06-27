@@ -32,5 +32,6 @@ lazy val root = (project in file("."))
     // Testeinstellungen
     coverageEnabled := true,
     coverageFailOnMinimum := false,
-    Test / fork := true
+    Test / fork := true,
+    coverageExcludedPackages := "de\\.htwg\\.view\\.Gui"
   )
