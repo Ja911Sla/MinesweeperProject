@@ -28,6 +28,20 @@ class Tui (using var controller: ControllerInterface) extends Observer {
     isInitialized = true
     controller.add(this) // Observer nur einmal hinzufügen
 
+    // GUI initialisieren, wenn noch nicht geschehen
+    if (Gui.tui == null) {
+      Gui.initialize(controller)
+      Gui.top.visible = true // GUI sichtbar machen
+      Gui.tui = this
+      Gui.tuiThread = new Thread(new Runnable {
+        override def run(): Unit = {
+          // TUI läuft bereits, keine erneute Initialisierung nötig
+        }
+      })
+      Gui.tuiThread.setDaemon(true)
+      Gui.tuiThread.start()
+    }
+
     if (!controller.isDifficultySet) {
       chooseDifficulty()
       if (resetBoard) controller.resetGame()
@@ -40,118 +54,73 @@ class Tui (using var controller: ControllerInterface) extends Observer {
     while (shouldRun) {
       if (state == PlayingState) {
         println(controller.displayBoardToString())
+      } else if (state == WonState || state == LostState) {
+        handleEndGame()
       }
-
-      Option(scala.io.StdIn.readLine()) match {
+      //Option(scala.io.StdIn.readLine()) match {
+      Option(StdIn.readLine()) match {
         case Some(input) =>
           if (input.trim.toUpperCase == "Q") {
             println("Spiel beendet.")
             shouldRun = false
             guiQuitCallback()
+            sys.exit(0)
           } else {
             shouldRun = state.handleInput(input, this)
           }
         case None =>
           println("Eingabestrom beendet.")
           shouldRun = false
+          sys.exit(0)
       }
     }
     "Game over."
   }
-
-
- /* def start(resetBoard: Boolean = true): String = {
-
-    chooseDifficulty()
-    if (resetBoard) controller.resetGame()
-    if (controller.getBoard == null || controller.getBoard.cells.flatten.isEmpty) {
-      chooseDifficulty()
-      if (resetBoard) controller.resetGame()
-    }
-    println(
-      """Willkommen zu Minesweeper!
-        |Das Ziel ist es, alle Felder zu öffnen, ohne auf eine Mine zu treten.
-        |Befehle:
-        |  C3   -> Zelle aufdecken
-        |  F C3 -> Flagge setzen/entfernen
-        |  H    -> Hilfe anzeigen
-        |  A    -> Anleitung anzeigen
-        |  T    -> Zeit anzeigen
-        |  M    -> Game Mode wechseln
-        |  Q    -> Spiel beenden
-        |""".stripMargin)
-
-    shouldRun = true
-    while (shouldRun) {
-      if (state == PlayingState) {
-        println(controller.displayBoardToString())
-      }
-
-      Option(scala.io.StdIn.readLine()) match {
-        case Some(input) =>
-          if (input.trim.toUpperCase == "Q") {
-            println("Spiel beendet.")
-            shouldRun = false
-            guiQuitCallback() // tell GUI to quit
-          } else {
-            shouldRun = state.handleInput(input, this)
-          }
-
-        case None =>
-          println("Eingabestrom beendet.")
-          shouldRun = false
-      }
-    }
-    "Game over."
-  }
-*/
 
   def chooseDifficulty(): Unit = {
     if (controller.isDifficultySet) {
       println("Schwierigkeit bereits durch GUI gesetzt.")
-      /*
-      controller.add(this)
-      println(controller.displayBoardToString()) // <- Damit TUI gleich was sieht
-      */
       return
-
     }
-    // GUI hat noch keine Schwierigkeit gesetzt, also TUI übernimmt
+
     println("Wähle Schwierigkeitsgrad:")
     println("1 - Leicht (6x6, 5 Minen)")
     println("2 - Mittel (9x9, 15 Minen)")
     println("3 - Schwer (12x12, 35 Minen)")
     println("4 - Benutzerdefiniert")
 
-    //println("SAVE - Spiel speichern")
-    //println("LOAD - Spiel laden")
-
-
-
     val strategy: GameModeStrategy = StdIn.readLine("Eingabe: ") match {
-      case "1" => GameConfig.getInstance.setCustom(6, 5)
-        CustomStrategy
-      case "2" => GameConfig.getInstance.setCustom(9, 15)
-        CustomStrategy
-      case "3" => GameConfig.getInstance.setCustom(12, 35)
-        CustomStrategy
+      case "1" => GameConfig.getInstance.setCustom(6, 5); CustomStrategy
+      case "2" => GameConfig.getInstance.setCustom(9, 15); CustomStrategy
+      case "3" => GameConfig.getInstance.setCustom(12, 35); CustomStrategy
       case "4" =>
         val size = StdIn.readLine("Boardgröße: (2 bis 26) erlaubt) ").toInt
-        val maxMines = size * size - 1
-        val mines = StdIn.readLine(s"Anzahl Minen: (>= 1 und <= $maxMines erlaubt) ").toInt
-        GameConfig.getInstance.setCustom(size, mines)
-        CustomStrategy
+        if (size < 2 || size > 26) {
+          println("Ungültige Boardgröße. Standardmäßig 'Mittel' gewählt.")
+          GameConfig.getInstance.setCustom(9, 15)
+          CustomStrategy
+        } else {
+          val maxMines = size * size - 1
+          val mines = StdIn.readLine(s"Anzahl Minen: (>= 1 und <= $maxMines erlaubt) ").toInt
+          if (mines < 1 || mines > maxMines) {
+            println("Ungültige Minenanzahl. Standardmäßig 'Mittel' gewählt.")
+            GameConfig.getInstance.setCustom(9, 15)
+            CustomStrategy
+          } else {
+            GameConfig.getInstance.setCustom(size, mines)
+            CustomStrategy
+          }
+        }
       case _ =>
         println("Ungültige Eingabe. Standardmäßig 'Mittel' gewählt.")
         GameConfig.getInstance.setCustom(9, 15)
         CustomStrategy
     }
-    /*
-    controller.add(this)
-    */
+
     val factory = strategy.getBoardFactory()
     controller.createNewBoard(factory)
     controller.setDifficultySet(true)
+    Gui.startGame(factory) // GUI aktualisieren
   }
 
 
@@ -223,30 +192,50 @@ class Tui (using var controller: ControllerInterface) extends Observer {
         state = MenuState
         state.handleInput(input, this)
 
+      case "N" =>
+        restartGame()
+        true
+
       case _ =>
         parseCoordinate(i) match {
           case Some((isFlag, row, col)) =>
+            //neu start
+            if (row < 0 || row >= controller.getBoard.size || col < 0 || col >= controller.getBoard.size) {
+              println("Ungültige Koordinaten!")
+              return true
+            }
+            if (controller.isGameOver || controller.isWon) {
+              handleEndGame()
+              return true
+            } //neu end
             if (isFlag) {
               val cmd = new FlagCommand(row, col, controller)
               controller.doAndStore(cmd)
               if (controller.checkWin()) {
                 state = WonState
-                state.handleInput(input, this)
+                handleEndGame()
                 return false
               }
             } else {
               val cmd = new SetCommand(row, col, controller)
               controller.doAndStore(cmd)
-              val cellOpt = Option(controller.getBoard.cells(row)(col))
-              val safe = cellOpt.exists(c => c.isRevealed && !c.isMine)
-              if (!safe) {
+              //neu start
+              if (controller.isGameOver) {
                 state = LostState
-                state.handleInput("", this)
-                return true
+                handleEndGame()
+                return true //neu end
+
               } else if (controller.checkWin()) {
                 state = WonState
-                state.handleInput(input, this); return false }
+                //neu start
+                handleEndGame()
+                return true //neu end
+                /*
+                state.handleInput(input, this); return false */
+              }
             }
+            //neu start
+            println(s"Verbleibende Flaggen: ${controller.remainingFlags()}") // neu end
             true
 
           case None =>
@@ -256,14 +245,42 @@ class Tui (using var controller: ControllerInterface) extends Observer {
     }
   }
 
-  override def update: String = {
+  private def handleEndGame(): Unit = {
+    if (state == WonState) {
+      println("Gewonnen, Glückwunsch!")
+    } else if (state == LostState) {
+      println("💥 Game Over – Du hast eine Mine erwischt!")
+    }
+    println("Tippe 'N' für ein neues Spiel oder 'Q' zum Beenden.")
+  }
+  def restartGame(): Unit = {
+    controller.setDifficultySet(false)
+    controller.resetGame()
+    state = MenuState
+    chooseDifficulty()
+    controller.resetGame()
+    state = PlayingState
+    println(s"Verbleibende Flaggen: ${controller.remainingFlags()}")
     println(controller.displayBoardToString())
+    Gui.restartGame() // GUI synchronisieren
+  }
+
+  override def update: String = {
+    if (controller.isGameOver) state = LostState
+    else if (controller.isWon) state = WonState
+    println(s"Verbleibende Flaggen: ${controller.remainingFlags()}")
+    println(controller.displayBoardToString())
+    if (controller.isGameOver || controller.isWon) handleEndGame()
     ""
   }
 
   // gui added stuff
   private var shouldRun = true
-  var guiQuitCallback: () => Unit = () => ()
+  var guiQuitCallback: () => Unit = () => {
+    println("TUI hat Quit-Signal gegeben. Beende GUI...")
+    if (Gui.top != null) Gui.top.close()
+  }
+
   def requestQuit(): Unit = {
     shouldRun = false
   }

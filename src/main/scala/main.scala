@@ -16,15 +16,11 @@ import de.htwg.fileio._
 
   //val fileIO: FileIOInterface = new FileIOJson()
   val fileIO: FileIOInterface = new FileIOXml()
-
-
   // Erzeuge den Controller mit FileIO über Dependency Injection
   val controller: ControllerInterface = new Controller(BoardFactory.getInstance, fileIO)
-
   // Stellt den Controller für Klassen mit `using` bereit (z. B. TUI)
   given ControllerInterface = controller
-
-  // NEU: Initialisiere GUI zuerst
+  // Initialisiere GUI zuerst
   Gui.initialize(controller)
 
   // Starte die TUI in einem separaten Thread
@@ -34,12 +30,10 @@ import de.htwg.fileio._
       Thread.sleep(100) // Kurze Verzögerung, um sicherzustellen, dass die GUI initialisiert ist
       tui.start(resetBoard = false)
     }
-    /*= tui.start()*/
   })
   tuiThread.setDaemon(true) // Programm beendet sich, wenn GUI geschlossen wird
   tuiThread.start()
 
-  // Initialisiere und starte die GUI
-  /*Gui.initialize(controller)*/
+  // starte die GUI
   Gui.main(Array.empty)
 }

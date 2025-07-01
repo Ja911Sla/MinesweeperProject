@@ -27,10 +27,6 @@ class Controller(private var boardFactory: BoardFactory, val fileIO: FileIOInter
   override def isGameOver: Boolean = _isGameOver
 
   override def isWon: Boolean = _isWon
-  //var isGameOver: Boolean = false
-  //var isWon: Boolean = false
-
-  //val fileIO0: FileIOInterface = new FileIOJson()
 
   override def getBoard: BoardInterface = board
 
@@ -105,6 +101,8 @@ override def resetGame(): String = {
   timer.reset()
   _isGameOver = false
   _isWon = false
+  undoStack.clear()
+  redoStack.clear()
   val resetMessage = board.reset()
   timer.start()
   notifyObservers()
