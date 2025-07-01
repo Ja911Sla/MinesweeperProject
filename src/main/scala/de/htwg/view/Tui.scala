@@ -15,12 +15,52 @@ class Tui (using var controller: ControllerInterface) extends Observer {
   var state: GameState = PlayingState
   private val flagPattern = "F ([A-Z])([1-9][0-9]*)".r
   private val revealPattern = "([A-Z])([1-9][0-9]*)".r
+  private var isInitialized: Boolean = false // Add this variable
 
   def runObserverUpdate(): Unit = update
 
-
   def start(resetBoard: Boolean = true): String = {
+    if (isInitialized) {
+      println("TUI bereits initialisiert.")
+      return controller.displayBoardToString()
+    }
 
+    isInitialized = true
+    controller.add(this) // Observer nur einmal hinzufügen
+
+    if (!controller.isDifficultySet) {
+      chooseDifficulty()
+      if (resetBoard) controller.resetGame()
+    } else {
+      println("Schwierigkeit bereits durch GUI gesetzt.")
+      println(controller.displayBoardToString())
+    }
+
+    shouldRun = true
+    while (shouldRun) {
+      if (state == PlayingState) {
+        println(controller.displayBoardToString())
+      }
+
+      Option(scala.io.StdIn.readLine()) match {
+        case Some(input) =>
+          if (input.trim.toUpperCase == "Q") {
+            println("Spiel beendet.")
+            shouldRun = false
+            guiQuitCallback()
+          } else {
+            shouldRun = state.handleInput(input, this)
+          }
+        case None =>
+          println("Eingabestrom beendet.")
+          shouldRun = false
+      }
+    }
+    "Game over."
+  }
+
+
+ /* def start(resetBoard: Boolean = true): String = {
 
     chooseDifficulty()
     if (resetBoard) controller.resetGame()
@@ -64,14 +104,17 @@ class Tui (using var controller: ControllerInterface) extends Observer {
     }
     "Game over."
   }
-
+*/
 
   def chooseDifficulty(): Unit = {
     if (controller.isDifficultySet) {
       println("Schwierigkeit bereits durch GUI gesetzt.")
+      /*
       controller.add(this)
       println(controller.displayBoardToString()) // <- Damit TUI gleich was sieht
+      */
       return
+
     }
     // GUI hat noch keine Schwierigkeit gesetzt, also TUI übernimmt
     println("Wähle Schwierigkeitsgrad:")
@@ -103,9 +146,9 @@ class Tui (using var controller: ControllerInterface) extends Observer {
         GameConfig.getInstance.setCustom(9, 15)
         CustomStrategy
     }
-
+    /*
     controller.add(this)
-
+    */
     val factory = strategy.getBoardFactory()
     controller.createNewBoard(factory)
     controller.setDifficultySet(true)

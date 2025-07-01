@@ -19,8 +19,16 @@ class Controller(private var boardFactory: BoardFactory, val fileIO: FileIOInter
   private val timer = new Timer()
   private val undoStack: mutable.Stack[Command] = mutable.Stack() // andu Schtäck
   private val redoStack: mutable.Stack[Command] = mutable.Stack() // redu Schtäck
-  var isGameOver: Boolean = false
-  var isWon: Boolean = false
+
+  private var _isGameOver: Boolean = false
+
+  private var _isWon: Boolean = false
+
+  override def isGameOver: Boolean = _isGameOver
+
+  override def isWon: Boolean = _isWon
+  //var isGameOver: Boolean = false
+  //var isWon: Boolean = false
 
   //val fileIO0: FileIOInterface = new FileIOJson()
 
@@ -51,13 +59,25 @@ class Controller(private var boardFactory: BoardFactory, val fileIO: FileIOInter
   override def revealCell(row: Int, col: Int): Boolean = {
     val safe = board.reveal(row, col)
     if (!safe) {
+      _isGameOver = true
+      notifyObservers()
+    } else if (checkWin()) {
+      _isWon = true
+      notifyObservers()
+    }
+    safe
+  }
+  /*
+  override def revealCell(row: Int, col: Int): Boolean = {
+    val safe = board.reveal(row, col)
+    if (!safe) {
       isGameOver = true
     } else if (checkWin()) {
       isWon = true
     }
     notifyObservers()
     safe
-  }
+  }*/
 
 
   override def flagCell(x: Int, y: Int): Unit = {
@@ -67,10 +87,31 @@ class Controller(private var boardFactory: BoardFactory, val fileIO: FileIOInter
 
   override def checkWin(): Boolean = {
     val result = board.checkWin()
+    if (result) {
+      _isWon = true
+      timer.stop()
+      notifyObservers()
+    }
+    result
+  }
+/*
+  override def checkWin(): Boolean = {
+    val result = board.checkWin()
     if (result) timer.stop()
     notifyObservers()
     result
-  }
+  }*/
+override def resetGame(): String = {
+  timer.reset()
+  _isGameOver = false
+  _isWon = false
+  val resetMessage = board.reset()
+  timer.start()
+  notifyObservers()
+  resetMessage
+}
+
+  /*
 
   override def resetGame(): String = {
     timer.reset()
@@ -78,7 +119,7 @@ class Controller(private var boardFactory: BoardFactory, val fileIO: FileIOInter
     timer.start()
     notifyObservers()
     resetMessage
-  }
+  }*/
 
   override def displayBoardToString(revealAll: Boolean = false): String = {
     board.display(revealAll)

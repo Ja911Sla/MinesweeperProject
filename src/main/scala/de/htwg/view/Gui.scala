@@ -9,14 +9,25 @@ import de.htwg.utility.Observer
 import de.htwg.controller.ControllerInterface
 import de.htwg.controller.factory.{BoardFactory, EasyBoardFactory, HardBoardFactory, MediumBoardFactory}
 import de.htwg.controller.controllerBase.given_ControllerInterface
+import de.htwg.controller.controllerBase.SetCommand
+import de.htwg.controller.controllerBase.FlagCommand
 object Gui extends SimpleSwingApplication {
   private var controllerOpt: Option[ControllerInterface] = None
   var tui: Tui = _
   var tuiThread: Thread = _
+  private var guiObserverRegistered = false // Flag für Observer-Registrierung
 
   def initialize(c: ControllerInterface): Unit = {
     controllerOpt = Some(c)
+    if (!guiObserverRegistered) {
+      controllerOpt.foreach(_.add(GuiObserver))
+      guiObserverRegistered = true
+    }
   }
+  /*
+  def initialize(c: ControllerInterface): Unit = {
+    controllerOpt = Some(c)
+  }*/
 
   var startGameHandler: BoardFactory => Unit = startGame _ // Für Tests
 
@@ -41,13 +52,13 @@ object Gui extends SimpleSwingApplication {
     reactions += {
       case ButtonClicked(`easyButton`) =>
         startGameHandler(EasyBoardFactory) // startGame(EasyBoardFactory) ursprünglich - angepasst für Tests
-        controllerOpt.get.createNewBoard(EasyBoardFactory)
+      /* controllerOpt.get.createNewBoard(EasyBoardFactory)*/
       case ButtonClicked(`mediumButton`) =>
         startGameHandler(MediumBoardFactory)
-        controllerOpt.get.createNewBoard(MediumBoardFactory)
+      /*  controllerOpt.get.createNewBoard(MediumBoardFactory)*/
       case ButtonClicked(`hardButton`) =>
         startGameHandler(HardBoardFactory)
-        controllerOpt.get.createNewBoard(HardBoardFactory)
+      /* controllerOpt.get.createNewBoard(HardBoardFactory)*/
     }
   }
 
@@ -89,13 +100,36 @@ object Gui extends SimpleSwingApplication {
     border = Swing.EmptyBorder(5, 65, 5, 10)
   }
 
-  def attachController(c: ControllerInterface): Unit = {
+  /*def attachController(c: ControllerInterface): Unit = {
     controllerOpt = Some(c)
     controllerOpt.foreach(_.add(GuiObserver))
-  }
+  }*/
 
   def startGame(factory: BoardFactory): Unit = {
     require(controllerOpt.isDefined, "Controller wurde nicht initialisiert!")
+    controllerOpt.foreach { controller =>
+      // Nur createNewBoard aufrufen, wenn Schwierigkeit nicht gesetzt ist
+      if (!controller.isDifficultySet) {
+        controller.createNewBoard(factory)
+        controller.setDifficultySet(true)
+      }
+      // TUI starten, falls noch nicht geschehen
+      if (tui == null) {
+        tui = new Tui
+        tui.guiQuitCallback = () => {
+          println("TUI hat Quit-Signal gegeben. Beende GUI...")
+          top.close()
+        }
+        tuiThread = new Thread(new Runnable {
+          override def run(): Unit = {
+            tui.start(resetBoard = false)
+          }
+        })
+        tuiThread.setDaemon(true)
+        tuiThread.start()
+      }
+
+      /*
     controllerOpt.foreach { controller =>
       controller.createNewBoard(factory)
       controller.setDifficultySet(true) // <<< wichtig für die TUI
@@ -116,19 +150,29 @@ object Gui extends SimpleSwingApplication {
           override def run(): Unit = {
             tui.start(resetBoard = false)
           }
-        })
+        }) */
 
-        val size = controller.getBoard.size
-        gridPanel.rows = size
-        gridPanel.columns = size
-        gridPanel.contents.clear()
+      val size = controller.getBoard.size
+      gridPanel.rows = size
+      gridPanel.columns = size
+      gridPanel.contents.clear()
 
-        for (row <- 0 until size; col <- 0 until size) {
-          val cellButton = new Button {
-            text = "⬜"
-            listenTo(mouse.clicks)
-            reactions += {
-              case e: MouseClicked if e.peer.getButton == java.awt.event.MouseEvent.BUTTON1 =>
+      for (row <- 0 until size; col <- 0 until size) {
+        val cellButton = new Button {
+          text = "⬜"
+          listenTo(mouse.clicks)
+          reactions += {
+            case e: MouseClicked if e.peer.getButton == java.awt.event.MouseEvent.BUTTON1 =>
+              if (!controller.isGameOver) {
+                val cmd = new SetCommand(row, col, controller)
+                controller.doAndStore(cmd)
+                if (controller.isGameOver) {
+                  handleGameOver()
+                } else if (controller.checkWin()) {
+                  handleGameWon()
+                }
+              }
+            /*
                 if (controller.getBoard.cells(row)(col).isMine) {
                   controller.revealCell(row, col)
                   handleGameOver()
@@ -136,35 +180,45 @@ object Gui extends SimpleSwingApplication {
                   handleGameWon()
                 } else {
                   controller.revealCell(row, col)
-                }
+                }*/
 
-              case e: MouseClicked if e.peer.getButton == java.awt.event.MouseEvent.BUTTON3 =>
-                controller.flagCell(row, col)
-            }
+            case e: MouseClicked if e.peer.getButton == java.awt.event.MouseEvent.BUTTON3 =>
+              if (!controller.isGameOver) {
+                val cmd = new FlagCommand(row, col, controller)
+                controller.doAndStore(cmd)
+              }
+            /* controller.flagCell(row, col)*/
           }
-          gridPanel.contents += cellButton
         }
-
-        mainPanel.layout(topControlPanel) = BorderPanel.Position.North
-        //mainPanel.layout(topPanel) = BorderPanel.Position.North
-        mainPanel.layout(gridPanel) = BorderPanel.Position.Center
-        //mainPanel.layout(newGameButton) = BorderPanel.Position.South:
-        mainPanel.peer.revalidate()
-        mainPanel.peer.repaint()
+        gridPanel.contents += cellButton
       }
+
+      mainPanel.layout(topControlPanel) = BorderPanel.Position.North
+      //mainPanel.layout(topPanel) = BorderPanel.Position.North
+      mainPanel.layout(gridPanel) = BorderPanel.Position.Center
+      //mainPanel.layout(newGameButton) = BorderPanel.Position.South:
+      mainPanel.peer.revalidate()
+      mainPanel.peer.repaint()
+
+      //neu grok
+      GuiObserver.update
       // Handle game over scenario
-
-
     }
   }
 
-    var isGameOver = false
+  /*var isGameOver = false*/
 
   def controller: ControllerInterface = controllerOpt.getOrElse(
     throw new IllegalStateException("Controller wurde nicht initialisiert!")
   )
 
-    def handleGameOver(): Unit = {
+  def handleGameOver(): Unit = {
+    if (!controller.isGameOver) return // Controller hat Vorrang
+    for (button <- gridPanel.contents) button.enabled = false
+    GuiObserver.update
+    Dialog.showMessage(mainPanel, "💥 Game Over – Du hast eine Mine erwischt!", "Verloren", Dialog.Message.Error)
+  }
+  /*
       if (!isGameOver) {
         isGameOver = true
         // Deaktiviere alle Buttons
@@ -179,10 +233,15 @@ object Gui extends SimpleSwingApplication {
 
         GuiObserver.update
         Dialog.showMessage(mainPanel, "💥 Game Over – Du hast eine Mine erwischt!", "Verloren", Dialog.Message.Error)
-      }
-    }
+      }*/
 
-    def handleGameWon(): Unit = {
+  def handleGameWon(): Unit = {
+    if (!controller.isWon) return // Controller hat Vorrang
+    for (button <- gridPanel.contents) button.enabled = false
+    GuiObserver.update
+    Dialog.showMessage(mainPanel, "Gewonnen, Glückwunsch!", "Gewonnen", Dialog.Message.Info)
+
+    /*
       for (button <- gridPanel.contents)
         button.enabled = false
 
@@ -192,27 +251,41 @@ object Gui extends SimpleSwingApplication {
       }
 
       GuiObserver.update
-      Dialog.showMessage(mainPanel, "Gewonnen, Glückwunsch!", "Gewonnen", Dialog.Message.Info)
-    }
+      Dialog.showMessage(mainPanel, "Gewonnen, Glückwunsch!", "Gewonnen", Dialog.Message.Info)*/
+  }
 
-    // Observer to update the GUI when controller notifies
-    private val GuiObserver: Observer = new Observer {
-      override def update: String = {
-        SwingUtilities.invokeLater(() => {
-          val board = controller.getBoard
+  // Observer to update the GUI when controller notifies
+  private val GuiObserver: Observer = new Observer {
+    override def update: String = {
+      SwingUtilities.invokeLater(() => {
+        val board = controller.getBoard
 
-          if (gridPanel.rows != board.size || gridPanel.columns != board.size) {
-            gridPanel.rows = board.size
-            gridPanel.columns = board.size
-            gridPanel.contents.clear()
+        if (gridPanel.rows != board.size || gridPanel.columns != board.size) {
+          gridPanel.rows = board.size
+          gridPanel.columns = board.size
+          gridPanel.contents.clear()
 
-            for (row <- 0 until board.size; col <- 0 until board.size) {
-              val cellButton = new Button {
-                text = "⬜"
-                listenTo(mouse.clicks)
-                reactions += {
-                  case e: MouseClicked if e.peer.getButton == java.awt.event.MouseEvent.BUTTON1 =>
-                    if (!isGameOver) {
+          for (row <- 0 until board.size; col <- 0 until board.size) {
+            val cellButton = new Button {
+              text = "⬜"
+              listenTo(mouse.clicks)
+              reactions += {
+                case e: MouseClicked if e.peer.getButton == java.awt.event.MouseEvent.BUTTON1 =>
+                  if (!controller.isGameOver) {
+                    val cmd = new SetCommand(row, col, controller)
+                    controller.doAndStore(cmd)
+                    if (controller.isGameOver) {
+                      handleGameOver()
+                    } else if (controller.checkWin()) {
+                      handleGameWon()
+                    }
+                  }
+                case e: MouseClicked if e.peer.getButton == java.awt.event.MouseEvent.BUTTON3 =>
+                  if (!controller.isGameOver) {
+                    val cmd = new FlagCommand(row, col, controller)
+                    controller.doAndStore(cmd)
+                  }
+                /*if (!isGameOver) {
                       if (controller.getBoard.cells(row)(col).isMine) {
                         controller.revealCell(row, col)
                         handleGameOver()
@@ -223,42 +296,43 @@ object Gui extends SimpleSwingApplication {
                       }
                     }
                   case e: MouseClicked if e.peer.getButton == java.awt.event.MouseEvent.BUTTON3 =>
-                    controller.flagCell(row, col)
-                }
+                    controller.flagCell(row, col)*/
+
               }
-              gridPanel.contents += cellButton
             }
-
-            mainPanel.layout(gridPanel) = BorderPanel.Position.Center
-            mainPanel.layout(newGameButton) = BorderPanel.Position.South
-            mainPanel.peer.revalidate()
-            mainPanel.peer.repaint()
+            gridPanel.contents += cellButton
           }
 
-          // Update alle Buttons
-          for ((button, idx) <- gridPanel.contents.zipWithIndex) {
-            val row = idx / board.size
-            val col = idx % board.size
-            val cell = board.cells(row)(col)
-
-            button.asInstanceOf[Button].text =
-              if (cell.isRevealed) {
-                if (cell.isMine) "💣"
-                else if (cell.mineCount > 0) cell.mineCount.toString
-                else ""
-              } else if (cell.isFlagged) "🚩"
-              else "⬜"
-          }
-          flagCountLabel.text = s"🚩: ${controller.remainingFlags()}"
+          mainPanel.layout(gridPanel) = BorderPanel.Position.Center
+          mainPanel.layout(newGameButton) = BorderPanel.Position.South
           mainPanel.peer.revalidate()
           mainPanel.peer.repaint()
-        })
-        ""
-      }
+        }
+
+        // Update alle Buttons
+        for ((button, idx) <- gridPanel.contents.zipWithIndex) {
+          val row = idx / board.size
+          val col = idx % board.size
+          val cell = board.cells(row)(col)
+
+          button.asInstanceOf[Button].text =
+            if (cell.isRevealed) {
+              if (cell.isMine) "💣"
+              else if (cell.mineCount > 0) cell.mineCount.toString
+              else ""
+            } else if (cell.isFlagged) "🚩"
+            else "⬜"
+        }
+        flagCountLabel.text = s"🚩: ${controller.remainingFlags()}"
+        mainPanel.peer.revalidate()
+        mainPanel.peer.repaint()
+      })
+      ""
     }
+  }
 
-    def runObserverUpdate(): Unit = GuiObserver.update // öffentliche methode für die tests
-
-
-
+  def runObserverUpdate(): Unit = GuiObserver.update // öffentliche methode für die tests
 }
+
+
+

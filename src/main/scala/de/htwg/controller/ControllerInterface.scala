@@ -40,4 +40,8 @@ trait ControllerInterface {
 
   def save(): Unit
   def load(): Unit
+
+  def isGameOver: Boolean
+
+  def isWon: Boolean
 }

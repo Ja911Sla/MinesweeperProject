@@ -1,6 +1,4 @@
-
 package de.htwg.controller.controllerMock
-
 
 import de.htwg.controller.ControllerInterface
 import de.htwg.controller.controllerBase.Command
@@ -9,23 +7,40 @@ import de.htwg.utility.*
 import de.htwg.model.BoardInterface
 import de.htwg.model.boardBase.Board
 import scala.collection.mutable
+import de.htwg.model.boardBase.Timer
+import de.htwg.utility.Observable
 
-class Controller(private var boardFactory: BoardFactory) extends ControllerInterface {
-  private var board: BoardInterface = new Board()
+class Controller(private var boardFactory: BoardFactory) extends ControllerInterface with Observable {
+  private var board: BoardInterface = boardFactory.createBoard()
+  private val timer = new Timer()
+  private val undoStack: mutable.Stack[Command] = mutable.Stack()
+  private val redoStack: mutable.Stack[Command] = mutable.Stack()
   private var observers: List[Observer] = List.empty
   var revealed: Boolean = false
   var flagged: Boolean = false
   var resetCalled: Boolean = false
 
+  override def isGameOver: Boolean = false // Mock implementation
+
+  override def isWon: Boolean = false // Mock implementation
+
   override def getBoard: BoardInterface = board
+
+  override def setBoard(storedBoard: BoardInterface): Unit = {
+    board = storedBoard
+    notifyObservers() // Now accessible
+  }
+
+  /*
+    override def setBoard(newBoard: BoardInterface): Unit = {
+      board = newBoard
+    }*/
 
   override def isDifficultySet: Boolean = false
 
   override def setDifficultySet(flag: Boolean): Unit = {}
 
-  override def setBoard(newBoard: BoardInterface): Unit = {
-    board = newBoard
-  }
+
 
   override def createNewBoard(factory: BoardFactory): Unit = {
     board = factory.createBoard()
@@ -81,9 +96,6 @@ class Controller(private var boardFactory: BoardFactory) extends ControllerInter
   override def remove(observer: Observer): Unit = {
     observers = observers.filterNot(_ ==observer)
     }
-
-  private val undoStack: mutable.Stack[Command] = mutable.Stack()
-  private val redoStack: mutable.Stack[Command] = mutable.Stack()
 
   override def getUndoStack: mutable.Stack[Command] = undoStack
   override def getRedoStack: mutable.Stack[Command] = redoStack

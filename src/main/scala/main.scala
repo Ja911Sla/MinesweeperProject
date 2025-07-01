@@ -24,15 +24,22 @@ import de.htwg.fileio._
   // Stellt den Controller für Klassen mit `using` bereit (z. B. TUI)
   given ControllerInterface = controller
 
+  // NEU: Initialisiere GUI zuerst
+  Gui.initialize(controller)
+
   // Starte die TUI in einem separaten Thread
   val tui = new Tui()
   val tuiThread = new Thread(new Runnable {
-    override def run(): Unit = tui.start()
+    override def run(): Unit = {
+      Thread.sleep(100) // Kurze Verzögerung, um sicherzustellen, dass die GUI initialisiert ist
+      tui.start(resetBoard = false)
+    }
+    /*= tui.start()*/
   })
   tuiThread.setDaemon(true) // Programm beendet sich, wenn GUI geschlossen wird
   tuiThread.start()
 
   // Initialisiere und starte die GUI
-  Gui.initialize(controller)
+  /*Gui.initialize(controller)*/
   Gui.main(Array.empty)
 }
