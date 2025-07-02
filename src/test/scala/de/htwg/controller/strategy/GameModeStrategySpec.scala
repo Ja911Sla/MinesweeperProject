@@ -51,5 +51,14 @@ class GameModeStrategySpec extends AnyWordSpec {
       board.size should be(13)
       board.mineCount should be(55)
     }
+
+    "return the BoardFactory singleton from getBoardFactory" in {
+      val factoryFromStrategy = CustomStrategy.getBoardFactory()
+      val factoryDirect = BoardFactory.getInstance
+
+      factoryFromStrategy should not be null
+      factoryFromStrategy shouldBe factoryDirect
+    }
+
   }
 }

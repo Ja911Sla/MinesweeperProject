@@ -24,9 +24,12 @@ lazy val root = (project in file("."))
       "com.google.inject" % "guice" % "7.0.0",
       "net.codingwell" %% "scala-guice" % "7.0.0" cross CrossVersion.for3Use2_13,
 
+
+      "org.scalatestplus" %% "mockito-4-11" % "3.2.18.0" % Test,
       // Testing
       "org.scalactic" %% "scalactic" % "3.2.14",
       "org.scalatest" %% "scalatest" % "3.2.14" % Test
+
     ),
 
     // Testeinstellungen

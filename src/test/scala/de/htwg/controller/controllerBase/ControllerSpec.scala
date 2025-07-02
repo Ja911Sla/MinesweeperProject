@@ -4,11 +4,13 @@ import de.htwg.controller.factory.BoardFactory
 import de.htwg.fileio.FileIOInterface
 import de.htwg.model.boardBase.Board
 import de.htwg.utility.Observer
+import de.htwg.view.Gui.controller
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 // import de.htwg.command.*
 import de.htwg.controller.*
 import de.htwg.controller.controllerBase.{Command, Controller, SetCommand}
+import de.htwg.utility.Observer
 
 import java.io.{ByteArrayOutputStream, PrintStream}
 

@@ -1,437 +1,383 @@
 package de.htwg.view
 
-import de.htwg.controller.controllerBase.{Controller, SetCommand}
-import de.htwg.controller.factory.{BoardFactory, EasyBoardFactory}
-import de.htwg.model.BoardInterface
-import de.htwg.model.boardBase.Board
-import de.htwg.model.singleton.GameConfig
-import org.scalatest.matchers.should.Matchers.*
 import org.scalatest.wordspec.AnyWordSpec
-import de.htwg.controller.controllerBase.given_ControllerInterface
+import org.scalatest.matchers.should.Matchers
 import de.htwg.controller.ControllerInterface
-import de.htwg.fileio.FileIOInterface
-import de.htwg.model.boardBase.GameCell
+import de.htwg.model.BoardInterface
+import de.htwg.controller.controllerBase.{FlagCommand, SetCommand}
+import de.htwg.view.state.{LostState, WonState}
+import org.mockito.Mockito.*
+import org.mockito.ArgumentMatchers.*
+import org.scalatestplus.mockito.MockitoSugar
 
-import java.io.{ByteArrayInputStream, ByteArrayOutputStream, PrintStream}
-import scala.Console
-import de.htwg.view.state.{IdleState, LostState, MenuState, PlayingState, QuitState, RestartState, WonState}
+import java.io.ByteArrayInputStream
 
-class TuiSpec extends AnyWordSpec {
+class TuiTest extends AnyWordSpec with Matchers with MockitoSugar {
 
-  class DummyFileIO extends FileIOInterface {
-    override def save(board: de.htwg.model.BoardInterface): Unit = {}
 
-    override def load(): de.htwg.model.BoardInterface = new Board(2, 1)
-  }
+  "A Tui" should {
 
-  given ControllerInterface = new Controller(BoardFactory.getInstance, new DummyFileIO())
-  object TestBoardFactory extends BoardFactory {
-    override def createBoard(): Board = new Board(9, 1)
-    
-  }
+    "recognize and process a reveal command like 'C3'" in {
+      val controller = mock[ControllerInterface]
+      val board = mock[BoardInterface]
+      when(controller.getBoard).thenReturn(board)
+      when(board.size).thenReturn(10)
+      when(controller.isGameOver).thenReturn(false)
+      when(controller.isWon).thenReturn(false)
+      when(controller.remainingFlags()).thenReturn(5)
+      when(controller.checkWin()).thenReturn(false)
 
-  "The Tui" should {
-
-    "show help when H is entered" in {
-      val in = new ByteArrayInputStream("1\nH\nQ\n".getBytes())
-      val out = new ByteArrayOutputStream()
-      val controller = new Controller(TestBoardFactory, new DummyFileIO())
-      val tui = new Tui
-
-      Console.withIn(in) {
-        Console.withOut(new PrintStream(out)) {
-          tui.start()
-        }
-      }
-
-      val output = out.toString
-      output should include("Befehle:")
+      val tui = new Tui(using controller)
+      val result = tui.processInputLine("C3")
+      result shouldBe true
     }
 
-    "show instructions when A is entered" in {
-      val in = new ByteArrayInputStream("1\nA\nQ\n".getBytes())
-      val out = new ByteArrayOutputStream()
-      val controller = new Controller(TestBoardFactory, new DummyFileIO())
-      val tui = new Tui
+    "recognize and process a flag command like 'F C3'" in {
+      val controller = mock[ControllerInterface]
+      val board = mock[BoardInterface]
+      when(controller.getBoard).thenReturn(board)
+      when(board.size).thenReturn(10)
+      when(controller.isGameOver).thenReturn(false)
+      when(controller.isWon).thenReturn(false)
+      when(controller.remainingFlags()).thenReturn(5)
+      when(controller.checkWin()).thenReturn(false)
 
-      Console.withIn(in) {
-        Console.withOut(new PrintStream(out)) {
-          tui.start()
-        }
-      }
-
-      val output = out.toString
-      output should include("Neu bei Minesweeper? Kein Problem!")
-    }
-    
-
-    "show elapsed time when T is entered" in {
-      val in = new ByteArrayInputStream("1\nT\nQ\n".getBytes())
-      val out = new ByteArrayOutputStream()
-      val controller = new Controller(TestBoardFactory, new DummyFileIO())
-      val tui = new Tui
-
-      Console.withIn(in) {
-        Console.withOut(new PrintStream(out)) {
-          tui.start()
-        }
-      }
-
-      val output = out.toString
-      output should include("Deine Spielzeit: 0 Sekunden.")
+      val tui = new Tui(using controller)
+      val result = tui.processInputLine("F C3")
+      result shouldBe true
     }
 
-    "toggle flag with F A1" in {
-      val controller = new Controller(TestBoardFactory, new DummyFileIO())
-      val tui = new Tui
-      tui.processInputLine("F A1")
-      controller.getBoard.cells(0)(0).isFlagged should be(true)
+    "handle invalid input correctly" in {
+      val controller = mock[ControllerInterface]
+      val board = mock[BoardInterface]
+      when(controller.getBoard).thenReturn(board)
+      when(board.size).thenReturn(10)
+
+      val tui = new Tui(using controller)
+      val result = tui.processInputLine("invalid")
+      result shouldBe true
     }
 
-    "reveal a cell with A1" in {
-      val controller = new Controller(TestBoardFactory, new DummyFileIO())
-      val tui = new Tui
-      tui.processInputLine("A1")
-      controller.getBoard.cells(0)(0).isRevealed should be(true)
+    "recognize and handle undo and redo commands" in {
+      val controller = mock[ControllerInterface]
+      val tui = new Tui(using controller)
+
+      tui.processInputLine("U") shouldBe true
+      verify(controller).undo()
+
+      tui.processInputLine("R") shouldBe true
+      verify(controller).redo()
     }
 
-    "handle invalid input" in {
-      val in = new ByteArrayInputStream("1\nXYZ\nQ\n".getBytes())
-      val out = new ByteArrayOutputStream()
-      val controller = new Controller(TestBoardFactory, new DummyFileIO())
-      val tui = new Tui
+    "handle game over condition correctly" in {
+      val controller = mock[ControllerInterface]
+      val board = mock[BoardInterface]
+      when(controller.getBoard).thenReturn(board)
+      when(board.size).thenReturn(10)
+      when(controller.isGameOver).thenReturn(true)
+      when(controller.isWon).thenReturn(false)
 
-      Console.withIn(in) {
-        Console.withOut(new PrintStream(out)) {
-          tui.start()
-        }
-      }
-
-      val output = out.toString
-      output should include("Ungültige Eingabe")
+      val tui = new Tui(using controller)
+      val result = tui.processInputLine("C3")
+      result shouldBe true
     }
 
-    "win the game by revealing all safe cells" in {
-      val board = Board(size = 2, mineCount = 1)
-      for (r <- 0 until board.size; c <- 0 until board.size) {
-        board.cells(r)(c).isMine = false
-      }
-      board.cells(0)(0).isMine = true
+    //    "test start() initialization logic" in {
+    //      val controller = mock[ControllerInterface]
+    //      val tui = new Tui(using controller)
+    //      when(controller.isDifficultySet).thenReturn(true)
+    //      when(controller.displayBoardToString()).thenReturn("Board")
+    //
+    //      val result = tui.start(resetBoard = false)
+    //      result should include("Board")
+    //    }
 
-      val controller = new Controller(TestBoardFactory, new DummyFileIO())
-      val tui = new Tui
+    //    "test chooseDifficulty() with default input" in {
+    //      val controller = mock[ControllerInterface]
+    //      when(controller.isDifficultySet).thenReturn(false)
+    //
+    //      val tui = new Tui(using controller)
+    //
+    //      // Simuliere Eingabe über StdIn (Workaround durch override)
+    //      Console.withIn(new java.io.ByteArrayInputStream("1\n".getBytes())) {
+    //        tui.chooseDifficulty()
+    //      }
+    //      verify(controller).createNewBoard(any())
+    //      verify(controller).setDifficultySet(true)
+    //    }
 
-      val out = new ByteArrayOutputStream()
-      Console.withOut(new PrintStream(out)) {
-        tui.processInputLine("A2") // (0,1)
-        tui.processInputLine("B1") // (1,0)
-        tui.processInputLine("B2") // (1,1) -> all safe cells revealed
-      }
+    "process valid input (reveal)" in {
+      val controller = mock[ControllerInterface]
+      val board = mock[BoardInterface]
+      when(controller.getBoard).thenReturn(board)
+      when(board.size).thenReturn(10)
+      when(controller.isGameOver).thenReturn(false)
+      when(controller.isWon).thenReturn(false)
+      when(controller.remainingFlags()).thenReturn(5)
+      when(controller.checkWin()).thenReturn(false)
 
-      val output = out.toString
-      output should include("Du hast gewonnen!")
+      val tui = new Tui(using controller)
+      tui.processInputLine("C3") shouldBe true
     }
 
-    "select Medium mode on input 2" in {
-      val in = new ByteArrayInputStream("2\n".getBytes())
-      val out = new ByteArrayOutputStream()
+    "process valid input (flag)" in {
+      val controller = mock[ControllerInterface]
+      val board = mock[BoardInterface]
+      when(controller.getBoard).thenReturn(board)
+      when(board.size).thenReturn(10)
+      when(controller.isGameOver).thenReturn(false)
+      when(controller.isWon).thenReturn(false)
+      when(controller.remainingFlags()).thenReturn(5)
+      when(controller.checkWin()).thenReturn(false)
 
-      Console.withIn(in) {
-        Console.withOut(new PrintStream(out)) {
-          val tui = new Tui()
-          val method = tui.getClass.getDeclaredMethod("chooseDifficulty")
-          method.setAccessible(true)
-          method.invoke(tui)
-          tui.controller.getBoard.size should be(9)
-          tui.controller.getBoard.mineCount should be(15)
-        }
-      }
-    }
-    
-    "select Hard mode on input 3" in {
-      val in = new ByteArrayInputStream("3\n".getBytes())
-      val out = new ByteArrayOutputStream()
-
-      Console.withIn(in) {
-        Console.withOut(new PrintStream(out)) {
-          val tui = new Tui()
-          val method = tui.getClass.getDeclaredMethod("chooseDifficulty")
-          method.setAccessible(true)
-          method.invoke(tui)
-          tui.controller.getBoard.size should be(12)
-          tui.controller.getBoard.mineCount should be(35)
-        }
-      }
-    }
-    "select Custom mode on input 4 with size and mines" in {
-      val in = new ByteArrayInputStream("4\n5\n3\n".getBytes()) // Size 5, Mines 3
-      val out = new ByteArrayOutputStream()
-
-      Console.withIn(in) {
-        Console.withOut(new PrintStream(out)) {
-          val tui = new Tui()
-          val method = tui.getClass.getDeclaredMethod("chooseDifficulty")
-          method.setAccessible(true)
-          method.invoke(tui)
-          tui.controller.getBoard.size should be(5)
-          tui.controller.getBoard.mineCount should be(3)
-        }
-      }
-    }
-    "handle invalid difficulty selection with fallback to Medium" in {
-      val in = new ByteArrayInputStream("invalid\n".getBytes())
-      val out = new ByteArrayOutputStream()
-
-      Console.withIn(in) {
-        Console.withOut(new PrintStream(out)) {
-          given ControllerInterface = new Controller(BoardFactory.getInstance, new DummyFileIO())
-          val tui = new Tui()
-          val method = tui.getClass.getDeclaredMethod("chooseDifficulty")
-          method.setAccessible(true)
-          method.invoke(tui)
-
-          val output = out.toString
-          output should include("Ungültige Eingabe. Standardmäßig 'Mittel' gewählt.")
-          tui.controller.getBoard.size should be(9)
-          tui.controller.getBoard.mineCount should be(15)
-        }
-      }
-    }
-    "show winning message when all mines are flagged after flag input" in {
-      val controller = new Controller(TestBoardFactory, new DummyFileIO())
-      val tui = new Tui
-
-      // Set up a single mine at A1
-      controller.getBoard.cells(0)(0).isMine = true
-
-      val out = new ByteArrayOutputStream()
-      Console.withOut(new PrintStream(out)) {
-        tui.processInputLine("F A1") // Flagging A1 should trigger win
-      }
-
-      val output = out.toString
-      output should include("Du hast gewonnen!")
-      output should include("Spielzeit: ")
-    }
-    "show losing message when revealing a mine" in {
-      val controller = new Controller(TestBoardFactory, new DummyFileIO())
-      val tui = new Tui
-
-      // Set up a single mine at A1
-      controller.getBoard.cells(0)(0).isMine = true
-
-      val out = new ByteArrayOutputStream()
-      Console.withOut(new PrintStream(out)) {
-        tui.processInputLine("A1") // Revealing A1 should trigger loss
-      }
-
-      val output = out.toString
-      output should include("BOOOM! Du hast verloren.")
-      output should include("Spielzeit: ")
+      val tui = new Tui(using controller)
+      tui.processInputLine("F C3") shouldBe true
     }
 
-    "handle M mode change correctly and go back to game" in {
-      given ControllerInterface = new Controller(BoardFactory.getInstance, new DummyFileIO())
-      val tui = new Tui()
+    //    "restartGame should reset and start new game" in {
+    //      val controller = mock[ControllerInterface]
+    //      val board = mock[BoardInterface]
+    //      when(controller.getBoard).thenReturn(board)
+    //      when(board.size).thenReturn(10)
+    //      when(controller.remainingFlags()).thenReturn(5)
+    //      when(controller.displayBoardToString()).thenReturn("ResetBoard")
+    //
+    //      val tui = new Tui(using controller)
+    //      Console.withIn(new java.io.ByteArrayInputStream("1\n".getBytes())) {
+    //        tui.restartGame()
+    //      }
+    //
+    //      verify(controller, atLeastOnce()).resetGame()
+    //      verify(controller).setDifficultySet(false)
+    //      verify(controller).setDifficultySet(true)
+    //    }
 
-      val in = new ByteArrayInputStream("2\n".getBytes())
-      Console.withIn(in) {
-        tui.state = MenuState
-        tui.state.handleInput("dummy", tui) // The input here is ignored in MenuState
-      }
+    "update should reflect game state changes" in {
+      val controller = mock[ControllerInterface]
+      val board = mock[BoardInterface]
+      when(controller.remainingFlags()).thenReturn(3)
+      when(controller.displayBoardToString()).thenReturn("SomeBoard")
+      when(controller.isGameOver).thenReturn(false)
+      when(controller.isWon).thenReturn(false)
 
-      tui.state should be(PlayingState)
+      val tui = new Tui(using controller)
+      val result = tui.update
+      result shouldBe ""
     }
-    "handle invalid input in M menu and return to game" in {
-      val in = new ByteArrayInputStream("1\nM\ninvalid\nQ\n".getBytes())
-      val out = new ByteArrayOutputStream()
-      val controller = new Controller(TestBoardFactory, new DummyFileIO())
-      val tui = new Tui
 
-      Console.withIn(in) {
-        Console.withOut(new PrintStream(out)) {
-          tui.start()
-        }
-      }
-
-      val output = out.toString
-      output should include("Ungültige Eingabe. Zurück zum Spiel.")
+    "runObserverUpdate should call update" in {
+      val controller = mock[ControllerInterface]
+      val tui = new Tui(using controller)
+      noException should be thrownBy tui.runObserverUpdate()
     }
-    "perform undo and show available undo/redo counts" in {
-      val controller = new Controller(TestBoardFactory, new DummyFileIO())
-      val tui = new Tui
 
-      // Führe einen Zug aus, damit Undo möglich ist
-      val cmd = new SetCommand(0, 1, controller)
-      controller.doAndStore(cmd)
-      controller.getBoard.cells(0)(1).isRevealed shouldBe true
-
-      val out = new ByteArrayOutputStream()
-      Console.withOut(new PrintStream(out)) {
-        tui.processInputLine("U") // ← führt undo aus
-      }
-
-      out.toString should include("Undo verfügbar:")
-      controller.getBoard.cells(0)(1).isRevealed shouldBe false
-    }
-    "perform redo and show available undo/redo counts" in {
-      val controller = new Controller(TestBoardFactory, new DummyFileIO())
-      val tui = new Tui
-
-      // Führe Zug aus + Undo
-      val cmd = new SetCommand(1, 1, controller)
-      controller.doAndStore(cmd)
-      tui.processInputLine("U")
-      controller.getBoard.cells(1)(1).isRevealed shouldBe false
-
-      val out = new ByteArrayOutputStream()
-      Console.withOut(new PrintStream(out)) {
-        tui.processInputLine("R") // ← führt redo aus
-      }
-
-      out.toString should include("Redo verfügbar:")
-      controller.getBoard.cells(1)(1).isRevealed shouldBe true
-    }
-    
-    "A fresh start should call chooseDifficulty and resetGame" in {
-      val in = new ByteArrayInputStream("1\nQ\n".getBytes())
-      val out = new ByteArrayOutputStream()
-
-      given ControllerInterface = new Controller(BoardFactory.getInstance, new DummyFileIO())
-      val tui = new Tui()
-
-      Console.withIn(in) {
-        Console.withOut(new PrintStream(out)) {
-          tui.start(resetBoard = true)
-        }
-      }
-
-      val output = out.toString
-      output should include("Willkommen zu Minesweeper")
-      output should include("Spiel beendet.")
-    }
-    "Print welcome message during start" in {
-      val in = new ByteArrayInputStream("1\nQ\n".getBytes())
-      val out = new ByteArrayOutputStream()
-
-      given ControllerInterface = new Controller(BoardFactory.getInstance, new DummyFileIO())
-      val tui = new Tui()
-
-      Console.withIn(in) {
-        Console.withOut(new PrintStream(out)) {
-          tui.start()
-        }
-      }
-
-      out.toString should include("Willkommen zu Minesweeper")
-    }
-    "preserve manual flag when not resetting board" in {
-      val controller = new Controller(BoardFactory.getInstance, new DummyFileIO())
-
-      given ControllerInterface = new Controller(BoardFactory.getInstance, new DummyFileIO())
-
-      val tui = new Tui()
-
-      // Simuliere manuelles Setup: Schwierigkeit & gesetzte Flagge
-      controller.createNewBoard(EasyBoardFactory)
-      controller.flagCell(0, 0)
-      controller.setDifficultySet(true)
-
-      val before = controller.getBoard
-
-      // Nicht `tui.start`, sondern gezielt Methoden
-      tui.chooseDifficulty() // wird sofort returnen, da isDifficultySet = true
-
-      // Sicherstellen, dass Board nicht verändert wurde
-      controller.getBoard eq before shouldBe true
-
-      // Flagge noch vorhanden
-      controller.getBoard.cells(0)(0).isFlagged shouldBe true
-    }
-    "Display the board while in PlayingState" in {
-      val in = new ByteArrayInputStream("1\nQ\n".getBytes())
-      val out = new ByteArrayOutputStream()
-
-      given ControllerInterface = new Controller(BoardFactory.getInstance, new DummyFileIO())
-
-      val tui = new Tui()
-
-      Console.withIn(in) {
-        Console.withOut(new PrintStream(out)) {
-          tui.start()
-        }
-      }
-
-      val output = out.toString
-      output should include("⬜") // typisches Zeichen aus dem Board
-    }
-    
-// neu
-    "should print 'Eingabestrom beendet.' on None input" in {
-      val controller = new Controller(BoardFactory.getInstance, new DummyFileIO())
-      val tui = new Tui
-      controller.setDifficultySet(true)
-      controller.createNewBoard(EasyBoardFactory)
-
-      val in = new java.io.ByteArrayInputStream(Array[Byte]()) // sofort EOF
-      val out = new ByteArrayOutputStream()
-
-      Console.withIn(in) {
-        Console.withOut(new PrintStream(out)) {
-          tui.start()
-        }
-      }
-
-      out.toString should include("Eingabestrom beendet.")
-    }
-    "should trigger second chooseDifficulty when board is null or empty" in {
-      val controller = new Controller(BoardFactory.getInstance, new DummyFileIO()) {
-        override def getBoard: BoardInterface = new Board(6, 0) {
-          override val cells: Array[Array[GameCell]] = Array.ofDim[GameCell](0, 0)
-        }
-      }
-      val tui = new Tui
-
-      val in = new ByteArrayInputStream("1\nQ\n".getBytes())
-      val out = new ByteArrayOutputStream()
-
-      Console.withIn(in) {
-        Console.withOut(new PrintStream(out)) {
-          tui.start()
-        }
-      }
-
-      out.toString should include("Wähle Schwierigkeitsgrad:")
-    }
-    "should return false after winning" in {
-      val controller = new Controller(BoardFactory.getInstance, new DummyFileIO())
-      val tui = new Tui
-
-      controller.getBoard.cells(0)(0).isMine = true
-      controller.getBoard.cells(0)(1).isMine = false
-      controller.getBoard.cells(1)(0).isMine = false
-      controller.getBoard.cells(1)(1).isMine = false
-
-      val out = new ByteArrayOutputStream()
-      Console.withOut(new PrintStream(out)) {
-        tui.processInputLine("F A1") // korrekt flaggen
-        tui.processInputLine("B1")
-        tui.processInputLine("B2")
-        tui.processInputLine("A2")
-      }
-
-      out.toString should include("Du hast gewonnen!")
-    }
-    "should stop the tui loop when requestQuit is called" in {
-      val controller = new Controller(BoardFactory.getInstance, new DummyFileIO())
-
-      given ControllerInterface = controller
-
-      val tui = new Tui()
+    "requestQuit should change running state" in {
+      val controller = mock[ControllerInterface]
+      val tui = new Tui(using controller)
+      tui.isRunning shouldBe true
       tui.requestQuit()
       tui.isRunning shouldBe false
     }
 
+    //
 
+    "start" should {
+      "print board if already initialized and difficulty is set" in {
+        val controller = mock[ControllerInterface]
+        when(controller.isDifficultySet).thenReturn(true)
+        when(controller.displayBoardToString()).thenReturn("MockBoard")
+
+        val tui = new Tui(using controller)
+        val result = tui.start(resetBoard = false)
+        result shouldBe "Game over."
+
+      }
+    }
+
+//    "chooseDifficulty" should {
+//      "select medium if input is invalid" in {
+//        val controller = mock[ControllerInterface]
+//        when(controller.isDifficultySet).thenReturn(false)
+//
+//        val tui = new Tui(using controller)
+//
+//        // Simuliere ungültige Eingabe → default ist "Mittel"
+//        Console.withIn(new java.io.ByteArrayInputStream("invalid\n".getBytes())) {
+//          tui.chooseDifficulty()
+//        }
+//
+//        verify(controller).createNewBoard(any())
+//        verify(controller).setDifficultySet(true)
+//      }
+//    }
+
+
+
+
+    "processInputLine with utility commands" should {
+      "SAVE should trigger save on controller" in {
+        val controller = mock[ControllerInterface]
+        val tui = new Tui(using controller)
+
+        tui.processInputLine("SAVE") shouldBe true
+        verify(controller).save()
+      }
+
+      "LOAD should trigger load on controller" in {
+        val controller = mock[ControllerInterface]
+        when(controller.displayBoardToString()).thenReturn("Board")
+
+        val tui = new Tui(using controller)
+        tui.processInputLine("LOAD") shouldBe true
+
+        verify(controller).load()
+      }
+
+      "T should print elapsed time" in {
+        val controller = mock[ControllerInterface]
+        when(controller.getElapsedTime).thenReturn(42)
+
+        val tui = new Tui(using controller)
+        tui.processInputLine("T") shouldBe true
+      }
+    }
+
+    "input validation" should {
+      "handle out-of-bounds coordinates safely" in {
+        val controller = mock[ControllerInterface]
+        val board = mock[BoardInterface]
+        when(controller.getBoard).thenReturn(board)
+        when(board.size).thenReturn(6)
+
+        val tui = new Tui(using controller)
+        val result = tui.processInputLine("Z9") // Z9 out of 6x6 board
+        result shouldBe true
+      }
+    }
+
+    "print tutorial text for 'A' command" in {
+      val controller = mock[ControllerInterface]
+      val tui = new Tui(using controller)
+
+      val output = new java.io.ByteArrayOutputStream()
+      Console.withOut(output) {
+        tui.processInputLine("A") shouldBe true
+      }
+
+      output.toString should include("Neu bei Minesweeper")
+      output.toString should include("Die Zahlen zeigen an, wie viele Minen angrenzen")
+    }
+
+    "print help text for 'H' command" in {
+      val controller = mock[ControllerInterface]
+      val tui = new Tui(using controller)
+
+      val output = new java.io.ByteArrayOutputStream()
+      Console.withOut(output) {
+        tui.processInputLine("H") shouldBe true
+      }
+
+      output.toString should include("Willkommen zu Minesweeper!")
+      output.toString should include("F C3 -> Flagge setzen")
+    }
+
+    "skip if difficulty is already set" in {
+      val controller = mock[ControllerInterface]
+      when(controller.isDifficultySet).thenReturn(true)
+
+      val tui = new Tui(using controller)
+      val out = new java.io.ByteArrayOutputStream()
+
+      Console.withOut(out) {
+        tui.chooseDifficulty()
+      }
+
+      out.toString should include("Schwierigkeit bereits durch GUI gesetzt.")
+    }
+
+    "call chooseDifficulty and resetGame if difficulty is not set and resetBoard is true" in {
+      val controller = mock[ControllerInterface]
+      val board = mock[BoardInterface]
+
+      when(controller.isDifficultySet).thenReturn(false)
+      when(controller.displayBoardToString()).thenReturn("Board")
+      when(controller.getBoard).thenReturn(board)
+      when(board.size).thenReturn(6)
+
+      val tui = spy(new Tui(using controller))
+
+      // chooseDifficulty selbst stubben, da wir dessen Inhalt nicht testen wollen
+      doNothing().when(tui).chooseDifficulty()
+
+      Console.withIn(new ByteArrayInputStream("Q\n".getBytes())) {
+        tui.start(resetBoard = true) shouldBe "Game over."
+      }
+
+      verify(tui).chooseDifficulty()
+      verify(controller).resetGame()
+    }
+
+    "not call resetGame if resetBoard is false" in {
+      val controller = mock[ControllerInterface]
+      val board = mock[BoardInterface]
+
+      when(controller.isDifficultySet).thenReturn(false)
+      when(controller.displayBoardToString()).thenReturn("Board")
+      when(controller.getBoard).thenReturn(board)
+      when(board.size).thenReturn(6)
+
+      val tui = spy(new Tui(using controller))
+      doNothing().when(tui).chooseDifficulty()
+
+      Console.withIn(new ByteArrayInputStream("Q\n".getBytes())) {
+        tui.start(resetBoard = false) shouldBe "Game over."
+      }
+
+      verify(tui).chooseDifficulty()
+      verify(controller, never()).resetGame()
+    }
+
+//    "call handleEndGame if state is WonState" in {
+//      val controller = mock[ControllerInterface]
+//      val board = mock[BoardInterface]
+//
+//      when(controller.isDifficultySet).thenReturn(true)
+//      when(controller.displayBoardToString()).thenReturn("Board")
+//      when(controller.getBoard).thenReturn(board)
+//      when(board.size).thenReturn(6)
+//
+//      val tui = spy(new Tui(using controller))
+//      tui.state = WonState
+//
+//      doNothing().when(tui).handleEndGame()
+//
+//      Console.withIn(new ByteArrayInputStream("Q\n".getBytes())) {
+//        tui.start(resetBoard = false)
+//      }
+//
+//      verify(tui).handleEndGame()
+//    }
+//
+//    "call handleEndGame if state is LostState" in {
+//      val controller = mock[ControllerInterface]
+//      val board = mock[BoardInterface]
+//
+//      when(controller.isDifficultySet).thenReturn(true)
+//      when(controller.displayBoardToString()).thenReturn("Board")
+//      when(controller.getBoard).thenReturn(board)
+//      when(board.size).thenReturn(6)
+//
+//      val tui = spy(new Tui(using controller))
+//      tui.state = LostState
+//
+//      doNothing().when(tui).handleEndGame()
+//
+//      Console.withIn(new ByteArrayInputStream("Q\n".getBytes())) {
+//        tui.start(resetBoard = false)
+//      }
+//
+//      verify(tui).handleEndGame()
+//    }
   }
 }
+

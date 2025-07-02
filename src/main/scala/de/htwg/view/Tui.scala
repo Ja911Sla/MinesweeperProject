@@ -64,14 +64,14 @@ class Tui (using var controller: ControllerInterface) extends Observer {
             println("Spiel beendet.")
             shouldRun = false
             guiQuitCallback()
-            sys.exit(0)
+            //sys.exit(0)
           } else {
             shouldRun = state.handleInput(input, this)
           }
         case None =>
           println("Eingabestrom beendet.")
           shouldRun = false
-          sys.exit(0)
+          //sys.exit(0)
       }
     }
     "Game over."
@@ -89,19 +89,24 @@ class Tui (using var controller: ControllerInterface) extends Observer {
     println("3 - Schwer (12x12, 35 Minen)")
     println("4 - Benutzerdefiniert")
 
-    val strategy: GameModeStrategy = StdIn.readLine("Eingabe: ") match {
+    println("Eingabe: ")
+    val strategy: GameModeStrategy = StdIn.readLine() match {
       case "1" => GameConfig.getInstance.setCustom(6, 5); CustomStrategy
       case "2" => GameConfig.getInstance.setCustom(9, 15); CustomStrategy
       case "3" => GameConfig.getInstance.setCustom(12, 35); CustomStrategy
       case "4" =>
-        val size = StdIn.readLine("Boardgröße: (2 bis 26) erlaubt) ").toInt
+        println("Boardgröße: (2 bis 26 erlaubt)")
+        val size = StdIn.readLine().toInt
+
         if (size < 2 || size > 26) {
           println("Ungültige Boardgröße. Standardmäßig 'Mittel' gewählt.")
           GameConfig.getInstance.setCustom(9, 15)
           CustomStrategy
         } else {
           val maxMines = size * size - 1
-          val mines = StdIn.readLine(s"Anzahl Minen: (>= 1 und <= $maxMines erlaubt) ").toInt
+          println(s"Anzahl Minen (>= 1 und <= $maxMines erlaubt):")
+          val mines = StdIn.readLine().toInt
+
           if (mines < 1 || mines > maxMines) {
             println("Ungültige Minenanzahl. Standardmäßig 'Mittel' gewählt.")
             GameConfig.getInstance.setCustom(9, 15)
@@ -120,7 +125,8 @@ class Tui (using var controller: ControllerInterface) extends Observer {
     val factory = strategy.getBoardFactory()
     controller.createNewBoard(factory)
     controller.setDifficultySet(true)
-    Gui.startGame(factory) // GUI aktualisieren
+    if (Gui != null && !java.awt.GraphicsEnvironment.isHeadless()) Gui.startGame(factory)
+    // GUI aktualisieren
   }
 
 
@@ -262,7 +268,8 @@ class Tui (using var controller: ControllerInterface) extends Observer {
     state = PlayingState
     println(s"Verbleibende Flaggen: ${controller.remainingFlags()}")
     println(controller.displayBoardToString())
-    Gui.restartGame() // GUI synchronisieren
+    if (Gui != null && !java.awt.GraphicsEnvironment.isHeadless()) Gui.restartGame()
+    // GUI synchronisieren
   }
 
   override def update: String = {
@@ -278,7 +285,8 @@ class Tui (using var controller: ControllerInterface) extends Observer {
   private var shouldRun = true
   var guiQuitCallback: () => Unit = () => {
     println("TUI hat Quit-Signal gegeben. Beende GUI...")
-    if (Gui.top != null) Gui.top.close()
+    if (Gui != null && Gui.top != null) Gui.top.close()
+
   }
 
   def requestQuit(): Unit = {
