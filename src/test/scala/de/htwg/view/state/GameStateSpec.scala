@@ -294,6 +294,5 @@ class GameStateSpec extends AnyWordSpec with Matchers with MockitoSugar {
       tui.state shouldBe PlayingState
       output.toString should include("Spiel mit neuer Schwierigkeit gestartet.")
     }
-    
   }
 }
