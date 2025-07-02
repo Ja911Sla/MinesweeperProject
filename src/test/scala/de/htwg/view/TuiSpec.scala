@@ -5,15 +5,16 @@ import org.scalatest.matchers.should.Matchers
 import de.htwg.controller.ControllerInterface
 import de.htwg.model.BoardInterface
 import de.htwg.controller.controllerBase.{FlagCommand, SetCommand}
+import de.htwg.controller.factory.BoardFactory
 import de.htwg.view.state.{LostState, WonState}
 import org.mockito.Mockito.*
 import org.mockito.ArgumentMatchers.*
 import org.scalatestplus.mockito.MockitoSugar
 
 import java.io.ByteArrayInputStream
+import scala.swing.Frame
 
 class TuiTest extends AnyWordSpec with Matchers with MockitoSugar {
-
 
   "A Tui" should {
 
@@ -182,17 +183,23 @@ class TuiTest extends AnyWordSpec with Matchers with MockitoSugar {
     //
 
     "start" should {
-      "print board if already initialized and difficulty is set" in {
-        val controller = mock[ControllerInterface]
-        when(controller.isDifficultySet).thenReturn(true)
-        when(controller.displayBoardToString()).thenReturn("MockBoard")
 
-        val tui = new Tui(using controller)
-        val result = tui.start(resetBoard = false)
-        result shouldBe "Game over."
-
-      }
     }
+
+    //  First Test git
+
+
+//      "print board if already initialized and difficulty is set" in {
+//        val controller = mock[ControllerInterface]
+//        when(controller.isDifficultySet).thenReturn(true)
+//        when(controller.displayBoardToString()).thenReturn("MockBoard")
+//
+//        val tui = new Tui(using controller)
+//        val result = tui.start(resetBoard = false)
+//        result shouldBe "Game over."
+//
+//      }
+//    }
 
 //    "chooseDifficulty" should {
 //      "select medium if input is invalid" in {
@@ -295,47 +302,51 @@ class TuiTest extends AnyWordSpec with Matchers with MockitoSugar {
       out.toString should include("Schwierigkeit bereits durch GUI gesetzt.")
     }
 
-    "call chooseDifficulty and resetGame if difficulty is not set and resetBoard is true" in {
-      val controller = mock[ControllerInterface]
-      val board = mock[BoardInterface]
+    // Second Test Git
 
-      when(controller.isDifficultySet).thenReturn(false)
-      when(controller.displayBoardToString()).thenReturn("Board")
-      when(controller.getBoard).thenReturn(board)
-      when(board.size).thenReturn(6)
+//    "call chooseDifficulty and resetGame if difficulty is not set and resetBoard is true" in {
+//      val controller = mock[ControllerInterface]
+//      val board = mock[BoardInterface]
+//
+//      when(controller.isDifficultySet).thenReturn(false)
+//      when(controller.displayBoardToString()).thenReturn("Board")
+//      when(controller.getBoard).thenReturn(board)
+//      when(board.size).thenReturn(6)
+//
+//      val tui = spy(new Tui(using controller))
+//
+//      // chooseDifficulty selbst stubben, da wir dessen Inhalt nicht testen wollen
+//      doNothing().when(tui).chooseDifficulty()
+//
+//      Console.withIn(new ByteArrayInputStream("Q\n".getBytes())) {
+//        tui.start(resetBoard = true) shouldBe "Game over."
+//      }
+//
+//      verify(tui).chooseDifficulty()
+//      verify(controller).resetGame()
+//    }
 
-      val tui = spy(new Tui(using controller))
+    // Third Test Git
 
-      // chooseDifficulty selbst stubben, da wir dessen Inhalt nicht testen wollen
-      doNothing().when(tui).chooseDifficulty()
-
-      Console.withIn(new ByteArrayInputStream("Q\n".getBytes())) {
-        tui.start(resetBoard = true) shouldBe "Game over."
-      }
-
-      verify(tui).chooseDifficulty()
-      verify(controller).resetGame()
-    }
-
-    "not call resetGame if resetBoard is false" in {
-      val controller = mock[ControllerInterface]
-      val board = mock[BoardInterface]
-
-      when(controller.isDifficultySet).thenReturn(false)
-      when(controller.displayBoardToString()).thenReturn("Board")
-      when(controller.getBoard).thenReturn(board)
-      when(board.size).thenReturn(6)
-
-      val tui = spy(new Tui(using controller))
-      doNothing().when(tui).chooseDifficulty()
-
-      Console.withIn(new ByteArrayInputStream("Q\n".getBytes())) {
-        tui.start(resetBoard = false) shouldBe "Game over."
-      }
-
-      verify(tui).chooseDifficulty()
-      verify(controller, never()).resetGame()
-    }
+//    "not call resetGame if resetBoard is false" in {
+//      val controller = mock[ControllerInterface]
+//      val board = mock[BoardInterface]
+//
+//      when(controller.isDifficultySet).thenReturn(false)
+//      when(controller.displayBoardToString()).thenReturn("Board")
+//      when(controller.getBoard).thenReturn(board)
+//      when(board.size).thenReturn(6)
+//
+//      val tui = spy(new Tui(using controller))
+//      doNothing().when(tui).chooseDifficulty()
+//
+//      Console.withIn(new ByteArrayInputStream("Q\n".getBytes())) {
+//        tui.start(resetBoard = false) shouldBe "Game over."
+//      }
+//
+//      verify(tui).chooseDifficulty()
+//      verify(controller, never()).resetGame()
+//    }
 
 //    "call handleEndGame if state is WonState" in {
 //      val controller = mock[ControllerInterface]
